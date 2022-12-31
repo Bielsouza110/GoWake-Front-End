@@ -77,3 +77,31 @@
 #subscribeForm{
   height: 6vh
 }
+
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+
+#fg{
+  text-decoration: none;
+  margin: 2%;
+}
+#tu{
+  text-decoration: none;
+}
+#pp{
+  text-decoration: none;
+}
+
+#bg{
+  background-image: url("https://contents.mediadecathlon.com/p1823225/k$5af64ede438d550765689c7cd70d5cd6/1200x0/1.91cr1/WAKEBOARD.jpg?format=auto");
+}
+
+#bg1 {
+  display: flex;
+  height: 100%;
+}

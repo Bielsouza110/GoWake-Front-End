@@ -1,22 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import NavBar from "./Componentes/NavBar";
-import DemoCarousel from "./Componentes/DemoCarousel";
-import Cards from "./Componentes/Cards";
-import Search from "./Componentes/Search";
-import Subscribe from "./Componentes/Subscribe";
-import Footer from "./Componentes/Footer";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import Home from "./Componentes/home/Home";
+import Login from "./Componentes/Login/Login";
 
 function App() {
   return (
-      <div>
-        <NavBar/>
-        <DemoCarousel/>
-        <Cards/>
-        <Search/>
-        <Subscribe/>
-        <Footer/>
-      </div>
+      <Router>
+          <Routes>
+                <Route path="/" element ={<Home/>}/>
+              <Route path="/login" element ={<Login/>}/>
+          </Routes>
+      </Router>
   );
 }
 

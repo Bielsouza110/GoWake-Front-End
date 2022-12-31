@@ -9,10 +9,10 @@ function NavBar() {
         <div>
             <Navbar bg="light" expand="lg">
                 <Container>
-                    <a className="navbar-brand" href="#">
+                    <a className="navbar-brand" href="/">
                         <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/International_Waterski_%26_Wakeboard_Federation_logo.svg/1200px-International_Waterski_%26_Wakeboard_Federation_logo.svg.png" width="100%" height="50" alt=""/>
                     </a>
-                    <Navbar.Brand href="#">International Waterski & Wakeboard Federation</Navbar.Brand>
+                    <Navbar.Brand href="/">International Waterski & Wakeboard Federation</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav
@@ -24,7 +24,7 @@ function NavBar() {
                             <Nav.Link class="justify-content"
                                       href="https://iwwf.sport/wp-content/uploads/2022/05/IWWFWakeboardBoatRules-2022.pdf"> IWWF
                                 Wakebord Rules<BsFileEarmarkRuled/></Nav.Link>
-                            <Nav.Link class="justify-content" href="#deets"> Login<FiLogIn/></Nav.Link>
+                            <Nav.Link class="justify-content" href="/login"> Login<FiLogIn/></Nav.Link>
                         </Nav>
 
                     </Navbar.Collapse>
