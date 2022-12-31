@@ -2,28 +2,6 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
 .App-link {
   color: #61dafb;
 }
@@ -35,4 +13,67 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.carousel img {
+  max-height: 500px;
+  margin: 0 auto;
+}
+
+.card {
+  margin: 2%;
+}
+
+.card img{
+  height: 48%;
+}
+.card:hover{
+  top:-2px;
+  box-shadow:0 10px 10px #666;
+}
+
+#tCards {
+  margin-top: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+#searh{
+  margin: 2%;
+}
+
+#sub{
+  background-image: url("https://wallpapercave.com/wp/wp3598073.jpg");
+  height: 45vh;
+}
+
+#subs{
+  padding-top: 2%;
+  text-align: center;
+  color: white;
+}
+
+#email{
+  padding-left: 20%;
+  align-items: center;
+
+}
+
+#botao{
+  padding-right: 2%;
+}
+
+#form{
+  padding-left: 25%;
+  padding-right: 25%;
+  padding-top: 2%;
+}
+
+.buttonW {
+  width: 100%;
+  align-items: center;
+}
+
+#subscribeForm{
+  height: 6vh
 }
