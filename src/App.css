@@ -105,3 +105,26 @@
   display: flex;
   height: 100%;
 }
+
+
+#card{
+  text-decoration: none;
+  color: black;
+}
+
+.li{
+  background-color: green;
+  border-radius: 22%;
+  font-size: 12px;
+  color: #eeeeee;
+  padding: 4px;
+  align-items: center;
+}
+
+#m{
+  margin-bottom: 2%;
+}
+
+#table {
+  border-collapse: collapse;
+}

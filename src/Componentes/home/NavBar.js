@@ -23,7 +23,8 @@ function NavBar() {
                             <Nav.Link class="justify-content" href="#deet"> Live Results<TbLivePhoto/></Nav.Link>
                             <Nav.Link class="justify-content"
                                       href="https://iwwf.sport/wp-content/uploads/2022/05/IWWFWakeboardBoatRules-2022.pdf"> IWWF
-                                Wakebord Rules<BsFileEarmarkRuled/></Nav.Link>
+                                Wakebord Rules
+                                <BsFileEarmarkRuled/></Nav.Link>
                             <Nav.Link class="justify-content" href="/login"> Login<FiLogIn/></Nav.Link>
                         </Nav>
 
