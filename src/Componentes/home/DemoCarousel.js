@@ -5,7 +5,7 @@ function DemoCarouse() {
 
     return (
         <div >
-            <Carousel fade>
+            <Carousel fade id="bg1">
                 <Carousel.Item>
                     <img
                         className="d-block w-100"

@@ -38,13 +38,18 @@
   margin-right: 2%;
 }
 
-#searh{
-  margin: 2%;
+#searh1{
+  margin-top: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+#searh2{
+  margin: 0.5% 2% 2%;
 }
 
 #sub{
   background-image: url("https://wallpapercave.com/wp/wp3598073.jpg");
-  height: 45vh;
+  height: 52vh;
 }
 
 #subs{
@@ -90,6 +95,9 @@
   text-decoration: none;
   margin: 2%;
 }
+#fgg{
+  text-decoration: none;
+}
 #tu{
   text-decoration: none;
 }
@@ -104,12 +112,18 @@
 #bg1 {
   display: flex;
   height: 100%;
+  margin-top: 4.6%;
 }
 
 
 #card{
   text-decoration: none;
   color: black;
+}
+
+#size{
+  min-height: 25vh;
+
 }
 
 .li{
@@ -127,4 +141,44 @@
 
 #table {
   border-collapse: collapse;
+}
+
+@media only screen and (max-width: 1026px) {
+  #esconde {
+    display: none;
+  }
+}
+
+#colorBTN{
+  background-color: lightgray;
+  color: black;
+  border-color: lightgray;
+}
+
+.mysidenav{
+  background-color: #00008b !important;
+}
+
+#sd{
+  margin: 1.5%;
+}
+
+.a {
+  color: #FFF;
+}
+.a:hover {
+  color: #FFF
+}
+
+.a, .a:hover, .a:visited, .a:active, .href {
+  color: inherit;
+  text-decoration: none;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
 }

@@ -4,11 +4,12 @@ import Cards from "./Cards";
 import Search from "./Search";
 import Subscribe from "./Subscribe";
 import Footer from "./Footer";
+import AppBar from "./AppBar"
 
 function Home() {
     return (
         <div>
-            <NavBar/>
+            <AppBar/>
             <DemoCarousel/>
             <Cards/>
             <Search/>
