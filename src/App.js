@@ -3,11 +3,15 @@ import './App.css';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Home from "./Componentes/home/Home";
 import Login from "./Componentes/Login/Login";
-import Event from "./Componentes/home/Event/Event";
+import Event from "./Componentes/Events/Event";
 import CreateAccount from "./Componentes/CreateAccount/CreateAccount";
 import Dashboard from "./Componentes/Dashboard/Dashboard";
-import BoxTeste1 from "./Componentes/Dashboard/boxTeste1";
-import BoxTeste2 from "./Componentes/Dashboard/BoxTeste2";
+import Athletes from "./Componentes/Dashboard/Athletes";
+import CreateEvent from "./Componentes/Dashboard/CreateEvent";
+import LiveResults from "./Componentes/Dashboard/LiveResults";
+import ModidyEvent from "./Componentes/Dashboard/ModifyEvent";
+import UploadXML from "./Componentes/Dashboard/UploadXML";
+import Rules from "./Componentes/Dashboard/Rules";
 
 
 function App() {
@@ -18,9 +22,16 @@ function App() {
               <Route path="/login" element ={<Login/>}/>
               <Route path="/event" element ={<Event/>}/>
               <Route path="/createlogin" element ={<CreateAccount/>}/>
+
               <Route path="/login/dashboard" element ={<Dashboard/>}/>
-              <Route path="/login/dashboard/box1" element ={<BoxTeste1/>}/>
-              <Route path="/login/dashboard/box2" element ={<BoxTeste2/>}/>
+              <Route path="/login/rules" element ={<Rules/>}/>
+              <Route path="/login/liveresults" element ={<LiveResults/>}/>
+              <Route path="/login/athletes" element ={<Athletes/>}/>
+              <Route path="/login/uploadxml" element ={<UploadXML/>}/>
+
+              <Route path="/login/createevent" element ={<CreateEvent/>}/>
+              <Route path="/login/modidyevent" element ={<ModidyEvent/>}/>
+
           </Routes>
       </Router>
   );

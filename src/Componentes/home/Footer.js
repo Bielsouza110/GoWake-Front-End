@@ -21,7 +21,7 @@ function Footer(){
                             sx={{
                                 mr: 2,
                                 marginBottom: 1,
-                                display: {xs: 'none', md: 'flex'},
+                                display: {xs: 'flex', md: 'flex'},
                                 fontFamily: 'monospace',
                                 fontWeight: 700,
                                 letterSpacing: '.0rem',
@@ -45,7 +45,7 @@ function Footer(){
                             sx={{
                                 mr: 2,
                                 marginBottom: 1,
-                                display: {xs: 'none', md: 'flex'},
+                                display: {xs: 'flex', md: 'flex'},
                                 fontFamily: 'monospace',
                                 fontWeight: 700,
                                 letterSpacing: '.0rem',

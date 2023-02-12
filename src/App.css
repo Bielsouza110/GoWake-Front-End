@@ -32,6 +32,11 @@
   box-shadow:0 10px 10px #666;
 }
 
+.sdd{
+  background-color: white;
+  min-height: 100vh;
+}
+
 #tCards {
   margin-top: 2%;
   margin-left: 2%;
@@ -123,7 +128,6 @@
 
 #size{
   min-height: 25vh;
-
 }
 
 .li{

@@ -1,10 +1,9 @@
 import Drawer from "./Drawer";
-import Sidebar from "./Sidebar";
-import BoxTeste2 from "./BoxTeste2";
 import {styled} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-
+import Cards from "../home/Cards";
+import DemoCarousel from "../home/DemoCarousel";
 
 function Dashboard() {
 
@@ -18,15 +17,17 @@ function Dashboard() {
     }));
 
     return (
-        <Box sx ={{display:"flex"}}>
-            <Drawer/>
-            <Box component="main" sx={{ flexGrow: 1, p: 3, margin:0 }}>
-                <DrawerHeader />
-                <Typography paragraph>
-                    DASHBOARD DO MAURO MONTEIRO rsrs...
-                </Typography>
+        <div className="sdd">
+            <Box sx ={{display:"flex"}}>
+                <Drawer/>
+                <Box>
+                    <DrawerHeader />
+                    <DemoCarousel/>
+                    <Cards/>
+                </Box>
             </Box>
-        </Box>
+        </div>
+
     );
 }
 

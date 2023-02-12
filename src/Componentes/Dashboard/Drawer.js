@@ -13,15 +13,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import Cards from "../home/Cards";
-import Footer from "../home/Footer";
-import Rodape from "../home/Rodape";
-import AdbIcon from "@mui/icons-material/Adb";
 import Tooltip from "@mui/material/Tooltip";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -34,7 +27,6 @@ import KitesurfingIcon from '@mui/icons-material/Kitesurfing';
 import PublishIcon from '@mui/icons-material/Publish';
 import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import BoxTeste1 from "./boxTeste1";
 import {useNavigate} from 'react-router-dom';
 
 const drawerWidth = 240;
@@ -120,8 +112,6 @@ const settings = [
     },
 ]
 
-
-
 function MiniDrawer (){
 
 
@@ -135,35 +125,34 @@ function MiniDrawer (){
         {
             text: 'Wakeboard Rules',
             icon: <PictureAsPdfIcon/>,
-            link: "/login/dashboard/box1"
+            link: "/login/rules"
 
         },
         {
             text: 'Live Results',
             icon: <StreamIcon/>,
-            link: "/login/dashboard/box2"
+            link: "/login/liveresults"
         },
         {
             text: 'Athletes',
             icon: <KitesurfingIcon/>,
-            link: "/login/dashboard/box1"
+            link: "/login/athletes"
         },
         {
             text: 'Upload XML',
             icon: <PublishIcon/>,
-            link: "/login/dashboard/box2"
+            link: "/login/uploadxml"
         },
         {
             text: 'Create Event',
             icon: <AddIcon/>,
-            link: "/login/dashboard/box2"
+            link: "/login/createevent"
         },
         {
             text: 'Modify Event',
             icon: <ModeEditIcon/>,
-            link: "/login/dashboard/box2"
+            link: "/login/modidyevent"
         },
-
     ]
 
     const theme = useTheme();
@@ -196,7 +185,6 @@ function MiniDrawer (){
     };
 
     const navigate = useNavigate();
-
 
     return (
         <Box sx={{display: 'flex'}}>

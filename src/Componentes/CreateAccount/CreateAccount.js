@@ -6,7 +6,6 @@ import {
 } from 'mdb-react-ui-kit';
 
 import {Button} from "react-bootstrap";
-import NavBar from "../home/NavBar";
 import { useNavigate } from 'react-router-dom';
 import AppBar from "../home/AppBar";
 

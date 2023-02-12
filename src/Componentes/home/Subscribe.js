@@ -1,6 +1,4 @@
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
-import InputGroup from "react-bootstrap/InputGroup";
-import {BsSearch} from "react-icons/bs";
 
 function Subscribe(){
 

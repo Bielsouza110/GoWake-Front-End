@@ -1,16 +1,15 @@
-import NavBar from "../NavBar";
 import {Col, Row, Table} from "react-bootstrap";
 import {MdOutlineKitesurfing} from "react-icons/md";
 import {BiCategoryAlt} from "react-icons/bi";
 import {BiCategory} from "react-icons/bi";
 import {AiOutlineStop} from "react-icons/ai";
+import AppBar from "../home/AppBar";
 
 function Event() {
     return (
         <div>
-            <NavBar/>
+            <AppBar/>
             <div id="tCards">
-
 
                 <h1>Circuito Surf Contest</h1>
                 <h6 id="m">22 - 23 APRIL 2023 <span className="li">LIVE</span> - Mad William</h6>
