@@ -31,7 +31,7 @@ function Cards() {
 */}
                     <Card.Body>
                         <a id="card" href="/event">
-                        <Card.Title>Hale'iwa Open <span style={{backgroundColor: 'green'}} className="dot"/></Card.Title>
+                        <Card.Title>Circuit Hale'iwa Open <span style={{backgroundColor: 'green'}} className="dot"/></Card.Title>
                         <Card.Text>
                             This is a wider card with supporting text below as a natural lead-in
                             to additional content. This content is a little bit longer.
@@ -45,20 +45,20 @@ function Cards() {
                 <Card style={{ borderRadius: "8px", overflow: "hidden"}}>
               {/*      <Card.Img variant="top" src="https://cdn.algarvefun.com/wp-content/uploads/2020/01/10191152/wakebording-in-arma%C3%A7%C3%A3o-de-pera.jpg"/>
                    */} <Card.Body>
-                        <Card.Title>Circuito Surf Contest <span style={{backgroundColor: 'green'}} className="dot"/></Card.Title>
+                        <Card.Title>Circuito Wake Contest <span style={{backgroundColor: 'green'}} className="dot"/></Card.Title>
                         <Card.Text>
                             This card has supporting text below as a natural lead-in to
                             additional content.{' '}
                         </Card.Text>
                     </Card.Body>
                     <Card.Footer>
-                        <small className="text-muted">Last updated 3 mins ago</small>
+                        <small className="text-muted">Last updated 10 mins ago</small>
                     </Card.Footer>
                 </Card>
                 <Card style={{ borderRadius: "8px", overflow: "hidden"}}>
                   {/*  <Card.Img variant="top" src="https://nagacp.com.br/wp-content/uploads/2015/04/30877804378_172ec7003f_o_1-1024x683.jpg"/>
                     */}<Card.Body>
-                        <Card.Title>Pian surf <span style={{backgroundColor: 'orange'}} className="dot"/></Card.Title>
+                        <Card.Title>Pian Wake <span style={{backgroundColor: 'orange'}} className="dot"/></Card.Title>
                         <Card.Text>
                             This is a wider card with supporting text below as a natural lead-in
                             to additional content. This card has even longer content than the
@@ -66,13 +66,13 @@ function Cards() {
                         </Card.Text>
                     </Card.Body>
                     <Card.Footer>
-                        <small className="text-muted">Last updated 3 mins ago</small>
+                        <small className="text-muted">Last updated 30 mins ago</small>
                     </Card.Footer>
                 </Card>
                 <Card style={{ borderRadius: "8px", overflow: "hidden"}}>
                    {/* <Card.Img variant="top" src="https://www.webconsultas.com/sites/default/files/styles/wch_image_schema/public/articulos/wakeboard_equilibrio.jpg"/>
                     */}<Card.Body>
-                        <Card.Title>Pian surf <span style={{backgroundColor: 'gray'}} className="dot"/></Card.Title>
+                        <Card.Title>Pian wake <span style={{backgroundColor: 'gray'}} className="dot"/></Card.Title>
                         <Card.Text>
                             This is a wider card with supporting text below as a natural lead-in
                             to additional content. This card has even longer content than the
@@ -80,7 +80,7 @@ function Cards() {
                         </Card.Text>
                     </Card.Body>
                     <Card.Footer>
-                        <small className="text-muted">Last updated 3 mins ago</small>
+                        <small className="text-muted">Last updated 1 day ago</small>
                     </Card.Footer>
                 </Card>
             </CardGroup>

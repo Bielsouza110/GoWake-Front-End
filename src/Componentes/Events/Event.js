@@ -1,326 +1,48 @@
-import {Col, Row, Table} from "react-bootstrap";
+import {Col, Container, Row, Table} from "react-bootstrap";
 import {MdOutlineKitesurfing} from "react-icons/md";
 import {BiCategoryAlt} from "react-icons/bi";
 import {BiCategory} from "react-icons/bi";
 import {AiOutlineStop} from "react-icons/ai";
 import AppBar from "../home/AppBar";
+import {styled} from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import DemoCarousel from "../home/DemoCarousel";
+import Cards from "../home/Cards";
+import Search from "../home/Search";
+import Subscribe from "../home/Subscribe";
+import Footer from "../home/Footer";
+import Card from "react-bootstrap/Card";
+import CardGroup from 'react-bootstrap/CardGroup';
+import CollapsibleTable from "./TableEvent";
+import SpacingGrid from "./GridTable";
+import GridTable from "./GridTable";
+
 
 function Event() {
+
+    const DrawerHeader = styled('div')(({ theme }) => ({
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        marginTop:5,
+        padding: theme.spacing(0, 1),
+        // necessary for content to be below app bar
+        ...theme.mixins.toolbar,
+    }));
+
+
     return (
-        <div>
-            <AppBar/>
-            <div id="tCards">
-
-                <h1>Circuito Surf Contest</h1>
-                <h6 id="m">22 - 23 APRIL 2023 <span className="li">LIVE</span> - Mad William</h6>
-
-                <Row>
-                    <Col lg='6' md='12' className='mb-4 mb-md-0' align="left">
-                        <Table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Athletes</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><BiCategoryAlt color="gray"/> Under 9 Boys</td>
-                                <td>
-                                    <p>
-                                        <MdOutlineKitesurfing color="black"/> Felipe Silva
-                                    </p>
-                                    <p>
-                                        <MdOutlineKitesurfing color="Green"/> Joel Sacramento
-                                    </p>
-                                    <p>
-                                    <MdOutlineKitesurfing color="gray"/> Pedro Antonio
-                                    </p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                    <Col lg='6' md='12' className='mb-4 mb-md-0' align="left">
-                        <Table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Athletes</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><BiCategory color="gray" /> Under 9 Girls</td>
-                                <td>
-                                    <p>
-                                        <MdOutlineKitesurfing color="orange"/> Gisele Model
-                                    </p>
-                                    <p>
-                                        <MdOutlineKitesurfing color="purple"/> Felipa Cristina
-                                    </p>
-                                    <p>
-                                        <MdOutlineKitesurfing color="Brown"/> Micaela Kross
-                                    </p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                </Row>
-
-                <br/>
-
-                <Row>
-                    <Col lg='6' md='12' className='mb-4 mb-md-0' align="left">
-                        <Table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Athletes</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><BiCategoryAlt color="Turquoise"/> 10 - 14 Boys</td>
-                                <td>
-                                    <p>
-                                        <MdOutlineKitesurfing color="black"/> Felipe Silva
-                                    </p>
-                                    <p>
-                                        <MdOutlineKitesurfing color="Green"/> Joel Sacramento
-                                    </p>
-                                    <p>
-                                        <MdOutlineKitesurfing color="gray"/> Pedro Antonio
-                                    </p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                    <Col lg='6' md='12' className='mb-4 mb-md-0' align="left">
-                        <Table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Athletes</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><BiCategory color="Turquoise" /> 10 - 14 Girls</td>
-                                <td>
-                                    <p>
-                                        <MdOutlineKitesurfing color="orange"/> Gisele Model
-                                    </p>
-                                    <p>
-                                        <MdOutlineKitesurfing color="purple"/> Felipa Cristina
-                                    </p>
-                                    <p>
-                                        <MdOutlineKitesurfing color="Brown"/> Micaela Kross
-                                    </p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                </Row>
-
-                <br/>
-
-                <Row>
-                    <Col lg='6' md='12' className='mb-4 mb-md-0' align="left">
-                        <Table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Athletes</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><BiCategoryAlt color="Salmon"/> Junior Men</td>
-                                <td>
-                                    <p>
-                                        <AiOutlineStop color="black"/> No athletes
-                                    </p>
-
-                                </td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                    <Col lg='6' md='12' className='mb-4 mb-md-0' align="left">
-                        <Table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Athletes</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><BiCategory color="Salmon" /> Junior Women</td>
-                                <td>
-                                    <p>
-                                        <MdOutlineKitesurfing color="orange"/> Gisele Model
-                                    </p>
-                                    <p>
-                                        <MdOutlineKitesurfing color="purple"/> Felipa Cristina
-                                    </p>
-                                    <p>
-                                        <MdOutlineKitesurfing color="Brown"/> Micaela Kross
-                                    </p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                </Row>
-                <br/>
-                <Row>
-                    <Col lg='6' md='12' className='mb-4 mb-md-0' align="left">
-                        <Table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Athletes</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><BiCategoryAlt color="Teal"/> Open Men</td>
-                                <td>
-                                    <p>
-                                        <MdOutlineKitesurfing color="black"/> Felipe Silva
-                                    </p>
-                                    <p>
-                                        <MdOutlineKitesurfing color="Green"/> Joel Sacramento
-                                    </p>
-                                    <p>
-                                        <MdOutlineKitesurfing color="gray"/> Pedro Antonio
-                                    </p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                    <Col lg='6' md='12' className='mb-4 mb-md-0' align="left">
-                        <Table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Athletes</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><BiCategory color="Teal" /> Open Women</td>
-                                <td>
-                                    <p>
-                                        <MdOutlineKitesurfing color="orange"/> Gisele Model
-                                    </p>
-                                    <p>
-                                        <MdOutlineKitesurfing color="purple"/> Felipa Cristina
-                                    </p>
-                                    <p>
-                                        <MdOutlineKitesurfing color="Brown"/> Micaela Kross
-                                    </p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                </Row>
-                <br/>
-
-                <Row>
-                    <Col lg='6' md='12' className='mb-4 mb-md-0' align="left">
-                        <Table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Athletes</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><BiCategoryAlt color="Lime"/> Masters Men</td>
-                                <td>
-                                    <p>
-                                        <AiOutlineStop color="black"/> No athletes
-                                    </p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                    <Col lg='6' md='12' className='mb-4 mb-md-0' align="left">
-                        <Table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Athletes</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><BiCategory color="Lime" /> Masters Women</td>
-                                <td>
-                                    <p>
-                                        <AiOutlineStop color="black"/> No athletes
-                                    </p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                </Row>
-                <br/>
-                <Row>
-                    <Col lg='6' md='12' className='mb-4 mb-md-0' align="left">
-                        <Table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Athletes</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><BiCategoryAlt color="orange"/> Veteran Men</td>
-                                <td>
-                                    <p>
-                                        <AiOutlineStop color="black"/> No athletes
-                                    </p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                    <Col lg='6' md='12' className='mb-4 mb-md-0' align="left">
-                        <Table>
-                            <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Athletes</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><BiCategory color="orange" /> Veteran Women</td>
-                                <td>
-                                    <p>
-                                        <AiOutlineStop color="black"/> No athletes
-                                    </p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                </Row>
+            <div className="sdd" id="tCards">
+                <Box sx ={{display:"flex"}}>
+                    <AppBar/>
+                    <Container>
+                        <DrawerHeader />
+                        <h1>Circuit Hale'iwa Open <span style={{backgroundColor: 'green'}} className="dot"/></h1>
+                        <h6 id="m">13 - 17 FEBRUARY 2023  - Mad William</h6>
+                        <GridTable/>
+                    </Container>
+                </Box>
             </div>
-        </div>
     );
 
 }

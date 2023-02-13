@@ -19,8 +19,7 @@ function Home() {
     }));
 
     return (
-        <div>
-
+        <div className="sdd">
             <Box sx ={{display:"flex"}}>
                 <AppBar/>
                 <Box>
