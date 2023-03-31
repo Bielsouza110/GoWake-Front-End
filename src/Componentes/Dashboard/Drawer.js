@@ -203,29 +203,23 @@ function MiniDrawer (){
                     >
                         <MenuIcon/>
                     </IconButton>
-                    <a className="navbar-brand" href="/login/dashboard">
-                        <img sx={{display: {xs: 'flex', md: 'flex'}, mr: 1}}
+
+
+                    <a href="/">
+                        <img
                              src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/International_Waterski_%26_Wakeboard_Federation_logo.svg/1200px-International_Waterski_%26_Wakeboard_Federation_logo.svg.png"
                              width="100%" height="50" alt=""/>
                     </a>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="/login/dashboard"
-                        sx={{
-                            marginLeft: 2,
-                            mr: 2,
-                            display: {xs: 'none', md: 'flex'},
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.0rem',
-                            color: '#808080',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        International Waterski & Wakeboard Federation
-                    </Typography>
+
+                    <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
+                        <Button
+                            href= "/"
+                            sx={{my: 2, color: '#808080', display: 'block'}}
+                        >
+                            International Waterski & Wakeboard Federation
+                        </Button>
+                    </Box>
+
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}/>
 
                     <Box id="ssd">

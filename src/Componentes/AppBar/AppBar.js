@@ -12,7 +12,6 @@ import Tooltip from '@mui/material/Tooltip';
 import LoginIcon from '@mui/icons-material/Login';
 import {useNavigate} from "react-router-dom";
 
-const pages = ['Live Results', 'IWWF Wakeboard Rules'];
 const menuItems = [
     { label: 'Live Results', path: "/"},
     { label: 'IWWF Wakeboard Rules', path: "https://iwwf.sport/wp-content/uploads/2022/05/IWWFWakeboardBoatRules-2022.pdf" },
@@ -46,30 +45,19 @@ function ResponsiveAppBar() {
                 <Toolbar disableGutters>
 
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
+
                         <a href="/">
-                            <img
+                            <img id="logo"
                                 src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/International_Waterski_%26_Wakeboard_Federation_logo.svg/1200px-International_Waterski_%26_Wakeboard_Federation_logo.svg.png"
                                 width="100%" height="50" alt=""/>
                         </a>
-                        <Typography
-                            component="a"
-                            variant="h6"
-                            noWrap
-                            href="/"
-                            sx={{
-                                marginLeft: 2,
-                                mr: 2,
-                                display: {xs: 'none', md: 'flex'},
-                                fontFamily: 'monospace',
-                                fontWeight: 700,
-                                letterSpacing: '.0rem',
-                                color: '#808080',
-                                textDecoration: 'none',
-                                alignItems: 'center'
-                            }}
+
+                        <Button
+                            href= "/"
+                            sx={{my: 2, color: '#808080', display: 'block'}}
                         >
                             International Waterski & Wakeboard Federation
-                        </Typography>
+                        </Button>
                     </Box>
 
                     <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
@@ -138,7 +126,7 @@ function ResponsiveAppBar() {
                     </Box>
 
                     <Box sx={{flexGrow: 0}}>
-                        <Tooltip title="Login" href="/login">
+                        <Tooltip title="Login" href="/">
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 1}}>
                                 <LoginIcon/>
                             </IconButton>

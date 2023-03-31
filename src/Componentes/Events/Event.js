@@ -3,7 +3,7 @@ import {MdOutlineKitesurfing} from "react-icons/md";
 import {BiCategoryAlt} from "react-icons/bi";
 import {BiCategory} from "react-icons/bi";
 import {AiOutlineStop} from "react-icons/ai";
-import AppBar from "../home/AppBar";
+import AppBar from "../AppBar/AppBar";
 import {styled} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import DemoCarousel from "../home/DemoCarousel";

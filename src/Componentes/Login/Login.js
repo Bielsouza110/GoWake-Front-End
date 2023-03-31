@@ -6,7 +6,7 @@ import {
 } from 'mdb-react-ui-kit';
 import {Button} from "react-bootstrap";
 import {useHistory, useNavigate} from 'react-router-dom';
-import AppBar from "../home/AppBar";
+import AppBar from "../AppBar/AppBar";
 import Typography from "@mui/material/Typography";
 import {useCallback, useEffect, useState} from "react";
 import {styled} from "@mui/material/styles";

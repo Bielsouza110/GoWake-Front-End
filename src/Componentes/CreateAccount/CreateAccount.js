@@ -7,7 +7,7 @@ import {
 
 import {Button} from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
-import AppBar from "../home/AppBar";
+import AppBar from "../AppBar/AppBar";
 import Box from "@mui/material/Box";
 import {styled} from "@mui/material/styles";
 import {Container} from "@material-ui/core";
