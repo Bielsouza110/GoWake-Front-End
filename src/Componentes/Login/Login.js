@@ -4,36 +4,24 @@ import {
     MDBRow,
     MDBInput,
 } from 'mdb-react-ui-kit';
-import {Button} from "react-bootstrap";
-import {useHistory, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import AppBar from "../AppBar/AppBar";
-import Typography from "@mui/material/Typography";
 import {useCallback, useEffect, useState} from "react";
 import {styled} from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import DemoCarousel from "../home/DemoCarousel";
-import Cards from "../home/Cards";
-import Search from "../home/Search";
-import Subscribe from "../home/Subscribe";
-import Footer from "../home/Footer";
 import {Container} from "@material-ui/core";
-import axios from "axios";
+import axios from 'axios';
+import {Button} from "react-bootstrap";
 
+import { useHistory } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 
-/*const accessToken = "59a1cebcaf74bc4f085b5cc4688a301270c4897d";
-const apiUrl = "https://gowake.daletech.pt/api";
-
-const authAxios = axios.create({
-    baseURL: apiUrl,
-    headers: {
-        Accept: 'application/json',
-        "Content-Type": 'application/json',
-        Authorization: `Bearer`
-    }
-})*/
+const history = createBrowserHistory();
 
 function Login() {
+    //const navigate = useNavigate();
     const navigate = useNavigate();
+    //const history = useHistory();
 
     const DrawerHeader = styled('div')(({theme}) => ({
         display: 'flex',
@@ -44,56 +32,64 @@ function Login() {
         ...theme.mixins.toolbar,
     }));
 
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
- /*   const [token, setToken] = useState([])
+    const [loginStatus, setLoginStatus] = useState(null);
+
+    //setUsername('admin');
+    //setPassword('iVSK7X!ynP09')
+
+    //const username = 'admin';
+    //const password = 'iVSK7X!ynP09';
+
+    const [user, setUser] = useState({ username: '', password: '' });
+
+    function handleChangeUsername(event) {
+        setUser({ ...user, username: event.target.value });
+    }
+
+    function handleChangePassword(event) {
+        setUser({ ...user, password: event.target.value });
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        const data = { name: 'John', age: 30 };
+        // fazer a chamada da API aqui
 
 
-    const [user, setUser] = useState([]);
-    const [requestError, setRequestError] = useState();
+        axios.post('https://mmonteiro.pythonanywhere.com/account/login/', user)
+            .then(response => {
+               // console.log(response.request.status);
+                setLoginStatus(response.request.status);
 
-    const fetchData = useCallback(async () => {
+                const user = {
+                    username: response.data.username,
+                    token: response.data.token,
+                    email: response.data.email,
+                    role: response.data.role,
+                };
 
-            console.log(username)
-            console.log(password)
+                navigate('/login/dashboard', { state: user });
 
-            const user = {username, password};
+                //navigate.push({ pathname: '/login/dashboard', state: { data } });
 
-                await authAxios.post(`/auth/`, user)
-                    .then(() =>{ console.log("Deu certooo")}
-                    ).catch((err) => {
-                        console.log(err.message)
-                    })
+               // navigate('/login/dashboard/2',  { state: { nome: 'produto x', preco: 10} });
+                //navigate('/login/dashboard');
+                // faça algo com a resposta, como atualizar o estado da aplicação ou redirecionar o usuário
+            })
+            .catch(error => {
+                if (error.response.status === 400) {
+                    // lidar com o erro de "Bad Request"
+                    //console.log(error.response.data);
+                    setLoginStatus(error.response.data.error); // Exibe a mensagem de erro da API
+                } else {
+                    // lidar com outros erros
+                    console.log(error);
+                }
+                 // console.error(error);
+                // faça algo em caso de erro, como exibir uma mensagem de erro para o usuário
+            });
+    }
 
-        }
-    )*/
-
- /*   const history = useHistory();
-     useEffect(() => {
-
-         if (localStorage.getItem("token")) {
-             navigate("/login/dashboard")
-         }
-     }, [])
-
-     async function login() {
-         console.warn(username, password)
-
-         let item = {username, password};
-         let result = await fetch("https://gowake.daletech.pt/api/auth/", {
-             method: 'POST',
-             headers: {
-                 "Content-Type": "application/json",
-                 "Accept": 'application/json',
-             },
-             body: JSON.stringify(item)
-         });
-
-         result = await result.json();
-         localStorage.setItem("token", JSON.stringify(result))
-
-         navigate("/login/dashboard")
-     }*/
     return (
         <div className="sdd">
             <Box sx={{display: "flex"}}>
@@ -113,15 +109,15 @@ function Login() {
                                     letterSpacing: '1px', fontSize: '30px'
                                 }}>Sign into your account</h5>
 
-                                <MDBInput wrapperClass='mb-4' onChange={(e) => setUsername(e.target.value)}
+                                <MDBInput wrapperClass='mb-4' value={user.username} onChange={handleChangeUsername}
                                           placeholder="Email adress" id='formControlLg' type='text'
                                           size="lg"/>
-                                <MDBInput wrapperClass='mb-4' onChange={(e) => setPassword(e.target.value)}
+                                <MDBInput wrapperClass='mb-4' value={user.password} onChange={handleChangePassword}
                                           placeholder="Password" id='formControlLg' type='password'
                                           size="lg"/>
 
                                 {/*---------------------*/}
-{/*
+                                {/*
 
                                 {<Button onClick={Login} className="mb-4 w-100" size="lg">post
                                     data</Button>}
@@ -132,7 +128,9 @@ function Login() {
 
                                 {/* ------------------------*/}
 
-                                <Button onClick={() => navigate("/login/dashboard")} className="mb-4 w-100" size="lg">Sign
+                                <p id="error">{loginStatus}</p>
+
+                                <Button type="submit" onClick={handleSubmit} className="mb-4 w-100" size="lg">Sign
                                     in</Button>
 
                                 <div className="divider d-flex align-items-center my-4"/>
@@ -153,7 +151,6 @@ function Login() {
                 </Container>
             </Box>
         </div>
-
     );
 }
 

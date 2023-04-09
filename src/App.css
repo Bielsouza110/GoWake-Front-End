@@ -198,3 +198,8 @@
 #logo{
   margin-top: 8%;
 }
+
+#error{
+  color: red;
+  font-size: 12px;
+}

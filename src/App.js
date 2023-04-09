@@ -12,29 +12,32 @@ import LiveResults from "./Componentes/Dashboard/LiveResults";
 import ModidyEvent from "./Componentes/Dashboard/ModifyEvent";
 import UploadXML from "./Componentes/Dashboard/UploadXML";
 import Rules from "./Componentes/Dashboard/Rules";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 
 function App() {
-  return (
-      <Router>
-          <Routes>
-              {/*<Route path="/" element ={<Home/>}/>*/}
-              <Route path="/" element ={<Login/>}/>
-              <Route path="/event" element ={<Event/>}/>
-              <Route path="/createlogin" element ={<CreateAccount/>}/>
 
-              <Route path="/login/dashboard" element ={<Dashboard/>}/>
-              <Route path="/login/rules" element ={<Rules/>}/>
-              <Route path="/login/liveresults" element ={<LiveResults/>}/>
-              <Route path="/login/athletes" element ={<Athletes/>}/>
-              <Route path="/login/uploadxml" element ={<UploadXML/>}/>
+    return (
+        <Router>
+            <Routes>
+                {/*<Route path="/" element ={<Home/>}/>*/}
+                <Route path="/" element={<Login/>}/>
+                <Route path="/event" element={<Event/>}/>
+                <Route path="/createlogin" element={<CreateAccount/>}/>
 
-              <Route path="/login/createevent" element ={<CreateEvent/>}/>
-              <Route path="/login/modidyevent" element ={<ModidyEvent/>}/>
+                <Route path="/login/dashboard" element={<Dashboard/>}/>
+                <Route path="/login/rules" element={<Rules/>}/>
+                <Route path="/login/liveresults" element={<LiveResults/>}/>
+                <Route path="/login/athletes" element={<Athletes/>}/>
+                <Route path="/login/uploadxml" element={<UploadXML/>}/>
 
-          </Routes>
-      </Router>
-  );
+                <Route path="/login/createevent" element={<CreateEvent/>}/>
+                <Route path="/login/modidyevent" element={<ModidyEvent/>}/>
+
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
