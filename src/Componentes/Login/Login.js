@@ -19,10 +19,10 @@ import { createBrowserHistory } from 'history';
 const history = createBrowserHistory();
 
 function Login() {
-    //const navigate = useNavigate();
-    const navigate = useNavigate();
-    //const history = useHistory();
 
+    const navigate = useNavigate();
+    const [showError, setShowError] = useState(false);
+    const [user, setUser] = useState({ username: '', password: '' });
     const DrawerHeader = styled('div')(({theme}) => ({
         display: 'flex',
         alignItems: 'center',
@@ -32,15 +32,8 @@ function Login() {
         ...theme.mixins.toolbar,
     }));
 
-    const [loginStatus, setLoginStatus] = useState(null);
-
-    //setUsername('admin');
-    //setPassword('iVSK7X!ynP09')
-
     //const username = 'admin';
     //const password = 'iVSK7X!ynP09';
-
-    const [user, setUser] = useState({ username: '', password: '' });
 
     function handleChangeUsername(event) {
         setUser({ ...user, username: event.target.value });
@@ -58,8 +51,6 @@ function Login() {
 
         axios.post('https://mmonteiro.pythonanywhere.com/account/login/', user)
             .then(response => {
-               // console.log(response.request.status);
-                setLoginStatus(response.request.status);
 
                 const user = {
                     username: response.data.username,
@@ -69,24 +60,19 @@ function Login() {
                 };
 
                 navigate('/login/dashboard', { state: user });
-
-                //navigate.push({ pathname: '/login/dashboard', state: { data } });
-
-               // navigate('/login/dashboard/2',  { state: { nome: 'produto x', preco: 10} });
-                //navigate('/login/dashboard');
-                // faça algo com a resposta, como atualizar o estado da aplicação ou redirecionar o usuário
             })
             .catch(error => {
                 if (error.response.status === 400) {
-                    // lidar com o erro de "Bad Request"
-                    //console.log(error.response.data);
-                    setLoginStatus(error.response.data.error); // Exibe a mensagem de erro da API
+
+                    setShowError(true);
+                    setTimeout(() => {
+                        setShowError(false);
+                    }, 2000);
+
                 } else {
                     // lidar com outros erros
                     console.log(error);
                 }
-                 // console.error(error);
-                // faça algo em caso de erro, como exibir uma mensagem de erro para o usuário
             });
     }
 
@@ -116,19 +102,7 @@ function Login() {
                                           placeholder="Password" id='formControlLg' type='password'
                                           size="lg"/>
 
-                                {/*---------------------*/}
-                                {/*
-
-                                {<Button onClick={Login} className="mb-4 w-100" size="lg">post
-                                    data</Button>}
-*/}
-
-                                {/*<p>{token}</p>
-                                {requestError && <p className="error">{requestError}</p>}*/}
-
-                                {/* ------------------------*/}
-
-                                <p id="error">{loginStatus}</p>
+                                {showError && <p id="error">Wrong credentials</p>}
 
                                 <Button type="submit" onClick={handleSubmit} className="mb-4 w-100" size="lg">Sign
                                     in</Button>
