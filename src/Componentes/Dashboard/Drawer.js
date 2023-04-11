@@ -28,6 +28,7 @@ import PublishIcon from '@mui/icons-material/Publish';
 import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import {useNavigate} from 'react-router-dom';
+import LoginIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 240;
 
@@ -205,7 +206,7 @@ function MiniDrawer (){
                     </IconButton>
 
 
-                    <a href="/">
+                    <a href="/login/dashboard">
                         <img
                              src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/International_Waterski_%26_Wakeboard_Federation_logo.svg/1200px-International_Waterski_%26_Wakeboard_Federation_logo.svg.png"
                              width="100%" height="50" alt=""/>
@@ -213,7 +214,7 @@ function MiniDrawer (){
 
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                         <Button
-                            href= "/"
+                            href= "/login/dashboard"
                             sx={{my: 2, color: '#808080', display: 'block'}}
                         >
                             International Waterski & Wakeboard Federation
@@ -223,39 +224,14 @@ function MiniDrawer (){
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}/>
 
                     <Box id="ssd">
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{mt: '45px'}}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
 
-                            {settings.map((item, index) => {
-                                const {text, link} = item
-                                return (
-                                    <div>
-                                        <MenuItem key={text} onClick={() => navigate(link)}>
-                                            <Typography textAlign="center">{text}</Typography>
-                                        </MenuItem>
-                                    </div>
-                                )
-                            })}
-                        </Menu>
+                        <Box sx={{flexGrow: 0}}>
+                            <Tooltip title="Logout" href="/">
+                                <IconButton onClick={handleOpenUserMenu} sx={{p: 1}}>
+                                    <LoginIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
                     </Box>
                 </Toolbar>
             </AppBar>

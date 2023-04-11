@@ -38,7 +38,6 @@ function Dashboard() {
                         <p>Nome: {nome}</p>
                         <p>Email: {email}</p>
                     </div>
-
                     <Cards/>
                 </Box>
             </Box>

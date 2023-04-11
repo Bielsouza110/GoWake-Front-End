@@ -6,17 +6,12 @@ import {
 } from 'mdb-react-ui-kit';
 import {useNavigate} from 'react-router-dom';
 import AppBar from "../AppBar/AppBar";
-import {useCallback, useEffect, useState} from "react";
+import {useState} from "react";
 import {styled} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import {Container} from "@material-ui/core";
 import axios from 'axios';
 import {Button} from "react-bootstrap";
-
-import { useHistory } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
-
-const history = createBrowserHistory();
 
 function Login() {
 
@@ -44,10 +39,8 @@ function Login() {
     }
 
     function handleSubmit(event) {
-        event.preventDefault();
-        const data = { name: 'John', age: 30 };
-        // fazer a chamada da API aqui
 
+        event.preventDefault();
 
         axios.post('https://mmonteiro.pythonanywhere.com/account/login/', user)
             .then(response => {
@@ -58,7 +51,6 @@ function Login() {
                     email: response.data.email,
                     role: response.data.role,
                 };
-
                 navigate('/login/dashboard', { state: user });
             })
             .catch(error => {
