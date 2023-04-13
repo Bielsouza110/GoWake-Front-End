@@ -17,7 +17,8 @@ function Login() {
 
     const navigate = useNavigate();
     const [showError, setShowError] = useState(false);
-    const [user, setUser] = useState({ username: '', password: '' });
+    const [showRecoverPassword, setRecoverPassword] = useState(false);
+    const [user, setUser] = useState({ username: '', password: '' , email: ''});
 
     const DrawerHeader = styled('div')(({theme}) => ({
         display: 'flex',
@@ -68,6 +69,41 @@ function Login() {
             });
     }
 
+    function handleSubmitRecoverPassword(event){
+
+        event.preventDefault();
+
+/*        axios.post('https://gowake.daletech.pt/account/recoverpassword/', user)
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                if (error.response.status === 400) {
+
+                    setShowError(true);
+                    setTimeout(() => {
+                        setShowError(false);
+                    }, 2000);
+
+                } else {
+                    // lidar com outros erros
+                    console.log(error);
+                }
+            });*/
+    } //falta o mauro fazer o endpoint
+
+
+    function recoverPassword(event) {
+        event.preventDefault();
+
+        if (showRecoverPassword) {
+            setRecoverPassword(false);
+        } else {
+            setRecoverPassword(true);
+        }
+    }
+
+
     return (
         <div className="sdd">
             <Box sx={{display: "flex"}}>
@@ -99,10 +135,22 @@ function Login() {
                                 <Button type="submit" onClick={handleSubmit} className="mb-4 w-100" size="lg">Sign
                                     in</Button>
 
+                                {showRecoverPassword && <div className="divider d-flex align-items-center my-4"/>}
+
+                                {showRecoverPassword &&
+                                    <MDBInput wrapperClass='mb-4' value={user.password} onChange={handleChangePassword}
+                                              placeholder="Enter email to recover password" id='formControlLg' type='email'
+                                              size="lg"/>
+                                }
+
+                                {showRecoverPassword &&
+                                    <Button variant="secondary" type="submit" onClick={handleSubmitRecoverPassword} className="mb-4 w-100" size="lg">Recover password</Button>
+                                }
+
                                 <div className="divider d-flex align-items-center my-4"/>
 
                                 <div className='d-flex flex-row justify-content-center'>
-                                    <a id="fg" className="small text-muted me-1 fw-bold" href="#!">Forgot Password?</a>
+                                    <a id="fg" className="small text-muted me-1 fw-bold" href="#!" onClick={recoverPassword}>Forgot Password?</a>
                                     <a id="fg" className="small text-muted me-1 fw-bold" href="/createlogin">Create an
                                         Account</a>
                                 </div>
