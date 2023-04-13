@@ -1,24 +1,17 @@
+import React, {useState} from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import Drawer from "./Drawer";
+import { FaDownload } from 'react-icons/fa';
 
-import React, { useState } from 'react';
-import { Document, Page } from 'react-pdf';
+import { Document, Page, pdfjs } from 'react-pdf';
+import { saveAs } from 'file-saver';
+import {Button} from "react-bootstrap";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import DownloadingTwoToneIcon from '@mui/icons-material/DownloadingTwoTone';
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const Rules = () => {
 
@@ -31,24 +24,65 @@ const Rules = () => {
         ...theme.mixins.toolbar,
     }));
 
+    const handleDownloadPDF = () => {
+        fetch('/pdfs/rules.pdf') // Path to your PDF file in public folder
+            .then(response => response.blob())
+            .then(blob => {
+                const file = new Blob([blob], { type: 'application/pdf' });
+                saveAs(file, 'Wakeboard rules.pdf');
+            });
+    };
+
     const [numPages, setNumPages] = useState(null);
-    const [pageNumber, setPageNumber] = useState(1);
 
     function onDocumentLoadSuccess({ numPages }) {
         setNumPages(numPages);
     }
 
+    const buttonStyle = {
+
+        position: 'fixed',
+        bottom: '20px',
+        right: '20px',
+        zIndex: 100,
+    };
+
     return (
-        <div>
-            <Document
-                file="https://iwwf.sport/wp-content/uploads/2022/05/IWWFWakeboardBoatRules-2022.pdf"
-                onLoadSuccess={onDocumentLoadSuccess}
-            >
-                <Page pageNumber={pageNumber} />
-            </Document>
-            <p>
-                Page {pageNumber} of {numPages}
-            </p>
+        <div className="sdd">
+        <Box sx ={{display:"flex"}}>
+            <Drawer/>
+            <Box component="main" sx={{ flexGrow: 1, p: 3, margin:0 }}>
+                <DrawerHeader />
+                <Typography paragraph>
+                    Page Wakeboard Rules
+                </Typography>
+
+                <Box style={buttonStyle} sx={{flexGrow: 0}}>
+                    <Tooltip title="Download wakeboard rules" onClick={handleDownloadPDF} >
+                        <IconButton sx={{p: 1}}>
+                            <DownloadingTwoToneIcon fontSize="large"/>
+                        </IconButton>
+                    </Tooltip>
+                </Box>
+
+{/*                <div>
+                    <Document
+                        file="/pdfs/rules.pdf"
+                        onLoadSuccess={onDocumentLoadSuccess}
+                    >
+                        {Array.from(
+                            new Array(numPages),
+                            (el, index) => (
+                                <div key={`page_${index + 1}`}>
+                                    <Page pageNumber={index + 1} />
+                                </div>
+                            ),
+                        )}
+                    </Document>
+                </div>*/}
+
+            </Box>
+        </Box>
         </div>
     );
 };
