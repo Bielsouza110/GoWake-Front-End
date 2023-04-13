@@ -3,8 +3,8 @@ import './App.css';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Home from "./Componentes/home/Home";
 import Login from "./Componentes/Login/Login";
-import Event from "./Componentes/Events/Event";
-import CreateAccount from "./Componentes/CreateAccount/CreateAccount";
+import Event from "./Componentes/home/Events/Event";
+import CreateAccount from "./Componentes/Login/CreateAccount/CreateAccount";
 import Dashboard from "./Componentes/Dashboard/Dashboard";
 import Athletes from "./Componentes/Dashboard/Athletes";
 import CreateEvent from "./Componentes/Dashboard/CreateEvent";
@@ -14,6 +14,7 @@ import UploadXML from "./Componentes/Dashboard/UploadXML";
 import Rules from "./Componentes/Dashboard/Rules";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import RulesLogin from "./Componentes/Login/rules/RulesLogin";
 
 
 function App() {
@@ -23,7 +24,8 @@ function App() {
             <Routes>
                 {/*<Route path="/" element ={<Home/>}/>*/}
                 <Route path="/" element={<Login/>}/>
-                <Route path="/event" element={<Event/>}/>
+                {/*<Route path="/event" element={<Event/>}/>*/}
+                <Route path="/rules" element={<RulesLogin/>}/>
                 <Route path="/createlogin" element={<CreateAccount/>}/>
 
                 <Route path="/login/dashboard" element={<Dashboard/>}/>

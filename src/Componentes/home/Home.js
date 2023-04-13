@@ -3,7 +3,7 @@ import Cards from "./Cards";
 import Search from "./Search";
 import Subscribe from "./Subscribe";
 import Footer from "./Footer";
-import AppBar from "../AppBar/AppBar"
+import AppBar from "../Login/AppBar/AppBar"
 import Box from "@mui/material/Box";
 import {styled} from "@mui/material/styles";
 

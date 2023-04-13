@@ -5,7 +5,7 @@ import {
     MDBInput,
 } from 'mdb-react-ui-kit';
 import {useNavigate} from 'react-router-dom';
-import AppBar from "../AppBar/AppBar";
+import AppBar from "./AppBar/AppBar";
 import {useState} from "react";
 import {styled} from "@mui/material/styles";
 import Box from "@mui/material/Box";

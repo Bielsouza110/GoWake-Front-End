@@ -14,7 +14,7 @@ import {useNavigate} from "react-router-dom";
 
 const menuItems = [
     { label: 'Live Results', path: "/"},
-    { label: 'IWWF Wakeboard Rules', path: "https://iwwf.sport/wp-content/uploads/2022/05/IWWFWakeboardBoatRules-2022.pdf" },
+    { label: 'IWWF Wakeboard Rules', path: "/rules" },
 ];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
