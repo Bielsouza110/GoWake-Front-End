@@ -11,9 +11,21 @@ import AppBar from "../AppBar/AppBar";
 import Box from "@mui/material/Box";
 import {styled} from "@mui/material/styles";
 import {Container} from "@material-ui/core";
+import {useState} from "react";
+import axios from "axios";
 
 function CreateAccount() {
+
     const navigate = useNavigate();
+    const [showError, setShowError] = useState(false);
+    const [showErrorUsername, setShowErrorUsername] = useState('');
+    const [showErrorEmail, setShowErrorEmail] = useState('');
+    const [showErrorPassword, setShowErrorPassword] = useState('');
+    const [showErrorPassword2, setShowErrorPassword2] = useState('');
+    const [showSucessMessage, setShowSucessMessage] = useState('');
+
+
+    const [user, setUser] = useState({ username: '', email: '', password: '', password2: '' });
 
     const DrawerHeader = styled('div')(({ theme }) => ({
         display: 'flex',
@@ -24,6 +36,96 @@ function CreateAccount() {
         ...theme.mixins.toolbar,
     }));
 
+    function handleChangeUsername(event) {
+        setUser({ ...user, username: event.target.value });
+    }
+
+    function handleChangePassword(event) {
+        setUser({ ...user, password: event.target.value });
+    }
+
+    function handleChangePassword2(event) {
+        setUser({ ...user, password2: event.target.value });
+    }
+
+    function handleChangeEmail(event) {
+        setUser({ ...user, email: event.target.value });
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        axios.post('https://gowake.daletech.pt/account/register/', user)
+            .then(response => {
+                const userResponse = {
+                    username: response.data.username,
+                    token: response.data.token,
+                    email: response.data.email,
+                    /*role: response.data.role,*/
+                };
+
+                if (user.password !== user.password2) {
+                    setShowError(true);
+                    setShowErrorPassword('Passwords do not match')
+                    setShowErrorPassword2('Passwords do not match')
+                    setTimeout(() => {
+                        setShowError(false);
+                    }, 4000);
+                    return;
+                }
+
+                if (response.status === 201) {
+
+                    setShowError(false);
+                    setShowSucessMessage(response.data.response)
+
+                    console.log(response);
+
+                    setTimeout(() => {
+                        setShowError(false);
+                        navigate('/');
+                    }, 4000);
+                }
+
+                /*navigate('/login/dashboard', { state: userResponse });*/
+            })
+            .catch(error => {
+                if (error.response.status === 400) {
+
+                    setShowErrorUsername(error.response.data.username)
+                    setShowErrorEmail(error.response.data.error)
+                    setShowErrorPassword(error.response.data.password)
+                    setShowErrorPassword2(error.response.data.password2)
+
+                    if (user.email === '') {
+                        setShowError(true);
+                        setShowErrorEmail('This field may not be blank.')
+                        setTimeout(() => {
+                            setShowError(false);
+                        }, 4000);
+                    }
+
+                    if (user.password !== user.password2) {
+                        setShowError(true);
+                        setShowErrorPassword('Passwords do not match')
+                        setShowErrorPassword2('Passwords do not match')
+                        setTimeout(() => {
+                            setShowError(false);
+                        }, 4000);
+                    }
+
+                    setShowError(true);
+                    setTimeout(() => {
+                        setShowError(false);
+                    }, 4000);
+
+                    console.log(error.response);
+                } else {
+                    // lidar com outros erros
+                    console.log(error);
+                }
+            });
+    }
 
     return (
 
@@ -42,19 +144,35 @@ function CreateAccount() {
                                 <h5 className="fw-normal my-4 pb-3" style={{letterSpacing: '1px', fontSize:'30px'
                                 }}>Join us</h5>
 
-                                <MDBInput wrapperClass='mb-4' placeholder="Email adress" id='formControlLg' type='email' size="lg"/>
-                                <MDBInput wrapperClass='mb-4' placeholder="Password" id='formControlLg' type='password' size="lg"/>
-                                <MDBInput wrapperClass='mb-4' placeholder="Confirm password" id='formControlLg' type='password' size="lg"/>
-                                <MDBInput wrapperClass='mb-4' placeholder="Insert invate code" id='formControlLg' type='email' size="lg"/>
+                                <MDBInput wrapperClass='mb-4' value={user.username} onChange={handleChangeUsername}
+                                placeholder="Username" id='formControlLg' type='text' size="lg"/>
 
-                                <Button className="mb-3 w-100" size="lg">Sign Up</Button>
+                                {showError && showErrorUsername !== '' && <p id="error">{showErrorUsername}</p>}
+
+                                <MDBInput wrapperClass='mb-4' value={user.email} onChange={handleChangeEmail}
+                                placeholder="Email adress" id='formControlLg' type='email' size="lg"/>
+
+                                {showError && showErrorEmail !== '' && <p id="error">{showErrorEmail}</p>}
+
+                                <MDBInput wrapperClass='mb-4' value={user.password} onChange={handleChangePassword}
+                                placeholder="Password" id='formControlLg' type='password' size="lg"/>
+
+                                {showError && showErrorPassword !== '' && <p id="error">{showErrorPassword}</p>}
+
+                                <MDBInput wrapperClass='mb-4' value={user.password2} onChange={handleChangePassword2}
+                                placeholder="Confirm password" id='formControlLg' type='password' size="lg"/>
+
+                                {showError && showErrorPassword2 !== '' && <p id="error">{showErrorPassword2}</p>}
+                                {!showError && showSucessMessage !== '' && <p id="sucess">{showSucessMessage}</p>}
+
+                                <Button type="submit" onClick={handleSubmit} className="mb-3 w-100" size="lg">Sign Up</Button>
                                 <Button onClick={() => navigate(-1)} id="colorBTN" className="mb-4 w-100" size="lg">Cancel</Button>
 
                                 <div className="divider d-flex align-items-center my-4"/>
 
                                 <div className='d-flex flex-row justify-content-center'>
                                     <p id="fg" className="small text-muted me-1 fw-bold" >
-                                        Already have an account? <a id="fgg" className="me-1 fw-bold" href="/login">
+                                        Already have an account? <a id="fgg" className="me-1 fw-bold" href="/">
                                         Sign in </a>
                                     </p>
                                 </div>

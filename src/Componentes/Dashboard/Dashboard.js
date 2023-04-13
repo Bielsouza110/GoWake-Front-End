@@ -12,7 +12,7 @@ function Dashboard() {
     const objetoComState = location.state || null;
     const nome = objetoComState?.username || 'Nome não fornecido';
     const email = objetoComState?.email || 'Email não fornecido';
-
+    const token = objetoComState?.token || 'Token não fornecido';
 
     const DrawerHeader = styled('div')(({ theme }) => ({
         display: 'flex',
@@ -37,6 +37,7 @@ function Dashboard() {
                     <div>
                         <p>Nome: {nome}</p>
                         <p>Email: {email}</p>
+                        <p>Token: {token}</p>
                     </div>
                     <Cards/>
                 </Box>

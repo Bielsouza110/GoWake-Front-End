@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -18,6 +17,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Drawer from "./Drawer";
 
+import React, { useState } from 'react';
+import { Document, Page } from 'react-pdf';
+
 const Rules = () => {
 
     const DrawerHeader = styled('div')(({ theme }) => ({
@@ -29,17 +31,24 @@ const Rules = () => {
         ...theme.mixins.toolbar,
     }));
 
+    const [numPages, setNumPages] = useState(null);
+    const [pageNumber, setPageNumber] = useState(1);
+
+    function onDocumentLoadSuccess({ numPages }) {
+        setNumPages(numPages);
+    }
+
     return (
-        <div className="sdd">
-        <Box sx ={{display:"flex"}}>
-            <Drawer/>
-            <Box component="main" sx={{ flexGrow: 1, p: 3, margin:0 }}>
-                <DrawerHeader />
-                <Typography paragraph>
-                    Page Wakeboard Rules
-                </Typography>
-            </Box>
-        </Box>
+        <div>
+            <Document
+                file="https://iwwf.sport/wp-content/uploads/2022/05/IWWFWakeboardBoatRules-2022.pdf"
+                onLoadSuccess={onDocumentLoadSuccess}
+            >
+                <Page pageNumber={pageNumber} />
+            </Document>
+            <p>
+                Page {pageNumber} of {numPages}
+            </p>
         </div>
     );
 };

@@ -1,205 +1,240 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 .App-link {
-  color: #61dafb;
+    color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .carousel img {
-  max-height: 500px;
-  margin: 0 auto;
+    max-height: 500px;
+    margin: 0 auto;
 }
 
 .card {
-  margin: 2%;
+    margin: 2%;
 }
 
-.card img{
-  height: 48%;
-}
-.card:hover{
-  top:-2px;
-  box-shadow:0 10px 10px #666;
+.card img {
+    height: 48%;
 }
 
-.sdd{
-  background-color: white;
-  min-height: 100vh;
+.card:hover {
+    top: -2px;
+    box-shadow: 0 10px 10px #666;
 }
 
-.sdds{
-  margin-top: 100vh;
+.sdd {
+    background-color: white;
+    min-height: 100vh;
+}
+
+.sdds {
+    margin-top: 100vh;
 }
 
 #tCards {
-  margin-top: 2%;
-  margin-left: 2%;
-  margin-right: 2%;
+    margin-top: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
 }
 
 #btn {
-  margin-top: 3%;
+    margin-top: 3%;
 }
 
-#searh1{
-  margin-top: 2%;
-  margin-left: 2%;
-  margin-right: 2%;
-}
-#searh2{
-  margin: 0.5% 2% 2%;
+#searh1 {
+    margin-top: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
 }
 
-#sub{
-  background-image: url("https://wallpapercave.com/wp/wp3598073.jpg");
-  height: 52vh;
+#searh2 {
+    margin: 0.5% 2% 2%;
 }
 
-#subs{
-  padding-top: 2%;
-  text-align: center;
-  color: white;
+#sub {
+    background-image: url("https://wallpapercave.com/wp/wp3598073.jpg");
+    height: 52vh;
 }
 
-#email{
-  padding-left: 20%;
-  align-items: center;
+#subs {
+    padding-top: 2%;
+    text-align: center;
+    color: white;
+}
+
+#email {
+    padding-left: 20%;
+    align-items: center;
 
 }
 
-#botao{
-  padding-right: 2%;
+#botao {
+    padding-right: 2%;
 }
 
-#form{
-  padding-left: 25%;
-  padding-right: 25%;
-  padding-top: 2%;
+#form {
+    padding-left: 25%;
+    padding-right: 25%;
+    padding-top: 2%;
 }
 
 .buttonW {
-  width: 100%;
-  align-items: center;
+    width: 100%;
+    align-items: center;
 }
 
-#subscribeForm{
-  height: 6vh
+#subscribeForm {
+    height: 6vh
 }
 
 .divider:after,
 .divider:before {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: #eee;
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
 }
 
-#fg{
-  text-decoration: none;
-  margin: 2%;
-}
-#fgg{
-  text-decoration: none;
-}
-#tu{
-  text-decoration: none;
-}
-#pp{
-  text-decoration: none;
+#fg {
+    text-decoration: none;
+    margin: 2%;
 }
 
-#bg{
-  background-image: url("https://contents.mediadecathlon.com/p1823225/k$5af64ede438d550765689c7cd70d5cd6/1200x0/1.91cr1/WAKEBOARD.jpg?format=auto");
+#fgg {
+    text-decoration: none;
+}
+
+#tu {
+    text-decoration: none;
+}
+
+#pp {
+    text-decoration: none;
+}
+
+#bg {
+    background-image: url("https://contents.mediadecathlon.com/p1823225/k$5af64ede438d550765689c7cd70d5cd6/1200x0/1.91cr1/WAKEBOARD.jpg?format=auto");
 }
 
 #bg1 {
-  display: flex;
-  height: 100%;
-  margin-top: 4.6%;
+    display: flex;
+    height: 100%;
+    margin-top: 4.6%;
 }
 
 
-#card{
-  text-decoration: none;
-  color: black;
+#card {
+    text-decoration: none;
+    color: black;
 }
 
-#size{
-  min-height: 25vh;
+#size {
+    min-height: 25vh;
 }
 
-.li{
-  background-color: green;
-  border-radius: 22%;
-  font-size: 12px;
-  color: #eeeeee;
-  padding: 4px;
-  align-items: center;
+.li {
+    background-color: green;
+    border-radius: 22%;
+    font-size: 12px;
+    color: #eeeeee;
+    padding: 4px;
+    align-items: center;
 }
 
-#m{
-  margin-bottom: 2%;
+#m {
+    margin-bottom: 2%;
 }
 
 #table {
-  border-collapse: collapse;
+    border-collapse: collapse;
 }
 
 @media only screen and (max-width: 1026px) {
-  #esconde {
-    display: none;
-  }
+    #esconde {
+        display: none;
+    }
 }
 
-#colorBTN{
-  background-color: lightgray;
-  color: black;
-  border-color: lightgray;
+#colorBTN {
+    background-color: lightgray;
+    color: black;
+    border-color: lightgray;
 }
 
-.mysidenav{
-  background-color: #00008b !important;
+.mysidenav {
+    background-color: #00008b !important;
 }
 
-#sd{
-  margin: 1.5%;
+#sd {
+    margin: 1.5%;
 }
 
 .a {
-  color: #FFF;
+    color: #FFF;
 }
+
 .a:hover {
-  color: #FFF
+    color: #FFF
 }
 
 .a, .a:hover, .a:visited, .a:active, .href {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 
 .dot {
-  height: 10px;
-  width: 10px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
+    height: 10px;
+    width: 10px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
 }
 
-#logo{
-  margin-top: 8%;
+#logo {
+    margin-top: 8%;
 }
 
-#error{
-  color: red;
-  font-size: 12px;
+#error {
+    color: red;
+    font-size: 12px;
+}
+
+#sucess {
+    color: green;
+    font-size: 12px;
+}
+
+.title {
+    font-size: 1.5em;
+    text-align: center;
+    color: palevioletred;
+}
+
+.subtitle {
+    font-size: 1.2em;
+    text-align: center;
+    color: #333;
+}
+
+.subject {
+    font-size: 1.2em;
+    text-align: left;
+    color: #333;
+}
+
+.text {
+    font-size: 1em;
+    text-align: left;
+    color: #333;
 }

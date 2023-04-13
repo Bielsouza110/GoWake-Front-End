@@ -18,6 +18,7 @@ function Login() {
     const navigate = useNavigate();
     const [showError, setShowError] = useState(false);
     const [user, setUser] = useState({ username: '', password: '' });
+
     const DrawerHeader = styled('div')(({theme}) => ({
         display: 'flex',
         alignItems: 'center',
@@ -37,12 +38,11 @@ function Login() {
     function handleChangePassword(event) {
         setUser({ ...user, password: event.target.value });
     }
-
     function handleSubmit(event) {
 
         event.preventDefault();
 
-        axios.post('https://mmonteiro.pythonanywhere.com/account/login/', user)
+        axios.post('https://gowake.daletech.pt/account/login/', user)
             .then(response => {
 
                 const user = {
@@ -88,7 +88,7 @@ function Login() {
                                 }}>Sign into your account</h5>
 
                                 <MDBInput wrapperClass='mb-4' value={user.username} onChange={handleChangeUsername}
-                                          placeholder="Email adress" id='formControlLg' type='text'
+                                          placeholder="Username" id='formControlLg' type='text'
                                           size="lg"/>
                                 <MDBInput wrapperClass='mb-4' value={user.password} onChange={handleChangePassword}
                                           placeholder="Password" id='formControlLg' type='password'
