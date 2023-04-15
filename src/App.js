@@ -15,6 +15,7 @@ import Rules from "./Componentes/Dashboard/Rules";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import RulesLogin from "./Componentes/Login/rules/RulesLogin";
+import DetailCompetitions from "./Componentes/Dashboard/Competitions/DetailCompetitions";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                 <Route path="/login/createevent" element={<CreateEvent/>}/>
                 <Route path="/login/modidyevent" element={<ModidyEvent/>}/>
 
+                <Route path="/login/dashboard/:id" element={<DetailCompetitions/>} />
             </Routes>
         </Router>
     );

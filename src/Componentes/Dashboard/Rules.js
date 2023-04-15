@@ -56,7 +56,7 @@ const Rules = () => {
                 <Drawer/>
                 <Container>
                     <DrawerHeader/>
-                    <MDBContainer className="p-3 my-4">
+                    <MDBContainer className="p-1 my-2">
 
                         <h5 className="fw-normal my-3 pb-2" style={{
                             letterSpacing: '1px', fontSize: '30px'

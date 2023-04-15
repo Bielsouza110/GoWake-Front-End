@@ -43,7 +43,7 @@ function Login() {
 
         event.preventDefault();
 
-        axios.post('https://gowake.daletech.pt/account/login/', user)
+        axios.post('https://mmonteiro.pythonanywhere.com/account/login/', user)
             .then(response => {
 
                 const user = {
@@ -102,7 +102,6 @@ function Login() {
             setRecoverPassword(true);
         }
     }
-
 
     return (
         <div className="sdd">

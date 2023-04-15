@@ -55,7 +55,7 @@ function CreateAccount() {
     function handleSubmit(event) {
         event.preventDefault();
 
-        axios.post('https://gowake.daletech.pt/account/register/', user)
+        axios.post('https://mmonteiro.pythonanywhere.com/account/register/', user)
             .then(response => {
                 const userResponse = {
                     username: response.data.username,
