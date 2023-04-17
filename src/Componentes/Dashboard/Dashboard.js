@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Cards from "../home/Cards";
 import DemoCarousel from "../home/DemoCarousel";
-import { useLocation } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 import Tooltip from "@mui/material/Tooltip";
@@ -12,9 +12,12 @@ import IconButton from "@mui/material/IconButton";
 import DownloadingTwoToneIcon from "@mui/icons-material/DownloadingTwoTone";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import FlagIcon from 'react-flags-select';
 
 function Dashboard() {
 
+    const navigate = useNavigate();
     const location = useLocation();
     const objetoComState = location.state || null;
     const nome = objetoComState?.username || 'Nome não fornecido';
@@ -54,6 +57,36 @@ function Dashboard() {
         fetchData();
     }, []);
 
+    const handleDetalhesClick = (id) => {
+        navigate(`/login/dashboard/${id}`);
+    };
+
+    const handleMouseEnter = (event) => {
+        event.currentTarget.style.backgroundColor = '#eee';
+    };
+
+    const handleMouseLeave = (event) => {
+        event.currentTarget.style.backgroundColor = '';
+    };
+
+    const countryFlags = {
+        PT: '🇵🇹', BRZ: '🇧🇷', ESP: '🇪🇸',
+        FRA: '🇫🇷', ITA: '🇮🇹', GER: '🇩🇪',
+        AUS: '🇦🇺', NED: '🇳🇱', GBR: '🇬🇧',
+        USA: '🇺🇸', CAN: '🇨🇦', JPN: '🇯🇵',
+        CHN: '🇨🇳', KOR: '🇰🇷', RUS: '🇷🇺',
+        SWE: '🇸🇪', NOR: '🇳🇴', FIN: '🇫🇮',
+        DEN: '🇩🇰', CZE: '🇨🇿', POL: '🇵🇱',
+        HUN: '🇭🇺', AUT: '🇦🇹', SUI: '🇨🇭',
+        BEL: '🇧🇪', IRL: '🇮🇪', POR: '🇵🇹',
+        ARG: '🇦🇷', MEX: '🇲🇽', COL: '🇨🇴',
+    };
+
+    function getCountryFlag(countryCode) {
+        const flag = countryFlags[countryCode];
+        return flag || countryCode;
+    }
+
     return (
         <div className="sdd">
             <Box sx={{display: "flex"}}>
@@ -76,22 +109,28 @@ function Dashboard() {
                             ))}
                         </div>*/}
 
-                        <div className="table-responsive">
-                            <table className="table">
-                                <thead>
-                                <tr>
-                                    <th>Data</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {data.map(item => (
-                                    <tr key={item.id}>
-                                        <td><a href={`/login/dashboard/${item.id}`}>{item.name}</a></td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
-                        </div>
+                        <TableContainer component={Paper}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Country</TableCell>
+                                        <TableCell>Venue</TableCell>
+                                        <TableCell>Name</TableCell>
+                                        <TableCell id="esconde">Discipline</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {data.map(dado => (
+                                        <TableRow key={dado.id} onClick={() => handleDetalhesClick(dado.id)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                                            <TableCell>{getCountryFlag(dado.organizing_country)}</TableCell>
+                                            <TableCell>{dado.venue.charAt(0).toUpperCase() + dado.venue.slice(1).toLowerCase()}</TableCell>
+                                            <TableCell>{dado.name.charAt(0).toUpperCase() + dado.name.slice(1).toLowerCase()}</TableCell>
+                                            <TableCell id="esconde">{dado.discipline.charAt(0).toUpperCase() + dado.discipline.slice(1).toLowerCase()}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
 
                     </MDBContainer>
                 </Container>

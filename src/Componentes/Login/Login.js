@@ -35,7 +35,6 @@ function Login() {
     function handleChangeUsername(event) {
         setUser({ ...user, username: event.target.value });
     }
-
     function handleChangePassword(event) {
         setUser({ ...user, password: event.target.value });
     }
@@ -68,7 +67,6 @@ function Login() {
                 }
             });
     }
-
     function handleSubmitRecoverPassword(event){
 
         event.preventDefault();
@@ -91,8 +89,6 @@ function Login() {
                 }
             });*/
     } //falta o mauro fazer o endpoint
-
-
     function recoverPassword(event) {
         event.preventDefault();
 
