@@ -16,9 +16,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Tooltip from "@mui/material/Tooltip";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
@@ -27,7 +24,7 @@ import KitesurfingIcon from '@mui/icons-material/Kitesurfing';
 import PublishIcon from '@mui/icons-material/Publish';
 import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import LoginIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 240;
@@ -97,22 +94,6 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
     }),
 );
 
-
-const settings = [
-    {
-        text: 'Profile',
-        link: "/login/dashboard/box1"
-    },
-    {
-        text: 'Account',
-        link: "/login/dashboard/box1"
-    },
-    {
-        text: 'Logout',
-        link: "/"
-    },
-]
-
 function MiniDrawer (){
 
 
@@ -167,25 +148,25 @@ function MiniDrawer (){
         setOpen(false);
     };
 
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+/*    const [ setAnchorElNav] = React.useState(null);*/
+    const [ setAnchorElUser] = React.useState(null);
 
-    const handleOpenNavMenu = (event) => {
+/*    const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
-    };
+    };*/
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseNavMenu = () => {
+/*    const handleCloseNavMenu = () => {
         setAnchorElNav(null);
-    };
+    };*/
 
-    const handleCloseUserMenu = () => {
+/*    const handleCloseUserMenu = () => {
         setAnchorElUser(null);
-    };
+    };*/
 
-    const navigate = useNavigate();
+/*    const navigate = useNavigate();*/
 
     return (
         <Box sx={{display: 'flex'}}>
@@ -244,7 +225,7 @@ function MiniDrawer (){
                 <List>
                     {itemsList.map((item, index) => (
                         <div key={index}>
-                        <ListItem button component={Link} to={item.link} key={index}>
+                        <ListItem component={Link} to={item.link} key={index}>
                             <ListItemIcon>{item.icon}</ListItemIcon>
                             <ListItemText primary={item.text} />
                         </ListItem>

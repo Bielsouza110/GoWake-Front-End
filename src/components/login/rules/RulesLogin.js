@@ -1,18 +1,16 @@
-import React, {useState} from 'react';
-import {styled, useTheme} from '@mui/material/styles';
+import React from 'react';
+import {styled} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import {FaDownload} from 'react-icons/fa';
 
-import {Document, Page, pdfjs} from 'react-pdf';
+import {pdfjs} from 'react-pdf';
 import {saveAs} from 'file-saver';
-import {Button} from "react-bootstrap";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import DownloadingTwoToneIcon from '@mui/icons-material/DownloadingTwoTone';
-import AppBar from "../AppBar/AppBar";
+import AppBar from "../appBar/AppBar";
 import {Container} from "@material-ui/core";
-import {MDBCol, MDBContainer, MDBInput, MDBRow} from "mdb-react-ui-kit";
+import {MDBContainer} from "mdb-react-ui-kit";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -36,11 +34,11 @@ const RulesLogin = () => {
             });
     };
 
-    const [numPages, setNumPages] = useState(null);
+/*    const [numPages, setNumPages] = useState(null);
 
     function onDocumentLoadSuccess({numPages}) {
         setNumPages(numPages);
-    }
+    }*/
 
     const buttonStyle = {
 

@@ -5,7 +5,7 @@ import {
     MDBInput,
 } from 'mdb-react-ui-kit';
 import {useNavigate} from 'react-router-dom';
-import AppBar from "./AppBar/AppBar";
+import AppBar from "./appBar/AppBar";
 import {useState} from "react";
 import {styled} from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -145,7 +145,7 @@ function Login() {
                                 <div className="divider d-flex align-items-center my-4"/>
 
                                 <div className='d-flex flex-row justify-content-center'>
-                                    <a id="fg" className="small text-muted me-1 fw-bold" href="#!" onClick={recoverPassword}>Forgot Password?</a>
+                                    <a id="fg" className="small text-muted me-1 fw-bold" onClick={recoverPassword}>Forgot Password?</a>
                                     <a id="fg" className="small text-muted me-1 fw-bold" href="/createlogin">Create an
                                         Account</a>
                                 </div>

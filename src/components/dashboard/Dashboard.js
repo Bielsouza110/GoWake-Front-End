@@ -8,9 +8,6 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField} from '@mui/material';
 import {Spinner} from "react-bootstrap";
-import IconButton from "@mui/material/IconButton";
-import PlaylistRemoveRoundedIcon from '@mui/icons-material/PlaylistRemoveRounded';
-import Tooltip from "@mui/material/Tooltip";
 import Typography from '@mui/material/Typography';
 
 function Dashboard() {
@@ -19,8 +16,8 @@ function Dashboard() {
     const location = useLocation();
     const objetoComState = location.state || null;
     const nome = objetoComState?.username || 'Nome não fornecido';
-    const email = objetoComState?.email || 'Email não fornecido';
-    const token = objetoComState?.token || 'Token não fornecido';
+/*    const email = objetoComState?.email || 'Email não fornecido';
+    const token = objetoComState?.token || 'Token não fornecido';*/
 
     const DrawerHeader = styled('div')(({theme}) => ({
         display: 'flex',
@@ -32,11 +29,8 @@ function Dashboard() {
     }));
 
     const token2 = '818f3287afd55fdcbc86d21cc55e068b62cffa18';
-    const token3 = "";
 
     const [data, setData] = useState([]);
-    const [showMessage, setShowMessage] = useState(false);
-
     const fetchData = async () => {
         try {
             const response = await axios.get('https://mmonteiro.pythonanywhere.com/api/competitions/', {

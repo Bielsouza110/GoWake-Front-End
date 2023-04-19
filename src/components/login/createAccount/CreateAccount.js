@@ -7,7 +7,7 @@ import {
 
 import {Button} from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
-import AppBar from "../AppBar/AppBar";
+import AppBar from "../appBar/AppBar";
 import Box from "@mui/material/Box";
 import {styled} from "@mui/material/styles";
 import {Container} from "@material-ui/core";
@@ -57,12 +57,6 @@ function CreateAccount() {
 
         axios.post('https://mmonteiro.pythonanywhere.com/account/register/', user)
             .then(response => {
-                const userResponse = {
-                    username: response.data.username,
-                    token: response.data.token,
-                    email: response.data.email,
-                    /*role: response.data.role,*/
-                };
 
                 if (user.password !== user.password2) {
                     setShowError(true);
