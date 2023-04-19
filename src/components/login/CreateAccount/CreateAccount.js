@@ -178,8 +178,8 @@ function CreateAccount() {
                                 </div>
 
                                 <div className='d-flex flex-row justify-content-center'>
-                                    <a id="tu" href="src/Componentes/Login/CreateAccount#" className="small text-muted me-1">Terms of use.</a>
-                                    <a id="pp" href="src/Componentes/Login/CreateAccount#" className="small text-muted">Privacy policy</a>
+                                    <a id="tu" href="src/components/login/CreateAccount#" className="small text-muted me-1">Terms of use.</a>
+                                    <a id="pp" href="src/components/login/CreateAccount#" className="small text-muted">Privacy policy</a>
                                 </div>
                             </MDBCol>
                         </MDBRow>

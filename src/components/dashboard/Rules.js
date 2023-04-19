@@ -11,7 +11,7 @@ import {Button} from "react-bootstrap";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import DownloadingTwoToneIcon from '@mui/icons-material/DownloadingTwoTone';
-import AppBar from "../Login/AppBar/AppBar";
+import AppBar from "../login/AppBar/AppBar";
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;

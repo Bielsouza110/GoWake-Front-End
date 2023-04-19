@@ -1,21 +1,21 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import Home from "./Componentes/home/Home";
-import Login from "./Componentes/Login/Login";
-import Event from "./Componentes/home/Events/Event";
-import CreateAccount from "./Componentes/Login/CreateAccount/CreateAccount";
-import Dashboard from "./Componentes/Dashboard/Dashboard";
-import Athletes from "./Componentes/Dashboard/Athletes";
-import CreateEvent from "./Componentes/Dashboard/CreateEvent";
-import LiveResults from "./Componentes/Dashboard/LiveResults";
-import ModidyEvent from "./Componentes/Dashboard/ModifyEvent";
-import UploadXML from "./Componentes/Dashboard/UploadXML";
-import Rules from "./Componentes/Dashboard/Rules";
+import Home from "./components/home/Home";
+import Login from "./components/login/Login";
+import Event from "./components/home/Events/Event";
+import CreateAccount from "./components/login/CreateAccount/CreateAccount";
+import Dashboard from "./components/dashboard/Dashboard";
+import Athletes from "./components/dashboard/Athletes";
+import CreateEvent from "./components/dashboard/CreateEvent";
+import LiveResults from "./components/dashboard/LiveResults";
+import ModidyEvent from "./components/dashboard/ModifyEvent";
+import UploadXML from "./components/dashboard/UploadXML";
+import Rules from "./components/dashboard/Rules";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import RulesLogin from "./Componentes/Login/rules/RulesLogin";
-import DetailCompetitions from "./Componentes/Dashboard/Competitions/DetailCompetitions";
+import RulesLogin from "./components/login/rules/RulesLogin";
+import DetailCompetitions from "./components/dashboard/competitions/DetailCompetitions";
 
 
 function App() {
