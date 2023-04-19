@@ -244,10 +244,13 @@ function MiniDrawer (){
                 <Divider/>
                 <List>
                     {itemsList.map((item, index) => (
+                        <div key={index}>
                         <ListItem button component={Link} to={item.link} key={index}>
                             <ListItemIcon>{item.icon}</ListItemIcon>
                             <ListItemText primary={item.text} />
                         </ListItem>
+                            {index === 4 &&  <Divider/>}
+                        </div>
                     ))}
                 </List>
 
