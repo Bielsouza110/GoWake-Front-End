@@ -171,10 +171,7 @@ function Dashboard() {
 
                                                 {filteredData.length === 0 &&
                                                     <TableRow onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                                                        <TableCell id="error">Competition not found!</TableCell>
-                                                        <TableCell ></TableCell>
-                                                        <TableCell ></TableCell>
-                                                        <TableCell id="esconde"></TableCell>
+                                                        <TableCell colSpan={4} id="error2" align="left"> Competition not found!</TableCell>
                                                     </TableRow>
                                                 }
 

@@ -27,7 +27,7 @@ import KitesurfingIcon from '@mui/icons-material/Kitesurfing';
 import PublishIcon from '@mui/icons-material/Publish';
 import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import LoginIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 240;
@@ -243,19 +243,14 @@ function MiniDrawer (){
                 </DrawerHeader>
                 <Divider/>
                 <List>
-                    {itemsList.map((item, index) => {
-                        const {text, icon, link} = item
-                        return (
-                            <div>
-                            <ListItem button key={text} onClick={() => navigate(link)}>
-                                {icon && <ListItemIcon>{icon}</ListItemIcon>}
-                                <ListItemText primary={text}/>
-                            </ListItem>
-                                {index === 4 &&  <Divider/>}
-                            </div>
-                        )
-                    })}
+                    {itemsList.map((item, index) => (
+                        <ListItem button component={Link} to={item.link} key={index}>
+                            <ListItemIcon>{item.icon}</ListItemIcon>
+                            <ListItemText primary={item.text} />
+                        </ListItem>
+                    ))}
                 </List>
+
             </Drawer>
         </Box>
     );
