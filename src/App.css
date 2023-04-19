@@ -210,6 +210,20 @@
     font-size: 12px;
 }
 
+#error2 {
+    color: red;
+    font-size: 14px;
+}
+
+#load {
+    margin: 0.8%;
+}
+
+#load2 {
+     color: gray;
+     font-size: 14px;
+ }
+
 #sucess {
     color: green;
     font-size: 12px;
