@@ -1,8 +1,7 @@
 import React from 'react';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Drawer from "./Drawer";
+import Drawer from "../../navs/Drawer";
 
 import { pdfjs } from 'react-pdf';
 import { saveAs } from 'file-saver';
@@ -11,19 +10,10 @@ import IconButton from "@mui/material/IconButton";
 import DownloadingTwoToneIcon from '@mui/icons-material/DownloadingTwoTone';
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
+import DrawerHeader from "../../navs/DrawerHeader";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const Rules = () => {
-
-    const DrawerHeader = styled('div')(({ theme }) => ({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
-        ...theme.mixins.toolbar,
-    }));
-
     const handleDownloadPDF = () => {
         fetch('/pdfs/rules.pdf') // Path to your PDF file in public folder
             .then(response => response.blob())
@@ -46,7 +36,7 @@ const Rules = () => {
         <div className="sdd">
             <Box sx={{display: "flex"}}>
                 <Drawer/>
-                <Container>
+                <Container id="marginDrawerHeader" >
                     <DrawerHeader/>
                     <MDBContainer className="p-1 my-2">
 

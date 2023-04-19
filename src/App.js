@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Login from "./components/login/Login";
-import CreateAccount from "./components/login/createAccount/CreateAccount";
+import CreateAccount from "./components/login/CreateAccount";
 import Dashboard from "./components/dashboard/Dashboard";
 import Athletes from "./components/dashboard/Athletes";
 import CreateEvent from "./components/dashboard/CreateEvent";
@@ -10,7 +10,7 @@ import LiveResults from "./components/dashboard/LiveResults";
 import ModidyEvent from "./components/dashboard/ModifyEvent";
 import UploadXML from "./components/dashboard/UploadXML";
 import Rules from "./components/dashboard/Rules";
-import RulesLogin from "./components/login/rules/RulesLogin";
+import RulesLogin from "./components/login/RulesLogin";
 import DetailCompetitions from "./components/dashboard/competitions/DetailCompetitions";
 
 

@@ -1,31 +1,26 @@
 import React from 'react';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Drawer from "./Drawer";
+import Drawer from "../../navs/Drawer";
+import DrawerHeader from "../../navs/DrawerHeader";
+import {Container} from "@material-ui/core";
+import {MDBContainer} from "mdb-react-ui-kit";
 
 const CreateEvent = () => {
 
-    const DrawerHeader = styled('div')(({ theme }) => ({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
-        ...theme.mixins.toolbar,
-    }));
-
     return (
         <div className="sdd">
-        <Box sx ={{display:"flex"}}>
-            <Drawer/>
-            <Box component="main" sx={{ flexGrow: 1, p: 3, margin:0 }}>
-                <DrawerHeader />
-                <Typography paragraph>
-                    Page Create Event
-                </Typography>
+            <Box sx={{display: "flex"}}>
+                <Drawer/>
+                <Container id="marginDrawerHeader" >
+                    <DrawerHeader/>
+                    <MDBContainer className="p-1 my-2">
+                        <Typography paragraph className="my-3 pb-0">
+                            Page Create Event
+                        </Typography>
+                    </MDBContainer>
+                </Container>
             </Box>
-        </Box>
         </div>
     );
 };

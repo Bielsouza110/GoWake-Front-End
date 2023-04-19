@@ -8,7 +8,7 @@ import {saveAs} from 'file-saver';
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import DownloadingTwoToneIcon from '@mui/icons-material/DownloadingTwoTone';
-import AppBar from "../appBar/AppBar";
+import AppBar from "../../navs/AppBar";
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 
