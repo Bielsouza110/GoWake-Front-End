@@ -50,7 +50,7 @@ function Dashboard() {
         fetchData();
 
         const timer = setTimeout(() => {
-            setShowSpinner(false);
+            setShowSpinner(true);
         }, 3000); // Tempo limite de 3 segundos
 
         return () => clearTimeout(timer);
