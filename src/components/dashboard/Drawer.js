@@ -24,7 +24,7 @@ import KitesurfingIcon from '@mui/icons-material/Kitesurfing';
 import PublishIcon from '@mui/icons-material/Publish';
 import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import LoginIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 240;
@@ -96,7 +96,6 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 
 function MiniDrawer (){
 
-
     const itemsList = [
         {
             text: 'Dashboard',
@@ -148,25 +147,25 @@ function MiniDrawer (){
         setOpen(false);
     };
 
-/*    const [ setAnchorElNav] = React.useState(null);*/
-    const [ setAnchorElUser] = React.useState(null);
+    const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-/*    const handleOpenNavMenu = (event) => {
+    const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
-    };*/
+    };
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
 
-/*    const handleCloseNavMenu = () => {
+    const handleCloseNavMenu = () => {
         setAnchorElNav(null);
-    };*/
+    };
 
-/*    const handleCloseUserMenu = () => {
+    const handleCloseUserMenu = () => {
         setAnchorElUser(null);
-    };*/
+    };
 
-/*    const navigate = useNavigate();*/
+    const navigate = useNavigate();
 
     return (
         <Box sx={{display: 'flex'}}>
@@ -225,7 +224,7 @@ function MiniDrawer (){
                 <List>
                     {itemsList.map((item, index) => (
                         <div key={index}>
-                        <ListItem component={Link} to={item.link} key={index}>
+                        <ListItem button component={Link} to={item.link} key={index}>
                             <ListItemIcon>{item.icon}</ListItemIcon>
                             <ListItemText primary={item.text} />
                         </ListItem>
