@@ -224,7 +224,6 @@ function MiniDrawer (){
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}/>
 
                     <Box id="ssd">
-
                         <Box sx={{flexGrow: 0}}>
                             <Tooltip title="Logout" href="/">
                                 <IconButton onClick={handleOpenUserMenu} sx={{p: 1}}>
