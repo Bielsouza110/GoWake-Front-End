@@ -10,7 +10,7 @@ import {Spinner} from "react-bootstrap";
 import Typography from '@mui/material/Typography';
 import DrawerHeader from "../../navs/DrawerHeader";
 
-function Dashboard() {
+const Dashboard = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
