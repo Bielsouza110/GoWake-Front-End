@@ -229,6 +229,10 @@
     font-size: 12px;
 }
 
+#nameUser {
+    color: #3664AD !important;
+}
+
 .title {
     font-size: 1.5em;
     text-align: center;
@@ -255,4 +259,8 @@
 
 #margin {
     margin: 2%;
+}
+
+#margin2 {
+    margin-bottom: 2vh;
 }

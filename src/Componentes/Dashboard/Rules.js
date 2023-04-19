@@ -43,7 +43,6 @@ const Rules = () => {
     }
 
     const buttonStyle = {
-
         position: 'fixed',
         bottom: '20px',
         right: '20px',
@@ -58,13 +57,13 @@ const Rules = () => {
                     <DrawerHeader/>
                     <MDBContainer className="p-1 my-2">
 
-                        <h5 className="fw-normal my-3 pb-2" style={{
-                            letterSpacing: '1px', fontSize: '30px'
-                        }}>General Rules</h5>
+                        <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{
+                            fontSize: '20px'
+                        }}>General Rules</Typography>
 
-                        <Typography id="margin" variant="h6">
-                            Applicability
-                        </Typography>
+                        <Typography id="margin" variant="h6" fontWeight="bold" style={{
+                            fontSize: '16px'
+                        }}>Applicability</Typography>
 
                         <Typography id="margin">
                             The rules set out here govern wakeboard competitions sanctioned by the International Water Ski and
@@ -79,9 +78,9 @@ const Rules = () => {
                             regulation, the later shall apply.
                         </Typography>
 
-                        <Typography id="margin" variant="h6">
-                            Exceptions
-                        </Typography>
+                        <Typography id="margin" variant="h6" fontWeight="bold" style={{
+                            fontSize: '16px'
+                        }}>Exceptions</Typography>
 
                         <Typography id="margin">
                             Where compliance with the rules is not feasible, the Chief Judge shall, with the approval of
@@ -92,9 +91,9 @@ const Rules = () => {
                             to enforce any provision is prohibited.
                         </Typography>
 
-                        <Typography id="margin" variant="h6">
-                            Amendments
-                        </Typography>
+                        <Typography id="margin" variant="h6" fontWeight="bold" style={{
+                            fontSize: '16px'
+                        }}>Amendments</Typography>
 
                         <Typography id="margin">
                             Riders are encouraged to make suggestions and raise questions about any concern to any judge
@@ -113,9 +112,9 @@ const Rules = () => {
                             for the following year.
                         </Typography>
 
-                        <Typography id="margin" variant="h6">
-                            Participation Contract
-                        </Typography>
+                        <Typography id="margin" variant="h6" fontWeight="bold" style={{
+                            fontSize: '16px'
+                        }}>Participation Contract</Typography>
 
                         <Typography id="margin">
                             Prior to competing in any National or International event, all athletes must sign a participation
@@ -137,9 +136,9 @@ const Rules = () => {
                             such times as the litigation is settled.
                         </Typography>
 
-                        <Typography id="margin" variant="h6">
-                            Anti-Doping
-                        </Typography>
+                        <Typography id="margin" variant="h6" fontWeight="bold" style={{
+                            fontSize: '16px'
+                        }}>Anti-Doping</Typography>
 
                         <Typography id="margin">
                             All competitors must agree to be subject to doping control. Specific policies and procedures regarding
@@ -148,9 +147,9 @@ const Rules = () => {
                             to, all amendments to the Anti-Doping Rules and all International Standards incorporated in the AntiDoping Rules.
                         </Typography>
 
-                        <Typography id="margin" variant="h6">
-                            Personal Data
-                        </Typography>
+                        <Typography id="margin" variant="h6" fontWeight="bold" style={{
+                            fontSize: '16px'
+                        }}>Personal Data</Typography>
 
                         <Typography id="margin">
                             All competitors must have comprehended and signed the Information Policy / Personal Data
@@ -158,9 +157,9 @@ const Rules = () => {
                             regarding individual data protection.
                         </Typography>
 
-                        <Typography id="margin" variant="h6">
-                            Alcohol
-                        </Typography>
+                        <Typography id="margin" variant="h6" fontWeight="bold" style={{
+                            fontSize: '16px'
+                        }}>Alcohol</Typography>
 
                         <Typography id="margin">
                             No alcohol is to be consumed by Athletes prior to or during the day’s event. The day’s event is
@@ -169,9 +168,9 @@ const Rules = () => {
                             are posted it is deemed that the athlete’s day is finished.
                         </Typography>
 
-                        <Typography id="margin" variant="h6">
-                            Unsportsmanlike Conduct
-                        </Typography>
+                        <Typography id="margin" variant="h6" fontWeight="bold" style={{
+                            fontSize: '16px'
+                        }}>Unsportsmanlike Conduct</Typography>
 
                         <Typography id="margin">
                             Any rider (or his/her representative) or official whose conduct is deemed unsportsmanlike or whose

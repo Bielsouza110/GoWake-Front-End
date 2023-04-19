@@ -6,11 +6,12 @@ import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from '@mui/material';
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField} from '@mui/material';
 import {Spinner} from "react-bootstrap";
 import IconButton from "@mui/material/IconButton";
 import PlaylistRemoveRoundedIcon from '@mui/icons-material/PlaylistRemoveRounded';
 import Tooltip from "@mui/material/Tooltip";
+import Typography from '@mui/material/Typography';
 
 function Dashboard() {
 
@@ -93,6 +94,14 @@ function Dashboard() {
 
     const [showSpinner, setShowSpinner] = useState(true);
 
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSearchTermChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const filteredData = data.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
     return (
         <div className="sdd">
             <Box sx={{display: "flex"}}>
@@ -101,20 +110,15 @@ function Dashboard() {
                     <DrawerHeader/>
                     <MDBContainer className="p-1 my-2">
 
-                        <h5 className="fw-normal my-3 pb-2" style={{
-                            letterSpacing: '1px', fontSize: '30px'
-                        }}>Dashboard</h5>
+                        <Typography variant="h6" fontWeight="bold" className="my-3 pb-2" style={{
+                            fontSize: '20px'
+                        }}>
+                            Welcome, <span id="nameUser">{nome}!</span>
+                        </Typography>
 
-                        {/*                        <Typography id="margin" variant="h6">
-                            Applicability
-                        </Typography>*/}
-
-                        {/*                        <div id="margin">
-                            {data.map(item => (
-                                <p key={item.id}>{item.name}</p>
-                            ))}
-                        </div>*/}
-
+                        <Typography id="margin2">
+                            Here you can see all the competitions that are currently available. Click on the competition to see more details.
+                        </Typography>
 
                         {data.length === 0 && showSpinner &&
                             (
@@ -133,31 +137,54 @@ function Dashboard() {
                             )
                         }
 
+                        {data.length !== 0 && (
+                            <div>
+                                <div>
+                                    <TextField
+                                        label="Search by competition name"
+                                        variant="outlined"
+                                        value={searchTerm}
+                                        onChange={handleSearchTermChange}
+                                        size="large"
+                                        sx={{ width: '100%', margin: '0 0 1rem'}}
+                                    />
+                                    <TableContainer component={Paper}>
+                                        <Table>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell>Country</TableCell>
+                                                    <TableCell>Venue</TableCell>
+                                                    <TableCell>Name</TableCell>
+                                                    <TableCell id="esconde">Discipline</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {filteredData.length > 0 && filteredData.map((item) => (
+                                                    <TableRow key={item.id} onClick={() => handleDetalhesClick(item.id)}
+                                                              onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                                                        <TableCell>{getCountryFlag(item.organizing_country)}</TableCell>
+                                                        <TableCell>{item.venue.charAt(0).toUpperCase() + item.venue.slice(1).toLowerCase()}</TableCell>
+                                                        <TableCell>{item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase()}</TableCell>
+                                                        <TableCell id="esconde">{item.discipline.charAt(0).toUpperCase() + item.discipline.slice(1).toLowerCase()}</TableCell>
+                                                    </TableRow>
+                                                ))}
 
-                        {data.length !== 0 && <TableContainer component={Paper}>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Country</TableCell>
-                                        <TableCell>Venue</TableCell>
-                                        <TableCell>Name</TableCell>
-                                        <TableCell id="esconde">Discipline</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {data.map(dado => (
-                                        <TableRow key={dado.id} onClick={() => handleDetalhesClick(dado.id)}
-                                                  onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                                            <TableCell>{getCountryFlag(dado.organizing_country)}</TableCell>
-                                            <TableCell>{dado.venue.charAt(0).toUpperCase() + dado.venue.slice(1).toLowerCase()}</TableCell>
-                                            <TableCell>{dado.name.charAt(0).toUpperCase() + dado.name.slice(1).toLowerCase()}</TableCell>
-                                            <TableCell
-                                                id="esconde">{dado.discipline.charAt(0).toUpperCase() + dado.discipline.slice(1).toLowerCase()}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>}
+                                                {filteredData.length === 0 &&
+                                                    <TableRow onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                                                        <TableCell id="error">Competition not found!</TableCell>
+                                                        <TableCell ></TableCell>
+                                                        <TableCell ></TableCell>
+                                                        <TableCell id="esconde"></TableCell>
+                                                    </TableRow>
+                                                }
+
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </div>
+                            </div>
+                        )}
+
 
                     </MDBContainer>
                 </Container>
