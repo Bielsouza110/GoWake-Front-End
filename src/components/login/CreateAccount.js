@@ -13,6 +13,7 @@ import {styled} from "@mui/material/styles";
 import {Container} from "@material-ui/core";
 import {useState} from "react";
 import axios from "axios";
+import {endpoints} from "../../api/Urls";
 
 function CreateAccount() {
 
@@ -52,11 +53,48 @@ function CreateAccount() {
         setUser({ ...user, email: event.target.value });
     }
 
-    function handleSubmit(event) {
-        event.preventDefault();
+    const createAccountApi = async (user) => {
+        try {
+            const response = await axios.post(endpoints.createAccount, user);
 
-        axios.post('https://mmonteiro.pythonanywhere.com/account/register/', user)
-            .then(response => {
+            if (user.password !== user.password2) {
+                setShowError(true);
+                setShowErrorPassword('Passwords do not match')
+                setShowErrorPassword2('Passwords do not match')
+                setTimeout(() => {
+                    setShowError(false);
+                }, 4000);
+                return;
+            }
+
+            if (response.status === 201) {
+
+                setShowError(false);
+                setShowSucessMessage(response.data.response)
+
+                console.log(response);
+
+                setTimeout(() => {
+                    setShowError(false);
+                    navigate('/');
+                }, 4000);
+            }
+
+        } catch (error) {
+            if (error.response.status === 400) {
+
+                setShowErrorUsername(error.response.data.username)
+                setShowErrorEmail(error.response.data.error)
+                setShowErrorPassword(error.response.data.password)
+                setShowErrorPassword2(error.response.data.password2)
+
+                if (user.email === '') {
+                    setShowError(true);
+                    setShowErrorEmail('This field may not be blank.')
+                    setTimeout(() => {
+                        setShowError(false);
+                    }, 4000);
+                }
 
                 if (user.password !== user.password2) {
                     setShowError(true);
@@ -65,60 +103,24 @@ function CreateAccount() {
                     setTimeout(() => {
                         setShowError(false);
                     }, 4000);
-                    return;
                 }
 
-                if (response.status === 201) {
-
+                setShowError(true);
+                setTimeout(() => {
                     setShowError(false);
-                    setShowSucessMessage(response.data.response)
+                }, 4000);
 
-                    console.log(response);
+                console.log(error.response);
+            } else {
+                // lidar com outros erros
+                console.log(error);
+            }
+        }
+    };
 
-                    setTimeout(() => {
-                        setShowError(false);
-                        navigate('/');
-                    }, 4000);
-                }
-
-                /*navigate('/login/dashboard', { state: userResponse });*/
-            })
-            .catch(error => {
-                if (error.response.status === 400) {
-
-                    setShowErrorUsername(error.response.data.username)
-                    setShowErrorEmail(error.response.data.error)
-                    setShowErrorPassword(error.response.data.password)
-                    setShowErrorPassword2(error.response.data.password2)
-
-                    if (user.email === '') {
-                        setShowError(true);
-                        setShowErrorEmail('This field may not be blank.')
-                        setTimeout(() => {
-                            setShowError(false);
-                        }, 4000);
-                    }
-
-                    if (user.password !== user.password2) {
-                        setShowError(true);
-                        setShowErrorPassword('Passwords do not match')
-                        setShowErrorPassword2('Passwords do not match')
-                        setTimeout(() => {
-                            setShowError(false);
-                        }, 4000);
-                    }
-
-                    setShowError(true);
-                    setTimeout(() => {
-                        setShowError(false);
-                    }, 4000);
-
-                    console.log(error.response);
-                } else {
-                    // lidar com outros erros
-                    console.log(error);
-                }
-            });
+    function handleSubmit(event) {
+        event.preventDefault();
+        createAccountApi(user);
     }
 
     return (

@@ -7,21 +7,21 @@ import {Container} from "@material-ui/core";
 import DrawerHeader from "../../../navs/DrawerHeader";
 import {MDBContainer} from "mdb-react-ui-kit";
 import Typography from "@mui/material/Typography";
+import {getEndpointById} from "../../../api/Urls";
 
 function DetailCompetitions() {
     const [data, setData] = useState(null);
     const {id} = useParams();
 
     const token2 = '818f3287afd55fdcbc86d21cc55e068b62cffa18';
-    const fetchData = async () => {
+    const competitionsByIdApi = async () => {
         try {
-            const response = await axios.get(`https://mmonteiro.pythonanywhere.com/api/competitions/${id}/`, {
+            const response = await axios.get(getEndpointById("competitions", id), {
                 headers: {
                     'Authorization': `Token ${token2}`
                 }
             });
-
-            console.log(response.data);
+            //console.log(response.data);
             setData(response.data);
         } catch (error) {
             console.error(error);
@@ -29,7 +29,7 @@ function DetailCompetitions() {
     };
 
     useEffect(() => {
-        fetchData();
+        competitionsByIdApi();
     });
 
     return (

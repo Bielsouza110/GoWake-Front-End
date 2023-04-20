@@ -12,6 +12,8 @@ import Box from "@mui/material/Box";
 import {Container} from "@material-ui/core";
 import axios from 'axios';
 import {Button} from "react-bootstrap";
+import {endpoints} from "../../api/Urls";
+import React from 'react';
 
 function Login() {
 
@@ -19,6 +21,7 @@ function Login() {
     const [showError, setShowError] = useState(false);
     const [showRecoverPassword, setRecoverPassword] = useState(false);
     const [user, setUser] = useState({ username: '', password: '' , email: ''});
+
 
     const DrawerHeader = styled('div')(({theme}) => ({
         display: 'flex',
@@ -38,34 +41,31 @@ function Login() {
     function handleChangePassword(event) {
         setUser({ ...user, password: event.target.value });
     }
+    const loginApi = async (user) => {
+        try {
+            const response = await axios.post(endpoints.login, user);
+
+            localStorage.setItem('usuario', JSON.stringify(response.data));
+            navigate('/login/dashboard');
+
+        } catch (error) {
+            if (error.response.status === 400) {
+
+                setShowError(true);
+                setTimeout(() => {
+                    setShowError(false);
+                }, 2000);
+
+            } else {
+                // lidar com outros erros
+                console.log(error);
+            }
+        }
+    };
     function handleSubmit(event) {
 
         event.preventDefault();
-
-        axios.post('https://mmonteiro.pythonanywhere.com/account/login/', user)
-            .then(response => {
-
-                const user = {
-                    username: response.data.username,
-                    token: response.data.token,
-                    email: response.data.email,
-                    role: response.data.role,
-                };
-                navigate('/login/dashboard', { state: user });
-            })
-            .catch(error => {
-                if (error.response.status === 400) {
-
-                    setShowError(true);
-                    setTimeout(() => {
-                        setShowError(false);
-                    }, 2000);
-
-                } else {
-                    // lidar com outros erros
-                    console.log(error);
-                }
-            });
+        loginApi(user);
     }
     function handleSubmitRecoverPassword(event){
 
