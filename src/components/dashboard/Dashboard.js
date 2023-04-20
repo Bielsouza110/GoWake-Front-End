@@ -16,13 +16,7 @@ const Dashboard = () => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
     const navigate = useNavigate();
-    const location = useLocation();
-    const objetoComState = location.state || null;
-    const nome = objetoComState?.username || 'Nome não fornecido';
-/*  const email = objetoComState?.email || 'Email não fornecido';
-    const token = objetoComState?.token || 'Token não fornecido';*/
-
-    const token2 = '818f3287afd55fdcbc86d21cc55e068b62cffa18';
+   // const token2 = '818f3287afd55fdcbc86d21cc55e068b62cffa18';
 
     const [data, setData] = useState([]);
     const competitionsApi = async () => {
