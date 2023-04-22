@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import Login from "./components/login/Login";
 import CreateAccount from "./components/login/CreateAccount";
 import Dashboard from "./components/dashboard/Dashboard";
@@ -20,7 +20,8 @@ function App() {
         <Router>
             <Routes>
                 {/*<Route path="/" element ={<Home/>}/>*/}
-                <Route path="/" element={<Login/>}/>
+                <Route path="/" element={<Navigate to="/login" />} />
+                <Route exact path="/login" element={<Login/>}/>
                 {/*<Route path="/event" element={<Event/>}/>*/}
                 <Route path="/rules" element={<RulesLogin/>}/>
                 <Route path="/createlogin" element={<CreateAccount/>}/>
