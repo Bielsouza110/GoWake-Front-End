@@ -24,7 +24,6 @@ const Rules = () => {
     };
 
    /* const [setNumPages] = useState(null);*/
-
     const buttonStyle = {
         position: 'fixed',
         bottom: '20px',

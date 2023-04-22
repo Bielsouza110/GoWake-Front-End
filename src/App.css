@@ -265,6 +265,19 @@
     margin-bottom: 2vh;
 }
 
+#margin3 {
+    margin-top: 0.6%;
+}
+
+#margin4 {
+    margin-bottom: 1vh;
+}
+
+#margin5 {
+    margin-top: 0.6%;
+    margin-bottom: 2.8vh;
+}
+
 #marginDrawerHeader {
     margin-top: 8.5vh;
 }
