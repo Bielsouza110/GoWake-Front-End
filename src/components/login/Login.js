@@ -14,6 +14,7 @@ import axios from 'axios';
 import {Button} from "react-bootstrap";
 import {endpoints} from "../../api/Urls";
 import React from 'react';
+import DrawerHeader from "../../navs/DrawerHeader";
 
 function Login() {
 
@@ -21,19 +22,6 @@ function Login() {
     const [showError, setShowError] = useState(false);
     const [showRecoverPassword, setRecoverPassword] = useState(false);
     const [user, setUser] = useState({ username: '', password: '' , email: ''});
-
-
-    const DrawerHeader = styled('div')(({theme}) => ({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
-        ...theme.mixins.toolbar,
-    }));
-
-    //const username = 'admin';
-    //const password = 'iVSK7X!ynP09';
 
     function handleChangeUsername(event) {
         setUser({ ...user, username: event.target.value });
@@ -49,7 +37,7 @@ function Login() {
             navigate('/login/dashboard');
 
         } catch (error) {
-            if (error.response.status === 400) {
+            if (error.response.status === 400 || error.response.status === 404) {
 
                 setShowError(true);
                 setTimeout(() => {
@@ -107,7 +95,7 @@ function Login() {
         <div className="sdd">
             <Box sx={{display: "flex"}}>
                 <AppBar/>
-                <Container>
+                <Container id="marginDrawerHeader">
                     <DrawerHeader/>
                     <MDBContainer className="p-3 my-4">
                         <MDBRow>

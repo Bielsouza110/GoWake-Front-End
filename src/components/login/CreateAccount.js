@@ -11,9 +11,10 @@ import AppBar from "../../navs/AppBar";
 import Box from "@mui/material/Box";
 import {styled} from "@mui/material/styles";
 import {Container} from "@material-ui/core";
-import {useState} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import {endpoints} from "../../api/Urls";
+import DrawerHeader from "../../navs/DrawerHeader";
 
 function CreateAccount() {
 
@@ -28,31 +29,18 @@ function CreateAccount() {
 
     const [user, setUser] = useState({ username: '', email: '', password: '', password2: '' });
 
-    const DrawerHeader = styled('div')(({ theme }) => ({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
-        ...theme.mixins.toolbar,
-    }));
-
     function handleChangeUsername(event) {
         setUser({ ...user, username: event.target.value });
     }
-
     function handleChangePassword(event) {
         setUser({ ...user, password: event.target.value });
     }
-
     function handleChangePassword2(event) {
         setUser({ ...user, password2: event.target.value });
     }
-
     function handleChangeEmail(event) {
         setUser({ ...user, email: event.target.value });
     }
-
     const createAccountApi = async (user) => {
         try {
             const response = await axios.post(endpoints.createAccount, user);
@@ -81,7 +69,7 @@ function CreateAccount() {
             }
 
         } catch (error) {
-            if (error.response.status === 400) {
+            if (error.response.status === 400 || error.response.status === 404) {
 
                 setShowErrorUsername(error.response.data.username)
                 setShowErrorEmail(error.response.data.error)
@@ -117,7 +105,6 @@ function CreateAccount() {
             }
         }
     };
-
     function handleSubmit(event) {
         event.preventDefault();
         createAccountApi(user);
@@ -128,8 +115,8 @@ function CreateAccount() {
         <div className="sdd">
             <Box sx ={{display:"flex"}}>
                 <AppBar/>
-                <Container>
-                    <DrawerHeader />
+                <Container id="marginDrawerHeader">
+                    <DrawerHeader/>
                     <MDBContainer className="p-3 my-4 mg">
                         <MDBRow>
                             <MDBCol id="esconde" col='10' md='6'>

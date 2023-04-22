@@ -16,32 +16,42 @@ const Dashboard = () => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
     const navigate = useNavigate();
-   // const token2 = '818f3287afd55fdcbc86d21cc55e068b62cffa18';
 
     const [data, setData] = useState([]);
-    const competitionsApi = async () => {
+/*    const competitionsApi = async () => {
         try {
             const response = await axios.get(endpoints.competitions, {
                 headers: {
                     'Authorization': `Token ${usuarioSalvo.token}`
                 }
-            });
+            })
             console.log(response.data.results);
             setData(response.data.results);
         } catch (error) {
             console.error(error);
         }
-    };
+    };*/
 
     useEffect(() => {
-        competitionsApi();
+
+        axios.get(endpoints.competitions, {
+            headers: {
+                'Authorization': `Token ${usuarioSalvo.token}`
+            }
+        }).then(response => {
+                console.log(response.data.results);
+                setData(response.data.results);
+            })
+            .catch(error => {
+                console.error(error);
+            });
 
         const timer = setTimeout(() => {
             setShowSpinner(false);
         }, 3000); // Tempo limite de 3 segundos
 
         return () => clearTimeout(timer);
-    });
+    }, []);
 
     const handleDetalhesClick = (id) => {
         navigate(`/login/dashboard/${id}`);

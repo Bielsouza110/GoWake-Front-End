@@ -1,5 +1,4 @@
 import React from 'react';
-import {styled} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
@@ -11,20 +10,19 @@ import DownloadingTwoToneIcon from '@mui/icons-material/DownloadingTwoTone';
 import AppBar from "../../navs/AppBar";
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
+import DrawerHeader from "../../navs/DrawerHeader";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const RulesLogin = () => {
 
-    const DrawerHeader = styled('div')(({theme}) => ({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
-        ...theme.mixins.toolbar,
-    }));
+    const buttonStyle = {
 
+        position: 'fixed',
+        bottom: '20px',
+        right: '20px',
+        zIndex: 100,
+    };
     const handleDownloadPDF = () => {
         fetch('/pdfs/rules.pdf') // Path to your PDF file in public folder
             .then(response => response.blob())
@@ -34,25 +32,11 @@ const RulesLogin = () => {
             });
     };
 
-/*    const [numPages, setNumPages] = useState(null);
-
-    function onDocumentLoadSuccess({numPages}) {
-        setNumPages(numPages);
-    }*/
-
-    const buttonStyle = {
-
-        position: 'fixed',
-        bottom: '20px',
-        right: '20px',
-        zIndex: 100,
-    };
-
     return (
         <div className="sdd">
             <Box sx={{display: "flex"}}>
                 <AppBar/>
-                <Container>
+                <Container id="marginDrawerHeader">
                     <DrawerHeader/>
                     <MDBContainer className="p-1 my-2">
 
