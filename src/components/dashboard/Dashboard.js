@@ -1,9 +1,9 @@
 import Drawer from "../../navs/Drawer";
 import Box from "@mui/material/Box";
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField} from '@mui/material';
 import {Spinner} from "react-bootstrap";
@@ -41,7 +41,7 @@ const Dashboard = () => {
         }, 3000); // Tempo limite de 3 segundos
 
         return () => clearTimeout(timer);
-    }, []);
+    });
 
     const handleDetalhesClick = (id) => {
         navigate(`/login/dashboard/${id}`);
@@ -74,7 +74,6 @@ const Dashboard = () => {
     }
 
     const [showSpinner, setShowSpinner] = useState(true);
-
     const [searchTerm, setSearchTerm] = useState('');
 
     const handleSearchTermChange = (event) => {

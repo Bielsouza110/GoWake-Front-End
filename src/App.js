@@ -12,10 +12,10 @@ import UploadXML from "./components/dashboard/UploadXML";
 import Rules from "./components/dashboard/Rules";
 import RulesLogin from "./components/login/RulesLogin";
 import DetailCompetitions from "./components/dashboard/competitions/DetailCompetitions";
+import {PrivateRoute} from "./privateRoute/PrivateRoute";
 
 
 function App() {
-
     return (
         <Router>
             <Routes>
@@ -24,15 +24,13 @@ function App() {
                 {/*<Route path="/event" element={<Event/>}/>*/}
                 <Route path="/rules" element={<RulesLogin/>}/>
                 <Route path="/createlogin" element={<CreateAccount/>}/>
-
-                <Route path="/login/dashboard" element={<Dashboard/>}/>
-                <Route path="/login/rules" element={<Rules/>}/>
-                <Route path="/login/liveresults" element={<LiveResults/>}/>
-                <Route path="/login/athletes" element={<Athletes/>}/>
-                <Route path="/login/uploadxml" element={<UploadXML/>}/>
-
-                <Route path="/login/createevent" element={<CreateEvent/>}/>
-                <Route path="/login/modidyevent" element={<ModidyEvent/>}/>
+                <Route path="/login/dashboard" element={<PrivateRoute><Dashboard/></PrivateRoute>}/>
+                <Route path="/login/rules" element={<PrivateRoute><Rules/></PrivateRoute>}/>
+                <Route path="/login/liveresults" element={<PrivateRoute><LiveResults/></PrivateRoute>}/>
+                <Route path="/login/athletes" element={<PrivateRoute><Athletes/></PrivateRoute>}/>
+                <Route path="/login/uploadxml" element={<PrivateRoute><UploadXML/></PrivateRoute>}/>
+                <Route path="/login/createevent" element={<PrivateRoute><CreateEvent/></PrivateRoute>}/>
+                <Route path="/login/modidyevent" element={<PrivateRoute><ModidyEvent/></PrivateRoute>}/>
 
                 <Route path="/login/dashboard/:id" element={<DetailCompetitions/>} />
             </Routes>

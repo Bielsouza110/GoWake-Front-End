@@ -6,7 +6,7 @@ import {
 } from 'mdb-react-ui-kit';
 import {useNavigate} from 'react-router-dom';
 import AppBar from "../../navs/AppBar";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {styled} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import {Container} from "@material-ui/core";
@@ -98,6 +98,10 @@ function Login() {
             setRecoverPassword(true);
         }
     }
+
+    useEffect(() => {
+        localStorage.clear();
+    }, []);
 
     return (
         <div className="sdd">
