@@ -25,17 +25,17 @@ Este projeto é um aplicativo web desenvolvido em React. Para instalá-lo, siga 
 # Funcionalidades
 
 | Pages           | In progress | Done |
-|-----------------|-----------|------|
-| Login           |           | X    |
-| Create Account  |           | X    |
-| Forgot Password | X         |      |
-| LiveResults     | X         |      |
-| IWWF Rules      |           | X    |
-| Dashboard       |           | X    |
-| Athletes        | X         |      |
-| Upload XML      | X         |      |
-| Create Event    | X         |      |
-| Modify Event    | X         |      |
+|-----------------|-------------|-----|
+| Login           |             | X   |
+| Create Account  |             | X   |
+| Forgot Password | X           |     |
+| LiveResults     | X           |     |
+| IWWF Rules      |             | X   |
+| Dashboard       | X           |     |
+| Athletes        | X           |     |
+| Upload XML      | X           |     |
+| Create Event    | X           |     |
+| Modify Event    | X           |     |
 
 
 # Imagens dos browsers
