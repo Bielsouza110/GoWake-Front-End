@@ -120,8 +120,7 @@ function CreateAccount() {
                     <MDBContainer className="p-3 my-4 mg">
                         <MDBRow>
                             <MDBCol id="esconde" col='10' md='6'>
-                                <img src="https://st2.depositphotos.com/1874273/9372/v/600/depositphotos_93724752-stock-illustration-athlete-on-board-glides-over.jpg"
-                                     width="90%" height="90%" alt=""/>
+                                <img src="/images/wake.png" alt="Image login" width="90%" height="90%" />
                             </MDBCol>
                             <MDBCol col='4' md='6'>
                                 <h5 className="fw-normal my-4 pb-3" style={{letterSpacing: '1px', fontSize:'30px'

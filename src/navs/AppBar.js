@@ -9,6 +9,7 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import LoginIcon from '@mui/icons-material/Login';
+import {Link} from "react-router-dom";
 
 const menuItems = [
     { label: 'Live Results', path: "/"},
@@ -44,11 +45,17 @@ function ResponsiveAppBar() {
 
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
 
-                        <a href="/">
+{/*                        <a href="/">
                             <img id="logo"
                                 src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/International_Waterski_%26_Wakeboard_Federation_logo.svg/1200px-International_Waterski_%26_Wakeboard_Federation_logo.svg.png"
                                 width="100%" height="50" alt=""/>
-                        </a>
+                        </a>*/}
+
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Link to="/">
+                                <img src="/images/iwwf.png" alt="Logo" style={{ height: '6.3vh' }} />
+                            </Link>
+                        </Box>
 
                         <Button
                             href= "/"

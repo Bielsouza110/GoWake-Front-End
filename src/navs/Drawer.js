@@ -185,12 +185,11 @@ function MiniDrawer (){
                         <MenuIcon/>
                     </IconButton>
 
-
-                    <a href="/login/dashboard">
-                        <img
-                             src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/International_Waterski_%26_Wakeboard_Federation_logo.svg/1200px-International_Waterski_%26_Wakeboard_Federation_logo.svg.png"
-                             width="100%" height="50" alt=""/>
-                    </a>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Link to="/login/dashboard">
+                            <img src="/images/iwwf.png" alt="Logo" style={{ height: '6.3vh' }} />
+                        </Link>
+                    </Box>
 
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                         <Button

@@ -4,7 +4,7 @@ import {
     MDBRow,
     MDBInput,
 } from 'mdb-react-ui-kit';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import AppBar from "../../navs/AppBar";
 import {useEffect, useState} from "react";
 import {styled} from "@mui/material/styles";
@@ -32,7 +32,6 @@ function Login() {
     const loginApi = async (user) => {
         try {
             const response = await axios.post(endpoints.login, user);
-
             localStorage.setItem('usuario', JSON.stringify(response.data));
             navigate('/login/dashboard');
 
@@ -100,9 +99,7 @@ function Login() {
                     <MDBContainer className="p-3 my-4">
                         <MDBRow>
                             <MDBCol id="esconde" col='10' md='6'>
-                                <img
-                                    src="https://st2.depositphotos.com/1874273/9372/v/600/depositphotos_93724752-stock-illustration-athlete-on-board-glides-over.jpg"
-                                    width="90%" height="90%" alt=""/>
+                                <img src="/images/wake.png" alt="Image login" width="90%" height="90%" />
                             </MDBCol>
                             <MDBCol col='4' md='6'>
 
