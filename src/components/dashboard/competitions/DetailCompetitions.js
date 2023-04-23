@@ -74,8 +74,14 @@ function DetailCompetitions() {
                         {data && (
                             <Typography id="margin3" variant="h6" fontWeight="bold" style={{
                                 fontSize: '16px'
-                            }}><CalendarMonthOutlinedIcon/> {moment(data.beginning_date).format('DD/MM/YYYY')} - {moment(data.end_date).format('DD/MM/YYYY')}
-                                <WatchLaterOutlinedIcon/> {moment(data.beginning_date).format('HH:mm')} - {moment(data.end_date).format('HH:mm')}
+                            }}><CalendarMonthOutlinedIcon/> {moment(data.beginning_date).format('DD/MM/YYYY')} <WatchLaterOutlinedIcon/> {moment(data.beginning_date).format('HH:mm')}
+                            </Typography>
+                        )}
+
+                        {data && (
+                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{
+                                fontSize: '16px'
+                            }}><CalendarMonthOutlinedIcon/> {moment(data.end_date).format('DD/MM/YYYY')} <WatchLaterOutlinedIcon/> {moment(data.end_date).format('HH:mm')}
                             </Typography>
                         )}
 
