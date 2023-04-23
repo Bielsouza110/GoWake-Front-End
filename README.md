@@ -1,70 +1,57 @@
-# Getting Started with Create React App
+# TFC-DEISI297-GoWake-Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Alunos
 
-## Available Scripts
+* Joel Bernardino - a21806180
+* Gabriel Souza - a21800463
 
-In the project directory, you can run:
+## Passos para instalação
 
-### `npm start`
+Este projeto é um aplicativo web desenvolvido em React. Para instalá-lo, siga as etapas abaixo:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Pré-requisitos
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+* Node.js (v14.17.6 ou superior)
+* npm (v6.14.15 ou superior)
 
-### `npm test`
+## Instalação
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Faça o clone do repositório: `git clone https://github.com/DEISI-ULHT-TFC-2022-23/TFC-DEISI297-GoWake-Frontend.git`
+2. Acesse o diretório do projeto: `cd TFC-DEISI297-GoWake-Frontend`
+3. Instale as dependências do projeto: `npm install` e `npm run build` 
+4. Inicie o aplicativo: `npm start`
+5. O aplicativo será iniciado em `http://localhost:3000/` no seu navegador.
 
-### `npm run build`
+# Funcionalidades
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Pages           | In progress | Done |
+|-----------------|-----------|------|
+| Login           |           | X    |
+| Create Account  |           | X    |
+| Forgot Password | X         |      |
+| LiveResults     | X         |      |
+| IWWF Rules      |           | X    |
+| Dashboard       |           | X    |
+| Athletes        | X         |      |
+| Upload XML      | X         |      |
+| Create Event    | X         |      |
+| Modify Event    | X         |      |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Imagens dos browsers
 
-### `npm run eject`
+Aqui estão algumas capturas de tela do aplicativo:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Chrome
+![Screenshot](screenshots/chorme.png)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Safari
+![Screenshot](screenshots/safari.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Firefox
+![Screenshot](screenshots/firefox.png)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Opera
+![Screenshot](screenshots/opera.png)
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
