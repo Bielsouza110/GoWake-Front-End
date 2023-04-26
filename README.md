@@ -22,6 +22,14 @@ Este projeto é um aplicativo web desenvolvido em React. Para instalá-lo, siga 
 4. Inicie o aplicativo: `npm start`
 5. O aplicativo será iniciado em `http://localhost:3000/` no seu navegador.
 
+## Caso tenha dificuldades em instalar, executar os seguintes passos:
+
+1. `npm install -g npm@latest`
+2. `npm cache clean --force`
+3. `npm install @mui/material`
+4. `npm install @mui/material --legacy-peer-deps`
+5. `npm start`
+
 # Funcionalidades
 
 | Pages           | In progress | Done |
