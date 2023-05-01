@@ -24,10 +24,7 @@ Este projeto é um aplicativo web desenvolvido em React. Para instalá-lo, siga 
 
 ## Caso tenha dificuldades em instalar, executar os seguintes passos:
 
-1. `npm install -g npm@latest`
-2. `npm cache clean --force`
-3. `npm install @mui/material`
-4. `npm install @mui/material --legacy-peer-deps`
+1. `npm install --legacy-peer-deps`
 5. `npm start`
 
 # Funcionalidades

@@ -71,5 +71,9 @@
   "devDependencies": {
     "gh-pages": "^5.0.0",
     "react-router-dom": "^6.10.0"
-  }
+  },
+  "description": "* Joel Bernardino - a21806180\r * Gabriel Souza - a21800463",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }
