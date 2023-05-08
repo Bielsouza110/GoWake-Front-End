@@ -11,7 +11,7 @@ import AppBar from "../../navs/AppBar";
 import Box from "@mui/material/Box";
 import {styled} from "@mui/material/styles";
 import {Container} from "@material-ui/core";
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import axios from "axios";
 import {endpoints} from "../../api/Urls";
 import DrawerHeader from "../../navs/DrawerHeader";
@@ -19,6 +19,7 @@ import DrawerHeader from "../../navs/DrawerHeader";
 function CreateAccount() {
 
     const navigate = useNavigate();
+    const inputRef = useRef(null);
     const [showError, setShowError] = useState(false);
     const [showErrorUsername, setShowErrorUsername] = useState('');
     const [showErrorEmail, setShowErrorEmail] = useState('');
@@ -110,6 +111,15 @@ function CreateAccount() {
         createAccountApi(user);
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            const meuBotao = document.getElementById('createAccount');
+            if (meuBotao) {
+                meuBotao.click(); // seleciona o botão se ele estiver definido
+            }
+        }
+    };
+
     return (
 
         <div className="sdd">
@@ -120,37 +130,37 @@ function CreateAccount() {
                     <MDBContainer className="p-3 my-4 mg">
                         <MDBRow>
                             <MDBCol id="esconde" col='10' md='6'>
-                                <img src="/images/wake.png" alt="Image login" width="90%" height="90%" />
+                                <img src="/images/wake.png" alt="Image login"/>
                             </MDBCol>
                             <MDBCol col='4' md='6'>
                                 <h5 className="fw-normal my-4 pb-3" style={{letterSpacing: '1px', fontSize:'30px'
                                 }}>Join us</h5>
 
-                                <MDBInput wrapperClass='mb-4' value={user.username} onChange={handleChangeUsername}
-                                placeholder="Username" id='formControlLg' type='text' size="lg"/>
+                                <MDBInput wrapperClass='mb-4' ref={inputRef} onKeyDown={handleKeyDown} value={user.username} onChange={handleChangeUsername}
+                                placeholder="Username" id='formControlLg' type='text' size="md"/>
 
                                 {showError && showErrorUsername !== '' && <p id="error">{showErrorUsername}</p>}
 
-                                <MDBInput wrapperClass='mb-4' value={user.email} onChange={handleChangeEmail}
-                                placeholder="Email adress" id='formControlLg' type='email' size="lg"/>
+                                <MDBInput wrapperClass='mb-4' ref={inputRef} onKeyDown={handleKeyDown} value={user.email} onChange={handleChangeEmail}
+                                placeholder="Email adress" id='formControlLg' type='email' size="md"/>
 
                                 {showError && showErrorEmail !== '' && <p id="error">{showErrorEmail}</p>}
 
-                                <MDBInput wrapperClass='mb-4' value={user.password} onChange={handleChangePassword}
-                                placeholder="Password" id='formControlLg' type='password' size="lg"/>
+                                <MDBInput wrapperClass='mb-4' ref={inputRef} onKeyDown={handleKeyDown} value={user.password} onChange={handleChangePassword}
+                                placeholder="Password" id='formControlLg' type='password' size="md"/>
 
                                 {showError && showErrorPassword !== '' && <p id="error">{showErrorPassword}</p>}
 
-                                <MDBInput wrapperClass='mb-4' value={user.password2} onChange={handleChangePassword2}
-                                placeholder="Confirm password" id='formControlLg' type='password' size="lg"/>
+                                <MDBInput wrapperClass='mb-4' ref={inputRef} onKeyDown={handleKeyDown} value={user.password2} onChange={handleChangePassword2}
+                                placeholder="Confirm password" id='formControlLg' type='password' size="md"/>
 
                                 {showError && showErrorPassword2 !== '' && <p id="error">{showErrorPassword2}</p>}
                                 {!showError && showSucessMessage !== '' && <p id="sucess">{showSucessMessage}</p>}
 
-                                <Button type="submit" onClick={handleSubmit} className="mb-3 w-100" size="lg">Sign Up</Button>
-                                <Button onClick={() => navigate(-1)} id="colorBTN" className="mb-4 w-100" size="lg">Cancel</Button>
+                                <Button type="submit" id="createAccount" ref={inputRef} onKeyDown={handleKeyDown} onClick={handleSubmit} className="mb-3 w-100" size="md">Sign Up</Button>
+                                <Button onClick={() => navigate(-1)} id="colorBTN" className="mb-4 w-100" size="md">Cancel</Button>
 
-                                <div className="divider d-flex align-items-center my-4"/>
+                                <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>
 
                                 <div className='d-flex flex-row justify-content-center'>
                                     <p id="fg" className="small text-muted me-1 fw-bold" >

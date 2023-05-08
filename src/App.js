@@ -14,12 +14,11 @@ import RulesLogin from "./components/login/RulesLogin";
 import DetailCompetitions from "./components/dashboard/competitions/DetailCompetitions";
 import {PrivateRoute} from "./privateRoute/PrivateRoute";
 
-
-function App() {
+ function App() {
     return (
         <Router>
             <Routes>
-                {/*<Route path="/" element ={<Home/>}/>*/}
+                 {/*<Route path="/" element ={<Home/>}/>*/}
                 <Route path="/" element={<Navigate to="/login" />} />
                 <Route exact path="/login" element={<Login/>}/>
                 {/*<Route path="/event" element={<Event/>}/>*/}
