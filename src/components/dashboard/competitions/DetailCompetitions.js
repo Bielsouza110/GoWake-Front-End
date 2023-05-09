@@ -18,7 +18,7 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material";
-import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../../../utils/Utils";
+import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../utils/Utils";
 import ShareLocationOutlinedIcon from '@mui/icons-material/ShareLocationOutlined';
 import AutoAwesomeMotionOutlinedIcon from '@mui/icons-material/AutoAwesomeMotionOutlined';
 import moment from 'moment';

@@ -3,7 +3,7 @@ import './App.css';
 import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import Login from "./components/login/Login";
 import CreateAccount from "./components/login/CreateAccount";
-import Dashboard from "./components/dashboard/Dashboard";
+import Dashboard from "./components/dashboard/competitions/Dashboard";
 import Athletes from "./components/dashboard/Athletes";
 import CreateEvent from "./components/dashboard/CreateEvent";
 import LiveResults from "./components/dashboard/LiveResults";
