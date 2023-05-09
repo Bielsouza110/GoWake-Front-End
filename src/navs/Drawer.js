@@ -156,11 +156,9 @@ function MiniDrawer (){
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
-
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
@@ -224,14 +222,19 @@ function MiniDrawer (){
                     {itemsList.map((item, index) => (
                         <div key={index}>
                         <ListItem button component={Link} to={item.link} key={index}>
-                            <ListItemIcon>{item.icon}</ListItemIcon>
+
+
+                            <span className="icon" title={item.text} style={{ marginLeft: "0.6vh" }}>
+                                <ListItemIcon>{item.icon}</ListItemIcon>
+                            </span>
+
                             <ListItemText primary={item.text} />
                         </ListItem>
-                            {index === 4 &&  <Divider/>}
+
+                            {index === 4 && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>}
                         </div>
                     ))}
                 </List>
-
             </Drawer>
         </Box>
     );

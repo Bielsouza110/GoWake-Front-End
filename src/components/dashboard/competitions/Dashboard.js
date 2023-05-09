@@ -78,7 +78,6 @@ const Dashboard = () => {
                         }
 
                         {data.length === 0 && !showSpinner && (
-
                             <div align="left">
                                 <p id="error2">There are no competitions at the moment!</p>
                             </div>

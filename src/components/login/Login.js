@@ -128,7 +128,7 @@ function Login() {
                                     Sign in
                                 </Button>
 
-                                {showRecoverPassword && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }} />
+                                {showRecoverPassword && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>
                                 }
 
                                 {showRecoverPassword &&
