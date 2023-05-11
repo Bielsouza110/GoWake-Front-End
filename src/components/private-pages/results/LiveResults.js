@@ -1,8 +1,8 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Drawer from "../../navs/Drawer";
-import DrawerHeader from "../../navs/DrawerHeader";
+import Drawer from "../../../navs/Drawer";
+import DrawerHeader from "../../../navs/DrawerHeader";
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 

@@ -7,14 +7,14 @@ import {
 
 import {Button} from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
-import AppBar from "../../navs/AppBar";
+import AppBar from "../../../navs/AppBar";
 import Box from "@mui/material/Box";
 import {styled} from "@mui/material/styles";
 import {Container} from "@material-ui/core";
 import React, {useRef, useState} from "react";
 import axios from "axios";
-import {endpoints} from "../../api/Urls";
-import DrawerHeader from "../../navs/DrawerHeader";
+import {endpoints} from "../../../api/Urls";
+import DrawerHeader from "../../../navs/DrawerHeader";
 
 function CreateAccount() {
 

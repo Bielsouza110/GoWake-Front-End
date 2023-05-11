@@ -7,10 +7,10 @@ import {saveAs} from 'file-saver';
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import DownloadingTwoToneIcon from '@mui/icons-material/DownloadingTwoTone';
-import AppBar from "../../navs/AppBar";
+import AppBar from "../../../navs/AppBar";
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
-import DrawerHeader from "../../navs/DrawerHeader";
+import DrawerHeader from "../../../navs/DrawerHeader";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 

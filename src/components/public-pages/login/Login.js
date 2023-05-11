@@ -2,17 +2,17 @@ import {
     MDBContainer,
     MDBCol,
     MDBRow,
-    MDBInput, MDBBtn,
+    MDBInput,
 } from 'mdb-react-ui-kit';
 import {useNavigate} from 'react-router-dom';
-import AppBar from "../../navs/AppBar";
+import AppBar from "../../../navs/AppBar";
 import {useEffect, useState} from "react";
 import Box from "@mui/material/Box";
 import {Container} from "@material-ui/core";
 import axios from 'axios';
 import {Button} from "react-bootstrap";
-import {endpoints} from "../../api/Urls";
-import DrawerHeader from "../../navs/DrawerHeader";
+import {endpoints} from "../../../api/Urls";
+import DrawerHeader from "../../../navs/DrawerHeader";
 import React, { useRef } from 'react';
 
 function Login() {

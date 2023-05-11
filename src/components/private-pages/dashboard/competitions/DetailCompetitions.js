@@ -2,12 +2,12 @@ import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import Box from "@mui/material/Box";
-import Drawer from "../../../navs/Drawer";
+import Drawer from "../../../../navs/Drawer";
 import {Container} from "@material-ui/core";
-import DrawerHeader from "../../../navs/DrawerHeader";
+import DrawerHeader from "../../../../navs/DrawerHeader";
 import {MDBContainer} from "mdb-react-ui-kit";
 import Typography from "@mui/material/Typography";
-import {endpoints, getEndpointById} from "../../../api/Urls";
+import {endpoints, getEndpointById} from "../../../../api/Urls";
 import {
     Grid,
     Paper,

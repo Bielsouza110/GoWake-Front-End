@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Drawer from "../../navs/Drawer";
+import Drawer from "../../../navs/Drawer";
 
 import { pdfjs } from 'react-pdf';
 import { saveAs } from 'file-saver';
@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import DownloadingTwoToneIcon from '@mui/icons-material/DownloadingTwoTone';
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
-import DrawerHeader from "../../navs/DrawerHeader";
+import DrawerHeader from "../../../navs/DrawerHeader";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const Rules = () => {
