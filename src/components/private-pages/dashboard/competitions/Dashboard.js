@@ -41,11 +41,9 @@ const Dashboard = () => {
 
         return () => clearTimeout(timer);
     }, []);
-
     const handleDetalhesClick = (id) => {
         navigate(`/login/dashboard/${id}`);
     };
-
     const handleSearchTermChange = (event) => {
         setSearchTerm(event.target.value);
     };
