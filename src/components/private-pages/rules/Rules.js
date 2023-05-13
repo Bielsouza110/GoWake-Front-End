@@ -11,6 +11,7 @@ import DownloadingTwoToneIcon from '@mui/icons-material/DownloadingTwoTone';
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 import DrawerHeader from "../../../navs/DrawerHeader";
+import './Rules.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const Rules = () => {

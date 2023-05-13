@@ -1,0 +1,17 @@
+#margin {
+    margin-top: 0.6%;
+}
+
+#margin2 {
+    margin-bottom: 1vh;
+}
+
+#margin3 {
+    margin-top: 0.6%;
+    margin-bottom: 2.8vh;
+}
+
+#error {
+    color: red;
+    font-size: 13px;
+}

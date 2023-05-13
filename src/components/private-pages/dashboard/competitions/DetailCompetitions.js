@@ -25,6 +25,7 @@ import moment from 'moment';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
 import {Spinner} from "react-bootstrap";
+import './DetailCompetitions.css';
 
 function DetailCompetitions() {
     const [data, setData] = useState(null);
@@ -66,34 +67,34 @@ function DetailCompetitions() {
                         }}>Competition details</Typography>
 
                         {data && (
-                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{
+                            <Typography id="margin" variant="h6" fontWeight="bold" style={{
                                 fontSize: '16px'
                             }}>{getCountryFlag(data.organizing_country)} {data.name.charAt(0).toUpperCase() + data.name.slice(1).toLowerCase()} </Typography>
                         )}
 
                         {data && (
-                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{
+                            <Typography id="margin" variant="h6" fontWeight="bold" style={{
                                 fontSize: '16px'
                             }}><CalendarMonthOutlinedIcon/> {moment(data.beginning_date).format('DD/MM/YYYY')} <WatchLaterOutlinedIcon/> {moment(data.beginning_date).format('HH:mm')}
                             </Typography>
                         )}
 
                         {data && (
-                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{
+                            <Typography id="margin" variant="h6" fontWeight="bold" style={{
                                 fontSize: '16px'
                             }}><CalendarMonthOutlinedIcon/> {moment(data.end_date).format('DD/MM/YYYY')} <WatchLaterOutlinedIcon/> {moment(data.end_date).format('HH:mm')}
                             </Typography>
                         )}
 
                         {data && (
-                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{
+                            <Typography id="margin" variant="h6" fontWeight="bold" style={{
                                 fontSize: '16px'
                             }}><AutoAwesomeMotionOutlinedIcon/> {data.discipline.charAt(0).toUpperCase() + data.discipline.slice(1).toLowerCase()}
                             </Typography>
                         )}
 
                         {data && (
-                            <Typography id="margin5" variant="h6" fontWeight="bold" style={{
+                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{
                                 fontSize: '16px'
                             }}><ShareLocationOutlinedIcon/> {data.venue.charAt(0).toUpperCase() + data.venue.slice(1).toLowerCase()}
                             </Typography>
@@ -103,7 +104,7 @@ function DetailCompetitions() {
                             <Grid container spacing={2}>
                                 <Grid item xs={12} md={6}>
 
-                                    <Typography variant="h6" id="margin4" fontWeight="bold" style={{
+                                    <Typography variant="h6" id="margin2" fontWeight="bold" style={{
                                         fontSize: '16px'
                                     }}>Events</Typography>
 
@@ -119,7 +120,7 @@ function DetailCompetitions() {
                                     {data.events.length === 0 && !showSpinner && (
 
                                         <div align="left">
-                                            <p id="error2">There are no events at the moment!</p>
+                                            <p id="error">There are no events at the moment!</p>
                                         </div>
                                     )
                                     }
@@ -152,7 +153,7 @@ function DetailCompetitions() {
 
                                 {/* Tabela 2 */}
                                 <Grid item xs={12} md={6}>
-                                    <Typography variant="h6" id="margin4" fontWeight="bold" style={{
+                                    <Typography variant="h6" id="margin2" fontWeight="bold" style={{
                                         fontSize: '16px'
                                     }}>Officials</Typography>
 
@@ -167,7 +168,7 @@ function DetailCompetitions() {
 
                                     {data.officials.length === 0 && !showSpinner && (
                                         <div align="left">
-                                            <p id="error2">There are no officials at the moment!</p>
+                                            <p id="error">There are no officials at the moment!</p>
                                         </div>
                                     )
                                     }
@@ -202,7 +203,7 @@ function DetailCompetitions() {
 
                                 {/* Tabela 3 */}
                                 <Grid item xs={12} md={12}>
-                                    <Typography variant="h6" id="margin4" fontWeight="bold" style={{
+                                    <Typography variant="h6" id="margin2" fontWeight="bold" style={{
                                         fontSize: '16px'
                                     }}>Athletes</Typography>
 
@@ -217,7 +218,7 @@ function DetailCompetitions() {
 
                                     {data.athletes.length === 0 && !showSpinner && (
                                         <div align="left">
-                                            <p id="error2">There are no athletes at the moment!</p>
+                                            <p id="error">There are no athletes at the moment!</p>
                                         </div>
                                     )
                                     }

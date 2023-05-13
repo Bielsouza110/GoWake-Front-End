@@ -11,6 +11,7 @@ import {getCountryFlag, handleMouseEnter, handleMouseLeave} from "../dashboard/u
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {endpoints} from "../../../api/Urls";
+import './Athletes.css';
 
 const Athletes = () => {
 
@@ -61,7 +62,7 @@ const Athletes = () => {
                             fontSize: '20px'
                         }}>Athletes</Typography>
 
-                        <Typography id="margin2">
+                        <Typography id="margin">
                             Here you can see all the competitions that are currently available. Click on the competition to see more details.
                         </Typography>
 
@@ -76,7 +77,7 @@ const Athletes = () => {
 
                         {data.length === 0 && !showSpinner && (
                             <div align="left">
-                                <p id="error2">There are no competitions at the moment!</p>
+                                <p id="error">There are no competitions at the moment!</p>
                             </div>
                         )
                         }
@@ -115,7 +116,7 @@ const Athletes = () => {
 
                                                 {filteredData.length === 0 &&
                                                     <TableRow onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                                                        <TableCell colSpan={4} id="error2" align="left"> Competition not found!</TableCell>
+                                                        <TableCell colSpan={4} id="error" align="left"> Competition not found!</TableCell>
                                                     </TableRow>
                                                 }
                                             </TableBody>
