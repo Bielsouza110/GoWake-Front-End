@@ -1,0 +1,14 @@
+#margin {
+    margin-bottom: 2vh;
+    text-align: justify;
+    color:red;
+}
+
+ #marginDrawerHeader {
+    margin-top: 8.5vh;
+}
+
+#error {
+    color: red;
+    font-size: 13px;
+}
