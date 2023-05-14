@@ -26,6 +26,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import {Link, useNavigate} from 'react-router-dom';
 import LoginIcon from "@mui/icons-material/Logout";
+import {Delete as DeleteIcon} from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -222,15 +223,11 @@ function MiniDrawer (){
                     {itemsList.map((item, index) => (
                         <div key={index}>
                         <ListItem button component={Link} to={item.link} key={index}>
-
-
-                            <span className="icon" title={item.text} style={{ marginLeft: "0.6vh" }}>
+                            <Tooltip title={item.text}>
                                 <ListItemIcon>{item.icon}</ListItemIcon>
-                            </span>
-
+                            </Tooltip>
                             <ListItemText primary={item.text} />
                         </ListItem>
-
                             {index === 4 && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>}
                         </div>
                     ))}
