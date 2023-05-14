@@ -12,8 +12,10 @@ const genderFlags = {
 
 export const GetGenderFlags = (genderCode) => {
     const flag = genderFlags[genderCode];
-    return flag || genderCode;
-}
+    return (
+        <span className="gender-flag">{flag || genderCode}</span>
+    );
+};
 
 export const handleMouseEnter = (event) => {
     event.currentTarget.style.backgroundColor = '#eee';

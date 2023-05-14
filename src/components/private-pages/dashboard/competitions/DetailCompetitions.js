@@ -7,7 +7,7 @@ import {Container} from "@material-ui/core";
 import DrawerHeader from "../../../../navs/DrawerHeader";
 import {MDBContainer} from "mdb-react-ui-kit";
 import Typography from "@mui/material/Typography";
-import {endpoints, getEndpointById} from "../../../../api/Urls";
+import {endpoints, getEndpointCompetitionById} from "../../../../api/Urls";
 import {
     Grid,
     Paper,
@@ -25,6 +25,7 @@ import moment from 'moment';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
 import {Spinner} from "react-bootstrap";
+import Tooltip from "@mui/material/Tooltip";
 
 function DetailCompetitions() {
     const [data, setData] = useState(null);
@@ -36,7 +37,7 @@ function DetailCompetitions() {
     useEffect(() => {
         //competitionsByIdApi();
 
-        axios.get(getEndpointById("competitions", id), {
+        axios.get(getEndpointCompetitionById("competitions", id), {
             headers: {
                 'Authorization': `Token ${usuarioSalvo.token}`
             }
@@ -74,14 +75,16 @@ function DetailCompetitions() {
                         {data && (
                             <Typography id="margin3" variant="h6" fontWeight="bold" style={{
                                 fontSize: '16px'
-                            }}><CalendarMonthOutlinedIcon/> {moment(data.beginning_date).format('DD/MM/YYYY')} <WatchLaterOutlinedIcon/> {moment(data.beginning_date).format('HH:mm')}
+                            }}><CalendarMonthOutlinedIcon/> {moment(data.beginning_date).format('DD/MM/YYYY')}
+                                <WatchLaterOutlinedIcon/> {moment(data.beginning_date).format('HH:mm')}
                             </Typography>
                         )}
 
                         {data && (
                             <Typography id="margin3" variant="h6" fontWeight="bold" style={{
                                 fontSize: '16px'
-                            }}><CalendarMonthOutlinedIcon/> {moment(data.end_date).format('DD/MM/YYYY')} <WatchLaterOutlinedIcon/> {moment(data.end_date).format('HH:mm')}
+                            }}><CalendarMonthOutlinedIcon/> {moment(data.end_date).format('DD/MM/YYYY')}
+                                <WatchLaterOutlinedIcon/> {moment(data.end_date).format('HH:mm')}
                             </Typography>
                         )}
 
@@ -107,22 +110,18 @@ function DetailCompetitions() {
                                         fontSize: '16px'
                                     }}>Events</Typography>
 
-                                    {data.events.length === 0 && showSpinner &&
-                                        (
+                                    {data.events.length === 0 && showSpinner && (
                                             <div align="left">
                                                 <Spinner id="load" animation="border" variant="secondary" size="3rem"/>
                                                 <p id="load2">Loading...</p>
                                             </div>
-                                        )
-                                    }
+                                    )}
 
                                     {data.events.length === 0 && !showSpinner && (
-
                                         <div align="left">
                                             <p id="error2">There are no events at the moment!</p>
                                         </div>
-                                    )
-                                    }
+                                    )}
 
                                     {data.events.length !== 0 && (
                                         <TableContainer component={Paper}>
@@ -136,10 +135,11 @@ function DetailCompetitions() {
                                                 </TableHead>
                                                 <TableBody>
                                                     {data.events.map((item) => (
-                                                        <TableRow key={item.id} onMouseEnter={handleMouseEnter}
+                                                        <TableRow style={{cursor: 'pointer'}} key={item.id} onMouseEnter={handleMouseEnter}
                                                                   onMouseLeave={handleMouseLeave}>
                                                             <TableCell>{item.name}</TableCell>
-                                                            <TableCell id="esconde">{item.event_class.charAt(0).toUpperCase() + item.event_class.slice(1).toLowerCase()}</TableCell>
+                                                            <TableCell
+                                                                id="esconde">{item.event_class.charAt(0).toUpperCase() + item.event_class.slice(1).toLowerCase()}</TableCell>
                                                             <TableCell>{item.rounds}</TableCell>
                                                         </TableRow>
                                                     ))}
@@ -150,48 +150,59 @@ function DetailCompetitions() {
 
                                 </Grid>
 
+
                                 {/* Tabela 2 */}
                                 <Grid item xs={12} md={6}>
                                     <Typography variant="h6" id="margin4" fontWeight="bold" style={{
                                         fontSize: '16px'
-                                    }}>Officials</Typography>
+                                    }}>Athletes</Typography>
 
-                                    {data.officials.length === 0 && showSpinner &&
-                                        (
+                                    {data.athletes.length === 0 && showSpinner && (
                                             <div align="left">
                                                 <Spinner id="load" animation="border" variant="secondary" size="3rem"/>
                                                 <p id="load2">Loading...</p>
                                             </div>
-                                        )
-                                    }
+                                    )}
 
-                                    {data.officials.length === 0 && !showSpinner && (
+                                    {data.athletes.length === 0 && !showSpinner && (
                                         <div align="left">
-                                            <p id="error2">There are no officials at the moment!</p>
+                                            <p id="error2">There are no athletes at the moment!</p>
                                         </div>
-                                    )
-                                    }
+                                    )}
 
-                                    {data.officials.length !== 0 && (
+                                    {data.athletes.length !== 0 && (
 
                                         <TableContainer component={Paper}>
                                             <Table>
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell>Name</TableCell>
-                                                        <TableCell>Position</TableCell>
-                                                        <TableCell id="esconde">Qualification</TableCell>
-                                                        <TableCell id="esconde">Country</TableCell>
+                                                        <TableCell>Nome</TableCell>
+                                                        <TableCell>Country</TableCell>
+                                                        <TableCell>Gender</TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
-                                                    {data.officials.map((item) => (
-                                                        <TableRow key={item.id} onMouseEnter={handleMouseEnter}
+                                                    {data.athletes.map((item) => (
+                                                        <TableRow style={{cursor: 'pointer'}} key={item.id} onMouseEnter={handleMouseEnter}
                                                                   onMouseLeave={handleMouseLeave}>
                                                             <TableCell>{item.first_name} {item.last_name}</TableCell>
-                                                            <TableCell>{item.position.charAt(0).toUpperCase() + item.position.slice(1).toLowerCase()}</TableCell>
-                                                            <TableCell id="esconde">{item.qualification}</TableCell>
-                                                            <TableCell id="esconde">{getCountryFlag(item.country)}</TableCell>
+                                                            <TableCell>
+                                                                <Tooltip title={item.country}>
+                                                                    {getCountryFlag(item.country)}
+                                                                </Tooltip>
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {item.gender === "F" && (
+                                                                    <Tooltip title="Feminine" className="tooltip-gender">
+                                                                        {GetGenderFlags(item.gender)}
+                                                                    </Tooltip>
+                                                                )}
+                                                                {item.gender === "M" && (
+                                                                    <Tooltip title="Masculine" className="tooltip-gender">
+                                                                        {GetGenderFlags(item.gender)}
+                                                                    </Tooltip>
+                                                                )}
+                                                            </TableCell>
                                                         </TableRow>
                                                     ))}
                                                 </TableBody>
@@ -204,49 +215,55 @@ function DetailCompetitions() {
                                 <Grid item xs={12} md={12}>
                                     <Typography variant="h6" id="margin4" fontWeight="bold" style={{
                                         fontSize: '16px'
-                                    }}>Athletes</Typography>
+                                    }}>Officials</Typography>
 
-                                    {data.athletes.length === 0 && showSpinner &&
-                                        (
-                                            <div align="left">
-                                                <Spinner id="load" animation="border" variant="secondary" size="3rem"/>
-                                                <p id="load2">Loading...</p>
-                                            </div>
-                                        )
-                                    }
-
-                                    {data.athletes.length === 0 && !showSpinner && (
+                                    {data.officials.length === 0 && showSpinner && (
                                         <div align="left">
-                                            <p id="error2">There are no athletes at the moment!</p>
+                                            <Spinner id="load" animation="border" variant="secondary" size="3rem"/>
+                                            <p id="load2">Loading...</p>
                                         </div>
-                                    )
-                                    }
+                                    )}
 
-                                    {data.athletes.length !== 0 && (
+                                    {data.officials.length === 0 && !showSpinner && (
+                                        <div align="left">
+                                            <p id="error2">There are no officials at the moment!</p>
+                                        </div>
+                                    )}
 
-                                    <TableContainer component={Paper}>
-                                        <Table>
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell>Nome</TableCell>
-                                                    <TableCell>Gender</TableCell>
-                                                    <TableCell id="esconde">Country</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {data.athletes.map((item) => (
-                                                    <TableRow key={item.id} onMouseEnter={handleMouseEnter}
-                                                              onMouseLeave={handleMouseLeave}>
-                                                        <TableCell>{item.first_name} {item.last_name}</TableCell>
-                                                        <TableCell>{GetGenderFlags(item.gender)}</TableCell>
-                                                        <TableCell id="esconde">{getCountryFlag(item.country)}</TableCell>
+                                    {data.officials.length !== 0 && (
+
+                                        <TableContainer component={Paper}>
+                                            <Table>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell>Name</TableCell>
+                                                        <TableCell id="esconde">Country</TableCell>
+                                                        <TableCell >Qualification</TableCell>
+                                                        <TableCell id="esconde">Position</TableCell>
+
                                                     </TableRow>
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {data.officials.map((item) => (
+                                                        <TableRow style={{cursor: 'pointer'}} key={item.id} onMouseEnter={handleMouseEnter}
+                                                                  onMouseLeave={handleMouseLeave}>
+                                                            <TableCell>{item.first_name} {item.last_name}</TableCell>
+                                                            <TableCell>
+                                                                <Tooltip title={item.country}>
+                                                                    {getCountryFlag(item.country)}
+                                                                </Tooltip>
+                                                            </TableCell>
+                                                            <TableCell>{item.position.charAt(0).toUpperCase() + item.position.slice(1).toLowerCase()}</TableCell>
+                                                            <TableCell id="esconde">{item.qualification}</TableCell>
+
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
                                     )}
                                 </Grid>
+
                             </Grid>
                         )}
 

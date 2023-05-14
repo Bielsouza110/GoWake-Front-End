@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import DrawerHeader from "../../../../navs/DrawerHeader";
 import {endpoints} from "../../../../api/Urls";
 import {getCountryFlag, handleMouseEnter, handleMouseLeave} from "../utils/Utils";
+import Tooltip from "@mui/material/Tooltip";
 
 const Dashboard = () => {
 
@@ -20,7 +21,8 @@ const Dashboard = () => {
     const [showSpinner, setShowSpinner] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState([]);
-    const filteredData = data.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    const filteredData = data.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        || item.venue.toLowerCase().includes(searchTerm.toLowerCase()));
 
     useEffect(() => {
 
@@ -105,9 +107,13 @@ const Dashboard = () => {
                                             </TableHead>
                                             <TableBody>
                                                 {filteredData.length > 0 && filteredData.map((item) => (
-                                                    <TableRow key={item.id} onClick={() => handleDetalhesClick(item.id)}
+                                                    <TableRow key={item.id} style={{cursor: 'pointer'}} onClick={() => handleDetalhesClick(item.id)}
                                                               onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                                                        <TableCell>{getCountryFlag(item.organizing_country)}</TableCell>
+                                                        <TableCell>
+                                                            <Tooltip title={item.organizing_country}>
+                                                                {getCountryFlag(item.organizing_country)}
+                                                            </Tooltip>
+                                                        </TableCell>
                                                         <TableCell>{item.venue.charAt(0).toUpperCase() + item.venue.slice(1).toLowerCase()}</TableCell>
                                                         <TableCell>{item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase()}</TableCell>
                                                         <TableCell id="esconde">{item.discipline.charAt(0).toUpperCase() + item.discipline.slice(1).toLowerCase()}</TableCell>
