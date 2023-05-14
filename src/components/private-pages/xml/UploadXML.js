@@ -5,6 +5,7 @@ import Drawer from "../../../navs/Drawer";
 import DrawerHeader from "../../../navs/DrawerHeader";
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
+import './UploadXML.css';
 
 const UploadXML = () => {
 
@@ -21,6 +22,17 @@ const UploadXML = () => {
                     </MDBContainer>
                 </Container>
             </Box>
+
+            <div className="box">
+                <h2 className="header">
+                    React drop files input
+                </h2>
+
+
+            </div>
+
+
+
         </div>
     );
 };
