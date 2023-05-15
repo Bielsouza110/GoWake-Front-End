@@ -6,7 +6,7 @@ import DrawerHeader from "../../../navs/DrawerHeader";
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 import './UploadXML.css';
-import DropFileInput from "./components/drop-file-input/DropFileInput";
+import DropFileInput from "./drop-file-input/DropFileInput";
 
 const UploadXML = () => {
 
@@ -22,7 +22,6 @@ const UploadXML = () => {
                         </Typography>
                     </MDBContainer>
                 </Container>
-
             </Box>
 
             <Container id="marginDrawerHeader">
@@ -31,12 +30,8 @@ const UploadXML = () => {
                         Input XML file
                     </h2>
                     <DropFileInput/>
-
                 </div>
                 </Container>
-
-
-
         </div>
     );
 };
