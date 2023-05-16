@@ -15,22 +15,26 @@ import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import ListItemIcon from "@mui/material/ListItemIcon";
 import Tooltip from "@mui/material/Tooltip";
-import LoginIcon from "@mui/icons-material/Login";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const Athletes = () => {
 
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
+    const [idAthlete, setIdAthlete] = useState('');
     const [showSpinner, setShowSpinner] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState([]);
     const [dataCompetition, setDataCompetition] = useState([]);
     const filteredData = data.filter(item => item.first_name.toLowerCase().includes(searchTerm.toLowerCase())
-        || item.last_name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+        || item.last_name.toLowerCase().includes(searchTerm.toLowerCase()));
 
     useEffect(() => {
         axios.get(endpoints.competitions, {
@@ -59,15 +63,12 @@ const Athletes = () => {
 
         return () => clearTimeout(timer);
     }, []);
-
     const handleDetalhesClick = (id) => {
         navigate(`/login/dashboard/${id}`);
     };
-
     const handleSearchTermChange = (event) => {
         setSearchTerm(event.target.value);
     };
-
     const handleDeleteAthlete = (idAthlete) => {
 
         const athleteId = idAthlete;
@@ -118,6 +119,18 @@ const Athletes = () => {
             });
         });
     };
+    const handleClickOpen = (id) => {
+        setIdAthlete(id);
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const handleDelete = (item) => {
+        //onDelete();
+        handleDeleteAthlete(item)
+        handleClose();
+    };
 
     return (
         <div className="sdd">
@@ -130,8 +143,23 @@ const Athletes = () => {
                             fontSize: '20px'
                         }}>Athletes</Typography>
 
+                        <Dialog open={open} onClose={handleClose}>
+                            <DialogTitle>Confirmation</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Are you sure you want to delete this athlete?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose}>Cancelar</Button>
+                                <Button onClick={() => handleDelete(idAthlete)} color="error">
+                                    Excluir
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+
                         <Typography id="margin2">
-                            Here you can see all the competitions that are currently available. Click on the competition to see more details.
+                            Here you can see all the athletes that are currently available. Click on the athlete to see more details.
                         </Typography>
 
                         {data.length === 0 && showSpinner &&
@@ -145,10 +173,9 @@ const Athletes = () => {
 
                         {data.length === 0 && !showSpinner && (
                             <div align="left">
-                                <p id="error2">There are no competitions at the moment!</p>
+                                <p id="error2">There are no athletes at the moment!</p>
                             </div>
-                        )
-                        }
+                        )}
 
                         {data.length !== 0 && (
                             <div>
@@ -214,7 +241,7 @@ const Athletes = () => {
                                                                 </IconButton>
                                                             </Tooltip>
                                                             <Tooltip title="Remove" className="tooltip-gender">
-                                                                <IconButton onClick={() => handleDeleteAthlete(item.id)}>
+                                                                <IconButton onClick={() => handleClickOpen(item.id)}>
                                                                     <DeleteIcon color="error" style={{cursor: 'pointer'}}/>
                                                                 </IconButton>
                                                             </Tooltip>
