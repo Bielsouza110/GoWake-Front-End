@@ -21,6 +21,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import CreateAthlete from "./create/CreateAthlete";
 
 const Athletes = () => {
 
@@ -132,6 +133,21 @@ const Athletes = () => {
         handleClose();
     };
 
+    const [openDialog, setOpenDialog] = useState(false);
+    const [athletes, setAthletes] = useState([]);
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
+    const handleCreateAthlete = (athlete) => {
+        setAthletes([...athletes, athlete]);
+    };
+
     return (
         <div className="sdd">
             <Box sx={{display: "flex"}}>
@@ -190,10 +206,17 @@ const Athletes = () => {
                                     />
 
                                     <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                        <Button variant="contained" startIcon={<AddIcon />} style={{ textTransform: 'none', color: 'success' }}>
+                                        <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenDialog}
+                                                style={{ textTransform: 'none', color: 'success' }}>
                                             Create athlete
                                         </Button>
                                     </Box>
+
+                                    <CreateAthlete
+                                        open={openDialog}
+                                        onClose={handleCloseDialog}
+                                        onCreate={handleCreateAthlete}
+                                    />
 
                                     <TableContainer component={Paper}>
                                         <Table>

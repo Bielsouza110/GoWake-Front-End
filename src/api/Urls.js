@@ -3,7 +3,7 @@ export const endpoints = {
     login: `${API_ROOT}/account/login/`,
     createAccount: `${API_ROOT}/account/register/`,
     competitions: `${API_ROOT}/api/competitions/`,
-    deleteAthlete: `${API_ROOT}/api/competition`,
+    deleteAthlete: `${API_ROOT}/api/competition/`,
 };
 
 export const getEndpointCompetitionById = (endpoint, id) => {

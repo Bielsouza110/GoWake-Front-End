@@ -35,5 +35,4 @@ const UploadXML = () => {
         </div>
     );
 };
-
 export default UploadXML;
