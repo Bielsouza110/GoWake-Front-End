@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import {Row, Col} from "react-bootstrap";
+import axios from "axios";
+import {endpoints} from "../../../../api/Urls";
 
 const CreateAthlete = ({ open, onClose, onCreate }) => {
+
+    const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
+
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
 
@@ -23,6 +28,35 @@ const CreateAthlete = ({ open, onClose, onCreate }) => {
         setAge('');
         onClose();
     };
+
+    const handleSum = async () => {
+        const data = {
+            events: [
+                { id: 2 },
+                { id: 1 }
+            ],
+            fed_id: "PT004",
+            first_name: "Joel",
+            last_name: "Bernardino",
+            country: "PT",
+            gender: "M",
+            year_of_birth: 2000
+        };
+
+        try {
+            const response = await axios.post('https://mmonteiro.pythonanywhere.com/api/competition/47/athletes/', data, {
+                headers: {
+                    Authorization: `Token ${usuarioSalvo.token}`,
+                },
+            });
+
+            onClose();
+        } catch (error) {
+            console.log('Ocorreu um erro ao fazer a solicitação.');
+        }
+
+
+    }
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
@@ -69,7 +103,7 @@ const CreateAthlete = ({ open, onClose, onCreate }) => {
                 <Button onClick={onClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={handleCreate} color="primary">
+                <Button onClick={handleSum} color="primary">
                     Create
                 </Button>
             </DialogActions>

@@ -32,10 +32,9 @@ const Dashboard = () => {
             }
         }).then(response => {
                 setData(response.data.results);
-            })
-            .catch(error => {
+        }).catch(error => {
                 console.error(error);
-            });
+        });
 
         const timer = setTimeout(() => {
             setShowSpinner(false);
