@@ -17,6 +17,13 @@ export const GetGenderFlags = (genderCode) => {
     );
 };
 
+export const getAllGenderFlags = (genderCode, type) => {
+    const flag = genderFlags[genderCode];
+    return (
+        <span className="gender-flag">{flag || genderCode} {type}</span>
+    );
+};
+
 export const handleMouseEnter = (event) => {
     event.currentTarget.style.backgroundColor = '#eee';
 };
