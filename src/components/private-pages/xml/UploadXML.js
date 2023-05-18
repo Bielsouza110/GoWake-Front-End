@@ -9,7 +9,9 @@ import './UploadXML.css';
 import DropFileInput from "./drop-file-input/DropFileInput";
 
 const UploadXML = () => {
-
+const onFileChange = (files) =>{
+    console.log(files);
+}
     return (
         <div className="sdd">
             <Box sx={{display: "flex"}}>
@@ -29,7 +31,7 @@ const UploadXML = () => {
                     <h2 className="header">
                         Input XML file
                     </h2>
-                    <DropFileInput/>
+                    <DropFileInput onFileChange={(files)=>onFileChange(files)}/>
                 </div>
                 </Container>
         </div>
