@@ -37,6 +37,35 @@ const Athletes = () => {
     const filteredData = data.filter(item => item.first_name.toLowerCase().includes(searchTerm.toLowerCase())
         || item.last_name.toLowerCase().includes(searchTerm.toLowerCase()));
 
+    const reload = () => {
+            axios.get(endpoints.competitions, {
+                headers: {
+                    'Authorization': `Token ${usuarioSalvo.token}`
+                }
+            }).then(response => {
+                const uniqueAthletes = {};
+                response.data.results.forEach((competition) => {
+                    competition.athletes.forEach((athlete) => {
+                        if (!uniqueAthletes[athlete.fed_id]) {
+                            uniqueAthletes[athlete.fed_id] = athlete;
+                        }
+                    });
+                });
+
+                const uniqueAthletesArray = Object.values(uniqueAthletes);
+                setData(uniqueAthletesArray);
+                setDataCompetition(response.data.results);
+            }).catch(error => {
+                console.error(error);
+            });
+
+            const timer = setTimeout(() => {
+                setShowSpinner(false);
+            }, 3000); // Tempo limite de 3 segundos
+
+            return () => clearTimeout(timer);
+    }
+
     useEffect(() => {
         axios.get(endpoints.competitions, {
             headers: {
@@ -81,7 +110,7 @@ const Athletes = () => {
         console.log(competitionIds); // Output: [1, 3]
 
         competitionIds.forEach(competitionId => {
-            axios.delete(getEndpointDeleteAthleteById("deleteAthlete", competitionId, idAthlete), {
+            axios.delete(getEndpointDeleteAthleteById("athlete", competitionId, idAthlete), {
                 headers: {
                     'Authorization': `Token ${usuarioSalvo.token}`
                 }
@@ -128,7 +157,6 @@ const Athletes = () => {
         setOpen(false);
     };
     const handleDelete = (item) => {
-        //onDelete();
         handleDeleteAthlete(item)
         handleClose();
     };
@@ -142,6 +170,7 @@ const Athletes = () => {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+        reload();
     };
 
     const handleCreateAthlete = (athlete) => {

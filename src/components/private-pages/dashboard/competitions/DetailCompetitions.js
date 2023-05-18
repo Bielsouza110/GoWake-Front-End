@@ -7,7 +7,7 @@ import {Container} from "@material-ui/core";
 import DrawerHeader from "../../../../navs/DrawerHeader";
 import {MDBContainer} from "mdb-react-ui-kit";
 import Typography from "@mui/material/Typography";
-import {endpoints, getEndpointCompetitionById} from "../../../../api/Urls";
+import {getEndpointCompetitionById} from "../../../../api/Urls";
 import {
     Grid,
     Paper,

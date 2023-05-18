@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import {Row, Col} from "react-bootstrap";
 import axios from "axios";
-import {endpoints} from "../../../../api/Urls";
+import {endpoints, getEndpointCompetitionById, getEndpointCreateAthlete} from "../../../../api/Urls";
 
-const CreateAthlete = ({ open, onClose, onCreate }) => {
+const CreateAthlete = ({ open, onClose, data }) => {
 
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
@@ -19,32 +19,25 @@ const CreateAthlete = ({ open, onClose, onCreate }) => {
         setAge(event.target.value);
     };
 
-    const handleCreate = () => {
-
-        console.log(name, age);
-
-        onCreate({ name, age });
-        setName('');
-        setAge('');
-        onClose();
-    };
-
-    const handleSum = async () => {
+    const handleCreate = async () => {
         const data = {
             events: [
                 { id: 2 },
                 { id: 1 }
             ],
-            fed_id: "PT004",
-            first_name: "Joel",
-            last_name: "Bernardino",
-            country: "PT",
+            fed_id: "PT005",
+            first_name: "Biel",
+            last_name: "Souza",
+            country: "ES",
             gender: "M",
             year_of_birth: 2000
         };
 
+        console.log(data);
+
         try {
-            const response = await axios.post('https://mmonteiro.pythonanywhere.com/api/competition/47/athletes/', data, {
+            /*idCompetition*/
+            const response = await axios.post(getEndpointCreateAthlete("athlete", 47), data, {
                 headers: {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
@@ -103,7 +96,7 @@ const CreateAthlete = ({ open, onClose, onCreate }) => {
                 <Button onClick={onClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={handleSum} color="primary">
+                <Button onClick={handleCreate} color="primary">
                     Create
                 </Button>
             </DialogActions>
