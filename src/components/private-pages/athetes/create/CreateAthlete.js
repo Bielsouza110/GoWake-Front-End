@@ -97,7 +97,7 @@ const CreateAthlete = ({ open, onClose, data }) => {
                         Authorization: `Token ${usuarioSalvo.token}`,
                     },
                 });
-                setEvents(response.data.results);
+                setEvents(response.data.results.map(item => item.events).flat());
             } catch (error) {
                 console.error(error);
             }
@@ -216,15 +216,15 @@ const CreateAthlete = ({ open, onClose, data }) => {
                             <InputLabel>Events</InputLabel>
                             <Select
                                 multiple
-                                value={selectedEvents} // Use o estado para armazenar os eventos selecionados
-                                onChange={handleEventChange} // Função para lidar com a mudança dos eventos selecionados
+                                value={selectedEvents}
+                                onChange={handleEventChange}
                                 input={<Input />}
                                 renderValue={(selected) => (
                                     <div>
                                         {selected.map((value) => {
                                             const event = events.find((event) => event.id === value);
                                             return (
-                                                <Chip key={value} label={event ? event.name : ""} style={{ marginRight: 5 }} />
+                                                <Chip key={value} label={event.name ? event.name : ""} style={{ marginRight: 5 }} />
                                             );
                                         })}
                                     </div>
@@ -237,6 +237,12 @@ const CreateAthlete = ({ open, onClose, data }) => {
                                 ))}
                             </Select>
                         </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12}>
+                        <div align="right">
+                            <p id="error2">All the fields above are required!</p>
+                        </div>
                     </Grid>
                 </Grid>
             </DialogContent>
