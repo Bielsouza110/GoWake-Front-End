@@ -67,35 +67,39 @@ const Athletes = () => {
     }
 
     useEffect(() => {
-        axios.get(endpoints.competitions, {
-            headers: {
-                'Authorization': `Token ${usuarioSalvo.token}`
-            }
-        }).then(response => {
-            const uniqueAthletes = {};
-            response.data.results.forEach((competition) => {
-                competition.athletes.forEach((athlete) => {
-                    if (!uniqueAthletes[athlete.fed_id]) {
-                        uniqueAthletes[athlete.fed_id] = athlete;
-                    }
+        const fetchAtletes = async () => {
+            axios.get(endpoints.competitions, {
+                headers: {
+                    'Authorization': `Token ${usuarioSalvo.token}`
+                }
+            }).then(response => {
+                const uniqueAthletes = {};
+                response.data.results.forEach((competition) => {
+                    competition.athletes.forEach((athlete) => {
+                        if (!uniqueAthletes[athlete.fed_id]) {
+                            uniqueAthletes[athlete.fed_id] = athlete;
+                        }
+                    });
                 });
-            });
-            const uniqueAthletesArray = Object.values(uniqueAthletes);
-            setData(uniqueAthletesArray);
-            setDataCompetition(response.data.results);
-        }).catch(error => {
+                const uniqueAthletesArray = Object.values(uniqueAthletes);
+                const sortedData = uniqueAthletesArray.sort((a, b) => a.fed_id.localeCompare(b.fed_id));
+                setData(sortedData);
+                setDataCompetition(response.data.results);
+            }).catch(error => {
                 console.error(error);
-        });
+            });
 
-        const timer = setTimeout(() => {
-            setShowSpinner(false);
-        }, 3000); // Tempo limite de 3 segundos
+            const timer = setTimeout(() => {
+                setShowSpinner(false);
+            }, 3000); // Tempo limite de 3 segundos
 
-        return () => clearTimeout(timer);
+            return () => clearTimeout(timer);
+        };
+
+        fetchAtletes();
     }, []);
-    const handleDetalhesClick = (id) => {
-        navigate(`/login/dashboard/${id}`);
-    };
+
+
     const handleSearchTermChange = (event) => {
         setSearchTerm(event.target.value);
     };
@@ -107,7 +111,7 @@ const Athletes = () => {
             .filter(competition => competition.athletes.some(athlete => athlete.id === athleteId))
             .map(competition => competition.id);
 
-        console.log(competitionIds); // Output: [1, 3]
+       // console.log(competitionIds); // Output: [1, 3]
 
         competitionIds.forEach(competitionId => {
             axios.delete(getEndpointDeleteAthleteById("athlete", competitionId, idAthlete), {
@@ -207,6 +211,28 @@ const Athletes = () => {
                             Here you can see all the athletes that are currently available. Click on the athlete to see more details.
                         </Typography>
 
+                        <TextField
+                            label="Search by athlete name"
+                            variant="outlined"
+                            value={searchTerm}
+                            onChange={handleSearchTermChange}
+                            size="large"
+                            sx={{ width: '100%', margin: '0 0 1rem'}}
+                        />
+
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenDialog}
+                                    style={{ textTransform: 'none', color: 'success' }}>
+                                Create athlete
+                            </Button>
+                        </Box>
+
+                        <CreateAthlete
+                            open={openDialog}
+                            onClose={handleCloseDialog}
+                            onCreate={handleCreateAthlete}
+                        />
+
                         {data.length === 0 && showSpinner &&
                             (
                                 <div align="left">
@@ -225,28 +251,6 @@ const Athletes = () => {
                         {data.length !== 0 && (
                             <div>
                                 <div>
-                                    <TextField
-                                        label="Search by athlete name"
-                                        variant="outlined"
-                                        value={searchTerm}
-                                        onChange={handleSearchTermChange}
-                                        size="large"
-                                        sx={{ width: '100%', margin: '0 0 1rem'}}
-                                    />
-
-                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                        <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenDialog}
-                                                style={{ textTransform: 'none', color: 'success' }}>
-                                            Create athlete
-                                        </Button>
-                                    </Box>
-
-                                    <CreateAthlete
-                                        open={openDialog}
-                                        onClose={handleCloseDialog}
-                                        onCreate={handleCreateAthlete}
-                                    />
-
                                     <TableContainer component={Paper}>
                                         <Table>
                                             <TableHead>
@@ -268,7 +272,7 @@ const Athletes = () => {
                                                         </TableCell>
 
                                                         <TableCell id="esconde">
-                                                            <Tooltip title={item.country}>
+                                                            <Tooltip title={item.country.toUpperCase()}>
                                                                 {getCountryFlag(item.country)}
                                                             </Tooltip>
                                                         </TableCell>

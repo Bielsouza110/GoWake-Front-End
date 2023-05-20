@@ -4,113 +4,18 @@ import axios from "axios";
 import { endpoints, getEndpointCompetitionById, getEndpointCreateAthlete } from "../../../../api/Urls";
 import {getAllGenderFlags} from "../../dashboard/utils/Utils";
 
-const CreateAthlete = ({ open, onClose, data }) => {
+const CreateAthlete = ({ open, onClose}) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
-    const [age, setAge] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [fedId, setFedId] = useState('');
     const [gender, setGender] = useState('');
     const [yearOfBirth, setYearOfBirth] = useState('');
     const [selectedEvents, setSelectedEvents] = useState([]); // Estado para armazenar os eventos selecionados
-
-    const handleAgeChange = (event) => {
-        setAge(event.target.value);
-    };
-
-    const handleFirstNameChange = (event) => {
-        setFirstName(event.target.value);
-    };
-
-    const handleLastNameChange = (event) => {
-        setLastName(event.target.value);
-    };
-
-    const handleFedIdChange = (event) => {
-        setFedId(event.target.value);
-    };
-
-    const handleGenderChange = (event) => {
-        setGender(event.target.value);
-    };
-
-    const handleYearOfBirthChange = (event) => {
-        setYearOfBirth(event.target.value);
-    };
-
-    const handleCreate = async () => {
-        const data = {
-            events: selectedEvents, // Usando os eventos selecionados
-            fed_id: fedId,
-            first_name: firstName,
-            last_name: lastName,
-            country: country,
-            gender: gender,
-            year_of_birth: yearOfBirth
-        };
-
-        console.log(data);
-
-        try {
-            const response = await axios.post(getEndpointCreateAthlete("athlete", 47), data, {
-                headers: {
-                    Authorization: `Token ${usuarioSalvo.token}`,
-                },
-            });
-
-            // Clearing the fields
-            setFedId('');
-            setFirstName('');
-            setLastName('');
-            setCountry('');
-            setGender('');
-            setYearOfBirth('');
-            setSelectedEvents([]);
-
-            onClose();
-        } catch (error) {
-            console.log('Ocorreu um erro ao fazer a solicitação.');
-        }
-    }
-
-    const getYearOptions = () => {
-        const currentYear = new Date().getFullYear();
-        const yearOptions = [];
-        for (let year = currentYear; year >= 1930; year--) {
-            yearOptions.push(year);
-        }
-        return yearOptions;
-    };
-
+    const [dataCompetition, setDataCompetition] = useState([]);
     const [events, setEvents] = useState([]);
-
-    const handleEventChange = (event) => {
-        setSelectedEvents(event.target.value); // Armazenando as opções selecionadas nos eventos
-    };
-
-    useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                const response = await axios.get(endpoints.competitions, {
-                    headers: {
-                        Authorization: `Token ${usuarioSalvo.token}`,
-                    },
-                });
-                setEvents(response.data.results.map(item => item.events).flat());
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        fetchEvents();
-    }, []);
-
     const [country, setCountry] = useState('');
-
-    const handleCountryChange = (event) => {
-        setCountry(event.target.value);
-    };
 
     const countryCodeMatrix = [
         'af', 'al', 'dz', 'as', 'ad', 'ao', 'ai', 'aq', 'ag', 'ar',
@@ -128,7 +33,7 @@ const CreateAthlete = ({ open, onClose, data }) => {
         'ly', 'li', 'lt', 'lu', 'mo', 'mk', 'mg', 'mw', 'my', 'mv',
         'ml', 'mt', 'mh', 'mq', 'mr', 'mu', 'yt', 'mx', 'fm', 'md',
         'mc', 'mn', 'ms', 'ma', 'mz', 'mm', 'na', 'nr', 'np', 'nl',
-        'an', 'nc', 'nz', 'ni', 'ne', 'ng', 'nu', 'nf', 'mp', 'no',
+        'nc', 'nz', 'ni', 'ne', 'ng', 'nu', 'nf', 'mp', 'no', 'zw',
         'om', 'pk', 'pw', 'pa', 'pg', 'py', 'pe', 'ph', 'pn', 'pl',
         'pt', 'pr', 'qa', 're', 'ro', 'ru', 'rw', 'sh', 'kn', 'lc',
         'pm', 'vc', 'ws', 'sm', 'st', 'sa', 'sn', 'sc', 'sl', 'sg',
@@ -136,7 +41,108 @@ const CreateAthlete = ({ open, onClose, data }) => {
         'sj', 'sz', 'se', 'ch', 'sy', 'tw', 'tj', 'tz', 'th', 'tl',
         'tg', 'tk', 'to', 'tt', 'tn', 'tr', 'tm', 'tc', 'tv', 'ug',
         'ua', 'ae', 'gb', 'us', 'um', 'uy', 'uz', 'vu', 've', 'vn',
-        'vg', 'vi', 'wf', 'eh', 'ye', 'zm', 'zw'];
+        'vg', 'vi', 'wf', 'eh', 'ye', 'zm'];
+
+    countryCodeMatrix.sort();
+    const handleFirstNameChange = (event) => {
+        setFirstName(event.target.value);
+    };
+    const handleLastNameChange = (event) => {
+        setLastName(event.target.value);
+    };
+    const handleFedIdChange = (event) => {
+        setFedId(event.target.value);
+    };
+    const handleGenderChange = (event) => {
+        setGender(event.target.value);
+    };
+    const handleYearOfBirthChange = (event) => {
+        setYearOfBirth(event.target.value);
+    };
+
+    const handleCountryChange = (event) => {
+        setCountry(event.target.value);
+    };
+
+    const handleEventChange = (event) => {
+        setSelectedEvents(event.target.value); // Armazenando as opções selecionadas nos eventos
+    };
+    const getYearOptions = () => {
+        const currentYear = new Date().getFullYear();
+        const yearOptions = [];
+        for (let year = currentYear; year >= 1930; year--) {
+            yearOptions.push(year);
+        }
+        return yearOptions;
+    };
+    const fetchAthletesForCompetition = async (competitionId) => {
+
+        const data = {
+            events: selectedEvents.map((eventId) => ({ id: eventId })),
+            fed_id: fedId,
+            first_name: firstName,
+            last_name: lastName,
+            country: country.toUpperCase(),
+            gender: gender,
+            year_of_birth: yearOfBirth
+        };
+
+        try {
+            const response = await axios.post(getEndpointCreateAthlete("athlete", competitionId), data, {
+                headers: {
+                    Authorization: `Token ${usuarioSalvo.token}`,
+                },
+            });
+
+            setFedId('');
+            setFirstName('');
+            setLastName('');
+            setCountry('');
+            setGender('');
+            setYearOfBirth('');
+            setSelectedEvents([]);
+
+            onClose();
+        } catch (error) {
+            //Fazer um box de mensagem mal!!!
+            console.error('Erro ao buscar atletas:', error.request.response);
+        }
+    };
+    const handleCreate = async () => {
+
+        try {
+            const competitionIds = dataCompetition
+                .filter((competition) =>
+                    competition.events.some((event) => selectedEvents.includes(event.id))
+                )
+                .map((competition) => competition.id);
+
+            competitionIds.forEach((competitionId) => {
+                fetchAthletesForCompetition(competitionId);
+            });
+        } catch (error) {
+            console.log('Ocorreu um erro ao fazer a solicitação.');
+        }
+    }
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const response = await axios.get(endpoints.competitions, {
+                    headers: {
+                        Authorization: `Token ${usuarioSalvo.token}`,
+                    },
+                });
+
+                setDataCompetition(response.data.results);
+                setEvents(response.data.results.map(item => item.events).flat());
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchEvents();
+    }, []);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
@@ -188,7 +194,7 @@ const CreateAthlete = ({ open, onClose, data }) => {
                             fullWidth
                         >
                             {countryCodeMatrix.map((code) => (
-                                <MenuItem key={code} value={code}>
+                                <MenuItem key={code.toUpperCase()} value={code}>
                                     <img src={`https://flagcdn.com/16x12/${code}.png`} alt={code}
                                          style={{ marginRight: '1rem' }} />
                                     {code.toUpperCase()}
@@ -213,29 +219,34 @@ const CreateAthlete = ({ open, onClose, data }) => {
                     </Grid>
                     <Grid item xs={12} sm={12}>
                         <FormControl fullWidth>
-                            <InputLabel>Events</InputLabel>
-                            <Select
-                                multiple
+                            <TextField
+                                select
+                                label="Events"
                                 value={selectedEvents}
                                 onChange={handleEventChange}
-                                input={<Input />}
-                                renderValue={(selected) => (
-                                    <div>
-                                        {selected.map((value) => {
-                                            const event = events.find((event) => event.id === value);
-                                            return (
-                                                <Chip key={value} label={event.name ? event.name : ""} style={{ marginRight: 5 }} />
-                                            );
-                                        })}
-                                    </div>
-                                )}
+                                fullWidth
+                                SelectProps={{
+                                    multiple: true,
+                                    renderValue: (selected) => (
+                                        <div>
+                                            {selected.map((value) => {
+                                                const event = events.find((event) => event.id === value);
+                                                return (
+                                                    <MenuItem key={value} value={event.id}>
+                                                        {event.name.charAt(0).toUpperCase() + event.name.slice(1).toLowerCase()}
+                                                    </MenuItem>
+                                                );
+                                            })}
+                                        </div>
+                                    ),
+                                }}
                             >
                                 {events.map((event) => (
                                     <MenuItem key={event.id} value={event.id}>
                                         {event.name}
                                     </MenuItem>
                                 ))}
-                            </Select>
+                            </TextField>
                         </FormControl>
                     </Grid>
 
@@ -261,18 +272,7 @@ const CreateAthlete = ({ open, onClose, data }) => {
                 }} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={() => {
-                    // Clearing the fields
-                    setFedId('');
-                    setFirstName('');
-                    setLastName('');
-                    setCountry('');
-                    setGender('');
-                    setYearOfBirth('');
-                    setSelectedEvents([]);
-
-                    handleCreate();
-                }} color="primary">
+                <Button onClick={() => {handleCreate()}} color="primary">
                     Create
                 </Button>
             </DialogActions>

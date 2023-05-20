@@ -137,7 +137,9 @@ function DetailCompetitions() {
                                                     {data.events.map((item) => (
                                                         <TableRow style={{cursor: 'pointer'}} key={item.id} onMouseEnter={handleMouseEnter}
                                                                   onMouseLeave={handleMouseLeave}>
-                                                            <TableCell>{item.name}</TableCell>
+                                                            <TableCell>
+                                                                {item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase()}
+                                                            </TableCell>
                                                             <TableCell
                                                                 id="esconde">{item.event_class.charAt(0).toUpperCase() + item.event_class.slice(1).toLowerCase()}</TableCell>
                                                             <TableCell>{item.rounds}</TableCell>

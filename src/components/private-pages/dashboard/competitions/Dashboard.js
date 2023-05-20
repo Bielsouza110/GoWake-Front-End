@@ -25,15 +25,17 @@ const Dashboard = () => {
         || item.venue.toLowerCase().includes(searchTerm.toLowerCase()));
 
     useEffect(() => {
-
         axios.get(endpoints.competitions, {
             headers: {
                 'Authorization': `Token ${usuarioSalvo.token}`
             }
         }).then(response => {
-                setData(response.data.results);
+            const sortedData = response.data.results.sort((a, b) =>
+                a.organizing_country.localeCompare(b.organizing_country)
+            );
+            setData(sortedData);
         }).catch(error => {
-                console.error(error);
+            console.error(error);
         });
 
         const timer = setTimeout(() => {
@@ -42,6 +44,7 @@ const Dashboard = () => {
 
         return () => clearTimeout(timer);
     }, []);
+
     const handleDetalhesClick = (id) => {
         navigate(`/login/dashboard/${id}`);
     };
@@ -109,7 +112,7 @@ const Dashboard = () => {
                                                     <TableRow key={item.id} style={{cursor: 'pointer'}} onClick={() => handleDetalhesClick(item.id)}
                                                               onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                                                         <TableCell>
-                                                            <Tooltip title={item.organizing_country}>
+                                                            <Tooltip title={item.organizing_country.toUpperCase()}>
                                                                 {getCountryFlag(item.organizing_country)}
                                                             </Tooltip>
                                                         </TableCell>
