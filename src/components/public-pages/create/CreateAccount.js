@@ -5,20 +5,27 @@ import {
     MDBInput,
 } from 'mdb-react-ui-kit';
 
-import {Button} from "react-bootstrap";
+import {Grid, TextField} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AppBar from "../../../navs/AppBar";
 import Box from "@mui/material/Box";
-import {styled} from "@mui/material/styles";
 import {Container} from "@material-ui/core";
 import React, {useRef, useState} from "react";
 import axios from "axios";
 import {endpoints} from "../../../api/Urls";
 import DrawerHeader from "../../../navs/DrawerHeader";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import DoneIcon from "@mui/icons-material/Done";
 
 function CreateAccount() {
 
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
     const inputRef = useRef(null);
     const [showError, setShowError] = useState(false);
     const [showErrorUsername, setShowErrorUsername] = useState('');
@@ -26,8 +33,6 @@ function CreateAccount() {
     const [showErrorPassword, setShowErrorPassword] = useState('');
     const [showErrorPassword2, setShowErrorPassword2] = useState('');
     const [showSucessMessage, setShowSucessMessage] = useState('');
-
-
     const [user, setUser] = useState({ username: '', email: '', password: '', password2: '' });
 
     function handleChangeUsername(event) {
@@ -63,10 +68,12 @@ function CreateAccount() {
 
                 console.log(response);
 
+                setOpen(true);
                 setTimeout(() => {
                     setShowError(false);
                     navigate('/');
-                }, 4000);
+                    setOpen(false);
+                }, 3000);
             }
 
         } catch (error) {
@@ -110,7 +117,6 @@ function CreateAccount() {
         event.preventDefault();
         createAccountApi(user);
     }
-
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             const meuBotao = document.getElementById('createAccount');
@@ -121,7 +127,6 @@ function CreateAccount() {
     };
 
     return (
-
         <div className="sdd">
             <Box sx ={{display:"flex"}}>
                 <AppBar/>
@@ -136,29 +141,79 @@ function CreateAccount() {
                                 <h5 className="fw-normal my-4 pb-3" style={{letterSpacing: '1px', fontSize:'30px'
                                 }}>Join us</h5>
 
-                                <MDBInput wrapperClass='mb-4' ref={inputRef} onKeyDown={handleKeyDown} value={user.username} onChange={handleChangeUsername}
-                                placeholder="Username" id='formControlLg' type='text' size="md"/>
+                                <Dialog open={open}>
+                                    <DialogContent>
+                                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                            <HowToRegIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }}/>
+                                            Registration successful!
+                                        </DialogContentText>
+                                    </DialogContent>
+                                </Dialog>
 
-                                {showError && showErrorUsername !== '' && <p id="error">{showErrorUsername}</p>}
+                                <Grid item id="margin9">
+                                    <TextField
+                                        label="Username"
+                                        value={user.username}
+                                        onChange={handleChangeUsername}
+                                        ref={inputRef}
+                                        onKeyDown={handleKeyDown}
+                                        fullWidth
+                                    />
+                                    {showError && showErrorUsername !== '' && <p id="error">{showErrorUsername}</p>}
+                                </Grid>
 
-                                <MDBInput wrapperClass='mb-4' ref={inputRef} onKeyDown={handleKeyDown} value={user.email} onChange={handleChangeEmail}
-                                placeholder="Email adress" id='formControlLg' type='email' size="md"/>
+                                <Grid item id="margin9">
+                                    <TextField
+                                        label="Email"
+                                        value={user.email}
+                                        onChange={handleChangeEmail}
+                                        ref={inputRef}
+                                        onKeyDown={handleKeyDown}
+                                        type='email'
+                                        size="md"
+                                        fullWidth
+                                    />
+                                    {showError && showErrorEmail !== '' && <p id="error">{showErrorEmail}</p>}
+                                </Grid>
 
-                                {showError && showErrorEmail !== '' && <p id="error">{showErrorEmail}</p>}
+                                <Grid item id="margin9">
+                                    <TextField
+                                        label="Password"
+                                        value={user.password}
+                                        onChange={handleChangePassword}
+                                        ref={inputRef}
+                                        onKeyDown={handleKeyDown}
+                                        type='password'
+                                        size="md"
+                                        fullWidth
+                                    />
+                                    {showError && showErrorPassword !== '' && <p id="error">{showErrorPassword}</p>}
+                                </Grid>
 
-                                <MDBInput wrapperClass='mb-4' ref={inputRef} onKeyDown={handleKeyDown} value={user.password} onChange={handleChangePassword}
-                                placeholder="Password" id='formControlLg' type='password' size="md"/>
+                                <Grid item id="margin10">
+                                    <TextField
+                                        label="Confirm password"
+                                        value={user.password2}
+                                        onChange={handleChangePassword2}
+                                        ref={inputRef}
+                                        onKeyDown={handleKeyDown}
+                                        type='password'
+                                        size="md"
+                                        fullWidth
+                                    />
+                                    {showError && showErrorPassword2 !== '' && <p id="error">{showErrorPassword2}</p>}
+                                </Grid>
 
-                                {showError && showErrorPassword !== '' && <p id="error">{showErrorPassword}</p>}
+                                <Button variant="contained" id="createAccount" ref={inputRef} onKeyDown={handleKeyDown} type="submit" onClick={handleSubmit} className="mb-2 w-100" size="md"
+                                        style={{ textTransform: 'none', color: 'success' }}>
+                                    Sign up
+                                </Button>
 
-                                <MDBInput wrapperClass='mb-4' ref={inputRef} onKeyDown={handleKeyDown} value={user.password2} onChange={handleChangePassword2}
-                                placeholder="Confirm password" id='formControlLg' type='password' size="md"/>
-
-                                {showError && showErrorPassword2 !== '' && <p id="error">{showErrorPassword2}</p>}
                                 {!showError && showSucessMessage !== '' && <p id="sucess">{showSucessMessage}</p>}
 
-                                <Button type="submit" id="createAccount" ref={inputRef} onKeyDown={handleKeyDown} onClick={handleSubmit} className="mb-3 w-100" size="md">Sign Up</Button>
-                                <Button onClick={() => navigate(-1)} id="colorBTN" className="mb-4 w-100" size="md">Cancel</Button>
+                                <Button variant="contained" type="submit" onClick={() => navigate(-1)} className="mb-3 w-100" size="md" style={{ textTransform: 'none', backgroundColor: 'gray' }}>
+                                    Cancel
+                                </Button>
 
                                 <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>
 

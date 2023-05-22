@@ -166,12 +166,6 @@
     }
 }
 
-#colorBTN {
-    background-color: lightgray;
-    color: black;
-    border-color: lightgray;
-}
-
 .mysidenav {
     background-color: #00008b !important;
 }
@@ -288,4 +282,13 @@
 
 #margin8{
     margin-right: 0.7vh;
+}
+
+#margin9 {
+    margin-top: 2.2%;
+}
+
+#margin10 {
+    margin-top: 2.5%;
+    margin-bottom: 4%;
 }

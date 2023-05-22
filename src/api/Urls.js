@@ -14,6 +14,6 @@ export const getEndpointDeleteAthleteById = (endpoint, idCompetition, idAthlete)
     return `${endpoints[endpoint]}/${idCompetition}/athlete/${idAthlete}/`;
 };
 
-export const getEndpointCreateAthlete = (endpoint, idCompetition) => {
+export const getEndpointCreateAthlete = (endpoint   , idCompetition) => {
     return `${endpoints[endpoint]}/${idCompetition}/athletes/`;
 };

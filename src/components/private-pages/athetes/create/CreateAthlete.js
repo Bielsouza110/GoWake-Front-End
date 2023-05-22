@@ -59,11 +59,9 @@ const CreateAthlete = ({ open, onClose}) => {
     const handleYearOfBirthChange = (event) => {
         setYearOfBirth(event.target.value);
     };
-
     const handleCountryChange = (event) => {
         setCountry(event.target.value);
     };
-
     const handleEventChange = (event) => {
         setSelectedEvents(event.target.value); // Armazenando as opções selecionadas nos eventos
     };
@@ -109,13 +107,11 @@ const CreateAthlete = ({ open, onClose}) => {
         }
     };
     const handleCreate = async () => {
-
         try {
             const competitionIds = dataCompetition
                 .filter((competition) =>
                     competition.events.some((event) => selectedEvents.includes(event.id))
-                )
-                .map((competition) => competition.id);
+                ).map((competition) => competition.id);
 
             competitionIds.forEach((competitionId) => {
                 fetchAthletesForCompetition(competitionId);

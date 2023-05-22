@@ -10,10 +10,17 @@ import {useEffect, useState} from "react";
 import Box from "@mui/material/Box";
 import {Container} from "@material-ui/core";
 import axios from 'axios';
-import {Button} from "react-bootstrap";
 import {endpoints} from "../../../api/Urls";
 import DrawerHeader from "../../../navs/DrawerHeader";
 import React, { useRef } from 'react';
+import {Grid, TextField} from "@mui/material";
+
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import DoneIcon from '@mui/icons-material/Done';
 
 function Login() {
 
@@ -29,11 +36,19 @@ function Login() {
     function handleChangePassword(event) {
         setUser({ ...user, password: event.target.value });
     }
+    function handleChangeEmail(event) {
+        setUser({ ...user, email: event.target.value });
+    }
     const loginApi = async (user) => {
         try {
             const response = await axios.post(endpoints.login, user);
             localStorage.setItem('usuario', JSON.stringify(response.data));
-            navigate('/login/dashboard');
+
+            setOpen(true);
+            setTimeout(() => {
+                navigate('/login/dashboard');
+                setOpen(false);
+            }, 3000);
 
         } catch (error) {
             if (error.response.status === 400 || error.response.status === 404) {
@@ -54,27 +69,8 @@ function Login() {
         loginApi(user);
     }
     function handleSubmitRecoverPassword(event){
-
         event.preventDefault();
-
-/*        axios.post('https://gowake.daletech.pt/account/recoverpassword/', user)
-            .then(response => {
-                console.log(response);
-            })
-            .catch(error => {
-                if (error.response.status === 400) {
-
-                    setShowError(true);
-                    setTimeout(() => {
-                        setShowError(false);
-                    }, 2000);
-
-                } else {
-                    // lidar com outros erros
-                    console.log(error);
-                }
-            });*/
-    } //falta o mauro fazer o endpoint
+    }
     function recoverPassword(event) {
         event.preventDefault();
 
@@ -98,6 +94,8 @@ function Login() {
         }
     };
 
+    const [open, setOpen] = useState(false);
+
     return (
         <div className="sdd">
             <Box sx={{display: "flex"}}>
@@ -115,31 +113,65 @@ function Login() {
                                     letterSpacing: '1px', fontSize: '30px'
                                 }}>Sign into your account</h5>
 
-                                <MDBInput wrapperClass='mb-4' ref={inputRef} onKeyDown={handleKeyDown} value={user.username} onChange={handleChangeUsername}
-                                          placeholder="Username" id='formControlLg' type='text'
-                                          size="md"/>
-                                <MDBInput wrapperClass='mb-4' ref={inputRef} onKeyDown={handleKeyDown} value={user.password} onChange={handleChangePassword}
-                                          placeholder="Password" id='formControlLg' type='password'
-                                          size="md"/>
+                                <Dialog open={open}>
+                                    <DialogContent>
+                                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                            <DoneIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }} />
+                                            Login successful!
+                                        </DialogContentText>
+                                    </DialogContent>
+                                </Dialog>
+
+                                <Grid item id="margin9">
+                                    <TextField
+                                        label="Username"
+                                        value={user.username}
+                                        onChange={handleChangeUsername}
+                                        ref={inputRef}
+                                        onKeyDown={handleKeyDown}
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item id="margin10">
+                                    <TextField
+                                        label="Password"
+                                        value={user.password}
+                                        onChange={handleChangePassword}
+                                        ref={inputRef}
+                                        onKeyDown={handleKeyDown}
+                                        type='password'
+                                        size="md"
+                                        fullWidth
+                                    />
+                                </Grid>
 
                                 {showError && <p id="error">Wrong credentials</p>}
 
-                                <Button id="login" type="submit" onClick={handleSubmit} className="mb-4 w-100" size="md">
+                                <Button id="login" variant="contained" type="submit" onClick={handleSubmit} className="mb-4 w-100" size="md"
+                                        style={{ textTransform: 'none', color: 'success' }}>
                                     Sign in
                                 </Button>
 
-                                {showRecoverPassword && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>
+                                {showRecoverPassword && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>}
+
+                                {showRecoverPassword &&
+                                    <Grid item id="margin10">
+                                        <TextField
+                                            label="Enter email to recover password"
+                                            value={user.email}
+                                            onChange={handleChangeEmail}
+                                            /*    ref={inputRef}
+                                                onKeyDown={handleKeyDown}*/
+                                            type='email'
+                                            size="md"
+                                            fullWidth
+                                        />
+                                    </Grid>
                                 }
 
                                 {showRecoverPassword &&
-                                    <MDBInput wrapperClass='mb-4' value={user.password} onChange={handleChangePassword}
-                                              placeholder="Enter email to recover password" id='formControlLg' type='email'
-                                              size="md"/>
-                                }
-
-                                {showRecoverPassword &&
-                                    <Button variant="secondary" type="submit" onClick={handleSubmitRecoverPassword} className="mb-4 w-100" size="md">
-                                        Recover password
+                                    <Button variant="contained" type="submit" onClick={handleSubmit} className="mb-3 w-100" size="md" style={{ textTransform: 'none', backgroundColor: 'gray' }}>
+                                        Cancel
                                     </Button>
                                 }
 
