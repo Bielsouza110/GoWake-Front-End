@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, MenuItem, Grid, Select, InputLabel, FormControl, Input, Chip } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, MenuItem, Grid, DialogContentText} from '@mui/material';
 import axios from "axios";
 import { endpoints, getEndpointCompetitionById, getEndpointCreateAthlete } from "../../../../api/Urls";
 import {getAllGenderFlags} from "../../dashboard/utils/Utils";
+import DoneIcon from '@mui/icons-material/Done';
 
 const CreateAthlete = ({ open, onClose}) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
@@ -12,10 +13,12 @@ const CreateAthlete = ({ open, onClose}) => {
     const [fedId, setFedId] = useState('');
     const [gender, setGender] = useState('');
     const [yearOfBirth, setYearOfBirth] = useState('');
-    const [selectedEvents, setSelectedEvents] = useState([]); // Estado para armazenar os eventos selecionados
+    const [selectedEvent, setSelectedEvent] = useState(''); // Estado para armazenar os eventos selecionados
     const [dataCompetition, setDataCompetition] = useState([]);
     const [events, setEvents] = useState([]);
     const [country, setCountry] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
     const countryCodeMatrix = [
         'af', 'al', 'dz', 'as', 'ad', 'ao', 'ai', 'aq', 'ag', 'ar',
@@ -57,13 +60,13 @@ const CreateAthlete = ({ open, onClose}) => {
         setGender(event.target.value);
     };
     const handleYearOfBirthChange = (event) => {
-        setYearOfBirth(event.target.value);
+        setYearOfBirth(String(event.target.value));
     };
     const handleCountryChange = (event) => {
         setCountry(event.target.value);
     };
     const handleEventChange = (event) => {
-        setSelectedEvents(event.target.value); // Armazenando as opções selecionadas nos eventos
+        setSelectedEvent(event.target.value); // Armazenando as opções selecionadas nos eventos
     };
     const getYearOptions = () => {
         const currentYear = new Date().getFullYear();
@@ -76,13 +79,13 @@ const CreateAthlete = ({ open, onClose}) => {
     const fetchAthletesForCompetition = async (competitionId) => {
 
         const data = {
-            events: selectedEvents.map((eventId) => ({ id: eventId })),
-            fed_id: fedId,
-            first_name: firstName,
-            last_name: lastName,
-            country: country.toUpperCase(),
-            gender: gender,
-            year_of_birth: yearOfBirth
+            events: [{ id: selectedEvent}],
+            fed_id: fedId.toUpperCase().trim(),
+            first_name: firstName.trim(),
+            last_name: lastName.trim(),
+            country: country.toUpperCase().trim(),
+            gender: gender.trim(),
+            year_of_birth: parseInt(yearOfBirth.trim()),
         };
 
         try {
@@ -92,34 +95,71 @@ const CreateAthlete = ({ open, onClose}) => {
                 },
             });
 
-            setFedId('');
-            setFirstName('');
-            setLastName('');
-            setCountry('');
-            setGender('');
-            setYearOfBirth('');
-            setSelectedEvents([]);
-
+            cleanFields();
             onClose();
         } catch (error) {
             //Fazer um box de mensagem mal!!!
             console.error('Erro ao buscar atletas:', error.request.response);
         }
     };
-    const handleCreate = async () => {
-        try {
-            const competitionIds = dataCompetition
-                .filter((competition) =>
-                    competition.events.some((event) => selectedEvents.includes(event.id))
-                ).map((competition) => competition.id);
 
-            competitionIds.forEach((competitionId) => {
-                fetchAthletesForCompetition(competitionId);
-            });
-        } catch (error) {
-            console.log('Ocorreu um erro ao fazer a solicitação.');
+    const handleCreate = async () => {
+        if (isFormEmpty()) {
+            setErrorMessage('All fields above are required!');
+            setTimeout(() => {
+                setErrorMessage('');
+            }, 3000);
+        } else {
+            try {
+                const competitionIds = dataCompetition
+                    .filter((competition) =>
+                        competition.events.some((event) => event.id === selectedEvent)
+                    )
+                    .map((competition) => competition.id);
+
+                if (competitionIds.length > 0) {
+                    setSuccessDialogOpen(true);
+                    for (const competitionId of competitionIds) {
+                        await fetchAthletesForCompetition(competitionId);
+                    }
+
+                    setTimeout(() => {
+                        cleanFieldsAndClose();
+                    }, 3000);
+                    onClose();
+                } else {
+                    console.error('No competitions found with the selected event.');
+                }
+            } catch (error) {
+                console.error('An error occurred while making the request.');
+            }
         }
-    }
+    };
+
+    const cleanFields = () => {
+        setFedId('');
+        setFirstName('');
+        setLastName('');
+        setCountry('');
+        setGender('');
+        setYearOfBirth('');
+        setSelectedEvent('');
+    };
+
+    const isFormEmpty = () => {
+        if (
+            firstName.trim() === '' ||
+            lastName.trim() === '' ||
+            fedId.trim() === '' ||
+            gender.trim() === '' ||
+            yearOfBirth.trim() === '' ||
+            country.trim() === '' ||
+            selectedEvent.length === 0
+        ) {
+            return true; // Form is empty
+        }
+        return false; // Form is not empty
+    };
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -138,7 +178,13 @@ const CreateAthlete = ({ open, onClose}) => {
         };
 
         fetchEvents();
+        cleanFields();
     }, []);
+
+    const cleanFieldsAndClose = () => {
+        cleanFields();
+        setSuccessDialogOpen(false);
+    };
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
@@ -214,61 +260,49 @@ const CreateAthlete = ({ open, onClose}) => {
                         </TextField>
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <FormControl fullWidth>
-                            <TextField
-                                select
-                                label="Events"
-                                value={selectedEvents}
-                                onChange={handleEventChange}
-                                fullWidth
-                                SelectProps={{
-                                    multiple: true,
-                                    renderValue: (selected) => (
-                                        <div>
-                                            {selected.map((value) => {
-                                                const event = events.find((event) => event.id === value);
-                                                return (
-                                                    <MenuItem key={value} value={event.id}>
-                                                        {event.name.charAt(0).toUpperCase() + event.name.slice(1).toLowerCase()}
-                                                    </MenuItem>
-                                                );
-                                            })}
-                                        </div>
-                                    ),
-                                }}
-                            >
-                                {events.map((event) => (
-                                    <MenuItem key={event.id} value={event.id}>
-                                        {event.name}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </FormControl>
+                        <TextField
+                            label="Event"
+                            value={selectedEvent}
+                            onChange={handleEventChange}
+                            fullWidth
+                            select
+                        >
+                            {events.map((event) => (
+                                <MenuItem key={event.id} value={event.id}>
+                                    {event.name.charAt(0).toUpperCase() + event.name.slice(1).toLowerCase()}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </Grid>
 
                     <Grid item xs={12} sm={12}>
                         <div align="right">
-                            <p id="error2">All the fields above are required!</p>
+                            {errorMessage && (
+                                <p id="error">{errorMessage}</p>
+                            )}
                         </div>
                     </Grid>
                 </Grid>
+                <Dialog open={successDialogOpen} onClose={cleanFieldsAndClose}>
+                    <DialogContent>
+                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <DoneIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }} />
+                            Athlete created successfully!
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => {
-                    // Clearing the fields
-                    setFedId('');
-                    setFirstName('');
-                    setLastName('');
-                    setCountry('');
-                    setGender('');
-                    setYearOfBirth('');
-                    setSelectedEvents([]);
-
-                    onClose();
-                }} color="primary">
+                <Button
+                    onClick={() => {
+                        cleanFieldsAndClose();
+                        onClose();
+                    }}
+                    color="primary"
+                >
                     Cancel
                 </Button>
-                <Button onClick={() => {handleCreate()}} color="primary">
+                <Button onClick={handleCreate} color="primary">
                     Create
                 </Button>
             </DialogActions>

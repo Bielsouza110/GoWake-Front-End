@@ -6,7 +6,7 @@ import DrawerHeader from "../../../navs/DrawerHeader";
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 import {Spinner} from "react-bootstrap";
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField} from "@mui/material";
+import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField} from "@mui/material";
 import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../dashboard/utils/Utils";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
@@ -22,6 +22,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import CreateAthlete from "./create/CreateAthlete";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const Athletes = () => {
 
@@ -181,6 +182,8 @@ const Athletes = () => {
         setAthletes([...athletes, athlete]);
     };
 
+    const isMobile = useMediaQuery('(max-width: 600px)');
+
     return (
         <div className="sdd">
             <Box sx={{display: "flex"}}>
@@ -220,12 +223,26 @@ const Athletes = () => {
                             sx={{ width: '100%', margin: '0 0 1rem'}}
                         />
 
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenDialog}
-                                    style={{ textTransform: 'none', color: 'success' }}>
-                                Create athlete
-                            </Button>
-                        </Box>
+                        {isMobile ? (
+                            <Grid item xs={12} sm={12}>
+                                <Button
+                                    variant="contained"
+                                    startIcon={<AddIcon />}
+                                    onClick={handleOpenDialog}
+                                    style={{ textTransform: 'none', color: 'success', marginBottom: '3vh' }}
+                                    sx={{ width: '100%', maxWidth: '100%'}}
+                                >
+                                    Create athlete
+                                </Button>
+                            </Grid>
+                        ) : (
+                            <Grid item xs={12} sm={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenDialog}
+                                        style={{ textTransform: 'none', color: 'success', marginBottom: '1vh' }}>
+                                    Create athlete
+                                </Button>
+                            </Grid>
+                        )}
 
                         <CreateAthlete
                             open={openDialog}
