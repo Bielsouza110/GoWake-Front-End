@@ -204,6 +204,11 @@
     font-size: 12px;
 }
 
+#error2 {
+    color: red;
+    font-size: 13px;
+}
+
 #load {
     margin: 0.8%;
 }
@@ -260,6 +265,7 @@
 
 #margin4 {
     margin-bottom: 1vh;
+
 }
 
 #margin5 {

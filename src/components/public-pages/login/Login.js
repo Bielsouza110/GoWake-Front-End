@@ -171,7 +171,7 @@ function Login() {
 
                                 {showRecoverPassword &&
                                     <Button variant="contained" type="submit" onClick={handleSubmit} className="mb-3 w-100" size="md" style={{ textTransform: 'none', backgroundColor: 'gray' }}>
-                                        Cancel
+                                        Recover password
                                     </Button>
                                 }
 

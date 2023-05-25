@@ -1,12 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, MenuItem, Grid, DialogContentText} from '@mui/material';
-import axios from "axios";
-import { endpoints, getEndpointCompetitionById, getEndpointCreateAthlete } from "../../../../api/Urls";
-import {getAllGenderFlags} from "../../dashboard/utils/Utils";
-import DoneIcon from '@mui/icons-material/Done';
+import React, {useEffect, useState} from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import {countryCodeMatrix, getYearOptions} from "../ultils/Utils";
+import {Button, Grid, MenuItem, TextField} from "@mui/material";
+import {getAllGenderFlags} from "../../dashboard/utils/Utils";
+import DoneIcon from "@mui/icons-material/Done";
+import axios from "axios";
+import {
+    endpoints,
+    getEndpointAthleteById,
+    getEndpointCreateAthlete,
+    getEndpointDeleteAthleteById, putEndpointAthleteById
+} from "../../../../api/Urls";
 
-const CreateAthlete = ({ open, onClose}) => {
+const EditAthlete = ({open, onClose, id}) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
     const [firstName, setFirstName] = useState('');
@@ -42,10 +52,10 @@ const CreateAthlete = ({ open, onClose}) => {
     const handleEventChange = (event) => {
         setSelectedEvent(event.target.value); // Armazenando as opções selecionadas nos eventos
     };
-    const submitCreateAthlete = async (competitionId) => {
+    const submitEditAthlete = async (competitionId) => {
 
         const data = {
-            events: [{ id: selectedEvent}],
+            events: [],
             fed_id: fedId.toUpperCase().trim(),
             first_name: firstName.trim(),
             last_name: lastName.trim(),
@@ -55,16 +65,13 @@ const CreateAthlete = ({ open, onClose}) => {
         };
 
         try {
-            const response = await axios.post(getEndpointCreateAthlete("athlete", competitionId), data, {
+            const response = await axios.put(putEndpointAthleteById("athlete", competitionId, id), data, {
                 headers: {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
             });
-
-            cleanFields();
             onClose();
         } catch (error) {
-            //Fazer um box de mensagem mal!!!
             console.error('Erro ao buscar atletas:', error.request.response);
         }
     };
@@ -85,7 +92,7 @@ const CreateAthlete = ({ open, onClose}) => {
                 if (competitionIds.length > 0) {
                     setSuccessDialogOpen(true);
                     for (const competitionId of competitionIds) {
-                        await submitCreateAthlete(competitionId);
+                        await submitEditAthlete(competitionId);
                     }
 
                     setTimeout(() => {
@@ -100,17 +107,8 @@ const CreateAthlete = ({ open, onClose}) => {
             }
         }
     };
-    const cleanFields = () => {
-        setFedId('');
-        setFirstName('');
-        setLastName('');
-        setCountry('');
-        setGender('');
-        setYearOfBirth('');
-        setSelectedEvent('');
-    };
+
     const cleanFieldsAndClose = () => {
-        cleanFields();
         setSuccessDialogOpen(false);
     };
     const isFormEmpty = () => {
@@ -129,30 +127,64 @@ const CreateAthlete = ({ open, onClose}) => {
     };
 
     useEffect(() => {
+        const fetchAthleteData = async () => {
+
+            try {
+                const athleteId = id;
+
+                const competitionIds = dataCompetition
+                    .filter(competition => competition.athletes.some(athlete => athlete.id === athleteId))
+                    .map(competition => competition.id);
+
+                console.log(competitionIds); // Output: [1, 3]
+
+                competitionIds.forEach(competitionId => {
+                    axios.get(getEndpointAthleteById("athlete", competitionId, athleteId), {
+                        headers: {
+                            'Authorization': `Token ${usuarioSalvo.token}`
+                        }
+                    }).then(response => {
+                        const athleteData = response.data;
+                        setFirstName(athleteData.first_name);
+                        setLastName(athleteData.last_name);
+                        setFedId(athleteData.fed_id);
+                        setGender(athleteData.gender);
+                        setYearOfBirth(String(athleteData.year_of_birth));
+                        setSelectedEvent(''); // Set the selected event to an appropriate initial value
+                        setCountry(String(athleteData.country.toLowerCase()));
+                    }).catch(error => {
+                        console.error('An error occurred while fetching athlete data:', error);
+                    });
+                });
+            } catch (error) {
+                console.error('An error occurred while fetching athlete data:', error);
+            }
+        };
+
         const fetchEvents = async () => {
             try {
                 const response = await axios.get(endpoints.competitions, {
                     headers: {
-                        Authorization: `Token ${usuarioSalvo.token}`,
+                        'Authorization': `Token ${usuarioSalvo.token}`
                     },
                 });
 
                 setDataCompetition(response.data.results);
                 setEvents(response.data.results.map(item => item.events).flat());
             } catch (error) {
-                console.error(error);
+                console.error('An error occurred while fetching events:', error);
             }
         };
 
         fetchEvents();
-        cleanFields();
-    }, []);
+        fetchAthleteData();
+    }, [id, usuarioSalvo.token]);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
-            <DialogTitle>Create Athlete</DialogTitle>
+            <DialogTitle>Edit Athlete</DialogTitle>
             <DialogContent>
-                <Grid container spacing={2} sx={{ marginTop: '0.0rem' }}>
+                <Grid container spacing={2} sx={{marginTop: '0.0rem'}}>
                     <Grid item xs={12} sm={6}>
                         <TextField
                             label="First Name"
@@ -200,10 +232,10 @@ const CreateAthlete = ({ open, onClose}) => {
                             {countryCodeMatrix.map((code) => (
                                 <MenuItem key={code.toUpperCase()} value={code}>
                                     <img src={`https://flagcdn.com/16x12/${code}.png`} alt={code}
-                                         style={{ marginRight: '1rem' }} />
+                                         style={{marginRight: '1rem'}}/>
                                     {code.toUpperCase()}
                                 </MenuItem>
-                                        ))}
+                            ))}
                         </TextField>
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -248,9 +280,9 @@ const CreateAthlete = ({ open, onClose}) => {
                 </Grid>
                 <Dialog open={successDialogOpen} onClose={cleanFieldsAndClose}>
                     <DialogContent>
-                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <DoneIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }} />
-                            Athlete created successfully!
+                        <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                            <DoneIcon sx={{color: 'green', fontSize: 48, marginBottom: '1%'}}/>
+                            Athlete successfully edited!
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>
@@ -266,11 +298,11 @@ const CreateAthlete = ({ open, onClose}) => {
                     Cancel
                 </Button>
                 <Button onClick={handleCreate} color="primary">
-                    Create
+                    Edit
                 </Button>
             </DialogActions>
         </Dialog>
     );
 };
 
-export default CreateAthlete;
+export default EditAthlete;

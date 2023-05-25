@@ -105,8 +105,6 @@ function ResponsiveAppBar() {
                                     </Button>
                                 );
                             })}
-
-
                         </Menu>
                     </Box>
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>

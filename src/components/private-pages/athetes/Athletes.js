@@ -11,9 +11,9 @@ import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {endpoints, getEndpointDeleteAthleteById} from "../../../api/Urls";
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
-import { Button } from '@mui/material';
+import {Edit as EditIcon, Delete as DeleteIcon} from '@mui/icons-material';
+import {IconButton} from '@mui/material';
+import {Button} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Tooltip from "@mui/material/Tooltip";
 import Dialog from '@mui/material/Dialog';
@@ -21,10 +21,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import CreateAthlete from "./create/CreateAthlete";
 import useMediaQuery from '@mui/material/useMediaQuery';
+import EditAthlete from "./edit/EditAthlete";
+import CreateAthlete from "./create/CreateAthlete";
 
-const Athletes = () => {
+const Athletes = (props) => {
 
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
@@ -37,35 +38,9 @@ const Athletes = () => {
     const [dataCompetition, setDataCompetition] = useState([]);
     const filteredData = data.filter(item => item.first_name.toLowerCase().includes(searchTerm.toLowerCase())
         || item.last_name.toLowerCase().includes(searchTerm.toLowerCase()));
-
-    const reload = () => {
-            axios.get(endpoints.competitions, {
-                headers: {
-                    'Authorization': `Token ${usuarioSalvo.token}`
-                }
-            }).then(response => {
-                const uniqueAthletes = {};
-                response.data.results.forEach((competition) => {
-                    competition.athletes.forEach((athlete) => {
-                        if (!uniqueAthletes[athlete.fed_id]) {
-                            uniqueAthletes[athlete.fed_id] = athlete;
-                        }
-                    });
-                });
-
-                const uniqueAthletesArray = Object.values(uniqueAthletes);
-                setData(uniqueAthletesArray);
-                setDataCompetition(response.data.results);
-            }).catch(error => {
-                console.error(error);
-            });
-
-            const timer = setTimeout(() => {
-                setShowSpinner(false);
-            }, 3000); // Tempo limite de 3 segundos
-
-            return () => clearTimeout(timer);
-    }
+    const [openDialog, setOpenDialog] = useState(false);
+    const [athletes, setAthletes] = useState([]);
+    const [openEditDialog, setOpenEditDialog] = useState(false);
 
     useEffect(() => {
         const fetchAtletes = async () => {
@@ -100,11 +75,38 @@ const Athletes = () => {
         fetchAtletes();
     }, []);
 
+    const reload = () => {
+        axios.get(endpoints.competitions, {
+            headers: {
+                'Authorization': `Token ${usuarioSalvo.token}`
+            }
+        }).then(response => {
+            const uniqueAthletes = {};
+            response.data.results.forEach((competition) => {
+                competition.athletes.forEach((athlete) => {
+                    if (!uniqueAthletes[athlete.fed_id]) {
+                        uniqueAthletes[athlete.fed_id] = athlete;
+                    }
+                });
+            });
 
+            const uniqueAthletesArray = Object.values(uniqueAthletes);
+            setData(uniqueAthletesArray);
+            setDataCompetition(response.data.results);
+        }).catch(error => {
+            console.error(error);
+        });
+
+        const timer = setTimeout(() => {
+            setShowSpinner(false);
+        }, 3000); // Tempo limite de 3 segundos
+
+        return () => clearTimeout(timer);
+    }
     const handleSearchTermChange = (event) => {
         setSearchTerm(event.target.value);
     };
-    const handleDeleteAthlete = (idAthlete) => {
+    const handleAthleteDelete = (idAthlete) => {
 
         const athleteId = idAthlete;
 
@@ -112,7 +114,7 @@ const Athletes = () => {
             .filter(competition => competition.athletes.some(athlete => athlete.id === athleteId))
             .map(competition => competition.id);
 
-       // console.log(competitionIds); // Output: [1, 3]
+        // console.log(competitionIds); // Output: [1, 3]
 
         competitionIds.forEach(competitionId => {
             axios.delete(getEndpointDeleteAthleteById("athlete", competitionId, idAthlete), {
@@ -154,32 +156,31 @@ const Athletes = () => {
             });
         });
     };
-    const handleClickOpen = (id) => {
+    const handleClickOpenDelete = (id) => {
         setIdAthlete(id);
         setOpen(true);
+    };
+    const handleDelete = (item) => {
+        handleAthleteDelete(item)
+        handleClose();
     };
     const handleClose = () => {
         setOpen(false);
     };
-    const handleDelete = (item) => {
-        handleDeleteAthlete(item)
-        handleClose();
-    };
-
-    const [openDialog, setOpenDialog] = useState(false);
-    const [athletes, setAthletes] = useState([]);
-
     const handleOpenDialog = () => {
         setOpenDialog(true);
     };
-
     const handleCloseDialog = () => {
         setOpenDialog(false);
         reload();
     };
-
-    const handleCreateAthlete = (athlete) => {
-        setAthletes([...athletes, athlete]);
+    const handleOpenEditDialog = (id) => {
+        setIdAthlete(id);
+        setOpenEditDialog(true);
+    };
+    const handleCloseEditDialog = () => {
+        setOpenEditDialog(false);
+        reload();
     };
 
     const isMobile = useMediaQuery('(max-width: 600px)');
@@ -188,7 +189,7 @@ const Athletes = () => {
         <div className="sdd">
             <Box sx={{display: "flex"}}>
                 <Drawer/>
-                <Container id="marginDrawerHeader" >
+                <Container id="marginDrawerHeader">
                     <DrawerHeader/>
                     <MDBContainer className="p-1 my-2">
                         <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{
@@ -211,7 +212,8 @@ const Athletes = () => {
                         </Dialog>
 
                         <Typography id="margin2">
-                            Here you can see all the athletes that are currently available. Click on the athlete to see more details.
+                            Here you can see all the athletes that are currently available. Click on the athlete to see
+                            more details.
                         </Typography>
 
                         <TextField
@@ -220,25 +222,25 @@ const Athletes = () => {
                             value={searchTerm}
                             onChange={handleSearchTermChange}
                             size="large"
-                            sx={{ width: '100%', margin: '0 0 1rem'}}
+                            sx={{width: '100%', margin: '0 0 1rem'}}
                         />
 
                         {isMobile ? (
                             <Grid item xs={12} sm={12}>
                                 <Button
                                     variant="contained"
-                                    startIcon={<AddIcon />}
+                                    startIcon={<AddIcon/>}
                                     onClick={handleOpenDialog}
-                                    style={{ textTransform: 'none', color: 'success', marginBottom: '3vh' }}
-                                    sx={{ width: '100%', maxWidth: '100%'}}
+                                    style={{textTransform: 'none', color: 'success', marginBottom: '3vh'}}
+                                    sx={{width: '100%', maxWidth: '100%'}}
                                 >
                                     Create athlete
                                 </Button>
                             </Grid>
                         ) : (
-                            <Grid item xs={12} sm={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenDialog}
-                                        style={{ textTransform: 'none', color: 'success', marginBottom: '1vh' }}>
+                            <Grid item xs={12} sm={12} sx={{display: 'flex', justifyContent: 'flex-end'}}>
+                                <Button variant="contained" startIcon={<AddIcon/>} onClick={handleOpenDialog}
+                                        style={{textTransform: 'none', color: 'success', marginBottom: '1vh'}}>
                                     Create athlete
                                 </Button>
                             </Grid>
@@ -247,7 +249,12 @@ const Athletes = () => {
                         <CreateAthlete
                             open={openDialog}
                             onClose={handleCloseDialog}
-                            onCreate={handleCreateAthlete}
+                        />
+
+                        <EditAthlete
+                            open={openEditDialog}
+                            onClose={handleCloseEditDialog}
+                            id={idAthlete}
                         />
 
                         {data.length === 0 && showSpinner &&
@@ -282,10 +289,11 @@ const Athletes = () => {
                                             <TableBody>
                                                 {filteredData.length > 0 && filteredData.map((item) => (
                                                     <TableRow style={{cursor: 'pointer'}} key={item.id}
-                                                              onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                                                        <TableCell id="esconde" >{item.fed_id}</TableCell>
+                                                              onMouseEnter={handleMouseEnter}
+                                                              onMouseLeave={handleMouseLeave}>
+                                                        <TableCell id="esconde">{item.fed_id}</TableCell>
                                                         <TableCell>{item.first_name.charAt(0).toUpperCase() + item.first_name.slice(1).toLowerCase()
-                                                                    + " " + item.last_name.charAt(0).toUpperCase() + item.last_name.slice(1).toLowerCase()}
+                                                            + " " + item.last_name.charAt(0).toUpperCase() + item.last_name.slice(1).toLowerCase()}
                                                         </TableCell>
 
                                                         <TableCell id="esconde">
@@ -296,12 +304,14 @@ const Athletes = () => {
 
                                                         <TableCell id="esconde">
                                                             {item.gender === "F" && (
-                                                                <Tooltip title="Feminine" className="tooltip-gender">
+                                                                <Tooltip title="Feminine"
+                                                                         className="tooltip-gender">
                                                                     {GetGenderFlags(item.gender)}
                                                                 </Tooltip>
                                                             )}
                                                             {item.gender === "M" && (
-                                                                <Tooltip title="Masculine" className="tooltip-gender">
+                                                                <Tooltip title="Masculine"
+                                                                         className="tooltip-gender">
                                                                     {GetGenderFlags(item.gender)}
                                                                 </Tooltip>
                                                             )}
@@ -309,13 +319,17 @@ const Athletes = () => {
 
                                                         <TableCell>
                                                             <Tooltip title="Edit" className="tooltip-gender">
-                                                                <IconButton >
-                                                                    <EditIcon color="gray" style={{cursor: 'pointer'}}/>
+                                                                <IconButton
+                                                                    onClick={() => handleOpenEditDialog(item.id)}>
+                                                                    <EditIcon color="gray"
+                                                                              style={{cursor: 'pointer'}}/>
                                                                 </IconButton>
                                                             </Tooltip>
                                                             <Tooltip title="Remove" className="tooltip-gender">
-                                                                <IconButton onClick={() => handleClickOpen(item.id)}>
-                                                                    <DeleteIcon color="error" style={{cursor: 'pointer'}}/>
+                                                                <IconButton
+                                                                    onClick={() => handleClickOpenDelete(item.id)}>
+                                                                    <DeleteIcon color="error"
+                                                                                style={{cursor: 'pointer'}}/>
                                                                 </IconButton>
                                                             </Tooltip>
                                                         </TableCell>
@@ -323,8 +337,10 @@ const Athletes = () => {
                                                 ))}
 
                                                 {filteredData.length === 0 &&
-                                                    <TableRow onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                                                        <TableCell colSpan={4} id="error2" align="left"> Athlete not found!</TableCell>
+                                                    <TableRow onMouseEnter={handleMouseEnter}
+                                                              onMouseLeave={handleMouseLeave}>
+                                                        <TableCell colSpan={4} id="error2" align="left"> Athlete not
+                                                            found!</TableCell>
                                                     </TableRow>
                                                 }
                                             </TableBody>

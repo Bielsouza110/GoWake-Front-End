@@ -1,4 +1,4 @@
-import Drawer from "../../../../navs/Drawer";
+import Drawer from "../../../navs/Drawer";
 import Box from "@mui/material/Box";
 import {useNavigate} from 'react-router-dom';
 import {Container} from "@material-ui/core";
@@ -8,9 +8,9 @@ import axios from "axios";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField} from '@mui/material';
 import {Spinner} from "react-bootstrap";
 import Typography from '@mui/material/Typography';
-import DrawerHeader from "../../../../navs/DrawerHeader";
-import {endpoints} from "../../../../api/Urls";
-import {getCountryFlag, handleMouseEnter, handleMouseLeave} from "../utils/Utils";
+import DrawerHeader from "../../../navs/DrawerHeader";
+import {endpoints} from "../../../api/Urls";
+import {getCountryFlag, handleMouseEnter, handleMouseLeave} from "./utils/Utils";
 import Tooltip from "@mui/material/Tooltip";
 
 const Dashboard = () => {
