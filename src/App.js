@@ -13,6 +13,7 @@ import Rules from "./components/private-pages/rules/Rules";
 import RulesLogin from "./components/public-pages/rules/RulesLogin";
 import DetailCompetitions from "./components/private-pages/dashboard/competitions/DetailCompetitions";
 import {PrivateRoute} from "./privateRoute/PrivateRoute";
+import Officials from "./components/private-pages/officers/Officials";
 
  function App() {
     return (
@@ -28,6 +29,7 @@ import {PrivateRoute} from "./privateRoute/PrivateRoute";
                 <Route path="/login/rules" element={<PrivateRoute><Rules/></PrivateRoute>}/>
                 <Route path="/login/liveresults" element={<PrivateRoute><LiveResults/></PrivateRoute>}/>
                 <Route path="/login/athletes" element={<PrivateRoute><Athletes/></PrivateRoute>}/>
+                <Route path="/login/officers" element={<PrivateRoute><Officials/></PrivateRoute>}/>
                 <Route path="/login/uploadxml" element={<PrivateRoute><UploadXML/></PrivateRoute>}/>
                 <Route path="/login/createevent" element={<PrivateRoute><CreateEvent/></PrivateRoute>}/>
                 <Route path="/login/modidyevent" element={<PrivateRoute><ModidyEvent/></PrivateRoute>}/>

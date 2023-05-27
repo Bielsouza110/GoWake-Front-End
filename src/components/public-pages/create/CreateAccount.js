@@ -209,8 +209,6 @@ function CreateAccount() {
                                     Sign up
                                 </Button>
 
-                                {!showError && showSucessMessage !== '' && <p id="sucess">{showSucessMessage}</p>}
-
                                 <Button variant="contained" type="submit" onClick={() => navigate(-1)} className="mb-3 w-100" size="md" style={{ textTransform: 'none', backgroundColor: 'gray' }}>
                                     Cancel
                                 </Button>

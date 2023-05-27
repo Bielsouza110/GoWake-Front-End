@@ -36,8 +36,7 @@ function DetailCompetitions() {
 
     useEffect(() => {
         //competitionsByIdApi();
-
-        axios.get(getEndpointCompetitionById("competitions", id), {
+        axios.get(getEndpointCompetitionById("competitionsBy", id), {
             headers: {
                 'Authorization': `Token ${usuarioSalvo.token}`
             }
@@ -103,7 +102,7 @@ function DetailCompetitions() {
                         )}
 
                         {data && (
-                            <Grid container spacing={2}>
+                            <Grid container spacing={4}>
                                 <Grid item xs={12} md={6}>
 
                                     <Typography variant="h6" id="margin4" fontWeight="bold" style={{
@@ -131,6 +130,7 @@ function DetailCompetitions() {
                                                         <TableCell>Name</TableCell>
                                                         <TableCell id="esconde">Event class</TableCell>
                                                         <TableCell>Rounds</TableCell>
+                                                        <TableCell>Code</TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
@@ -143,6 +143,7 @@ function DetailCompetitions() {
                                                             <TableCell
                                                                 id="esconde">{item.event_class.charAt(0).toUpperCase() + item.event_class.slice(1).toLowerCase()}</TableCell>
                                                             <TableCell>{item.rounds}</TableCell>
+                                                            <TableCell>{item.code}</TableCell>
                                                         </TableRow>
                                                     ))}
                                                 </TableBody>
@@ -187,7 +188,9 @@ function DetailCompetitions() {
                                                     {data.athletes.map((item) => (
                                                         <TableRow style={{cursor: 'pointer'}} key={item.id} onMouseEnter={handleMouseEnter}
                                                                   onMouseLeave={handleMouseLeave}>
-                                                            <TableCell>{item.first_name} {item.last_name}</TableCell>
+                                                            <TableCell>
+                                                                {item.first_name.charAt(0).toUpperCase() + item.first_name.slice(1).toLowerCase() + " " + item.last_name.charAt(0).toUpperCase() + item.last_name.slice(1).toLowerCase()}
+                                                            </TableCell>
                                                             <TableCell>
                                                                 <Tooltip title={item.country}>
                                                                     {getCountryFlag(item.country)}
@@ -242,14 +245,15 @@ function DetailCompetitions() {
                                                         <TableCell id="esconde">Country</TableCell>
                                                         <TableCell >Qualification</TableCell>
                                                         <TableCell id="esconde">Position</TableCell>
-
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
                                                     {data.officials.map((item) => (
                                                         <TableRow style={{cursor: 'pointer'}} key={item.id} onMouseEnter={handleMouseEnter}
                                                                   onMouseLeave={handleMouseLeave}>
-                                                            <TableCell>{item.first_name} {item.last_name}</TableCell>
+                                                            <TableCell>
+                                                                {item.first_name.charAt(0).toUpperCase() + item.first_name.slice(1).toLowerCase() + " " + item.last_name.charAt(0).toUpperCase() + item.last_name.slice(1).toLowerCase()}
+                                                            </TableCell>
                                                             <TableCell>
                                                                 <Tooltip title={item.country}>
                                                                     {getCountryFlag(item.country)}
@@ -257,7 +261,6 @@ function DetailCompetitions() {
                                                             </TableCell>
                                                             <TableCell>{item.position.charAt(0).toUpperCase() + item.position.slice(1).toLowerCase()}</TableCell>
                                                             <TableCell id="esconde">{item.qualification}</TableCell>
-
                                                         </TableRow>
                                                     ))}
                                                 </TableBody>
@@ -265,10 +268,8 @@ function DetailCompetitions() {
                                         </TableContainer>
                                     )}
                                 </Grid>
-
                             </Grid>
                         )}
-
                     </MDBContainer>
                 </Container>
             </Box>

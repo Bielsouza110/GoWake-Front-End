@@ -27,6 +27,7 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import {Link, useNavigate} from 'react-router-dom';
 import LoginIcon from "@mui/icons-material/Logout";
 import {Delete as DeleteIcon} from "@mui/icons-material";
+import FitbitIcon from '@mui/icons-material/Fitbit';
 
 const drawerWidth = 240;
 
@@ -119,6 +120,11 @@ function MiniDrawer (){
             text: 'Athletes',
             icon: <KitesurfingIcon/>,
             link: "/login/athletes"
+        },
+        {
+            text: 'Officers',
+            icon: <FitbitIcon/>,
+            link: "/login/officers"
         },
         {
             text: 'Upload XML',
@@ -228,7 +234,7 @@ function MiniDrawer (){
                             </Tooltip>
                             <ListItemText primary={item.text} />
                         </ListItem>
-                            {index === 4 && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>}
+                            {index === 5 && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>}
                         </div>
                     ))}
                 </List>

@@ -10,7 +10,7 @@ import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../dashboard/utils/Utils";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
-import {endpoints, getEndpointDeleteAthleteById} from "../../../api/Urls";
+import {endpoints, getEndpointDeleteOfficialById} from "../../../api/Urls";
 import {Edit as EditIcon, Delete as DeleteIcon} from '@mui/icons-material';
 import {IconButton} from '@mui/material';
 import {Button} from '@mui/material';
@@ -22,17 +22,17 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import EditAthlete from "./edit/EditAthlete";
-import CreateAthlete from "./create/CreateAthlete";
-import DoneIcon from "@mui/icons-material/Done";
+import EditAthlete from "../athetes/edit/EditAthlete";
+import CreateOfficial from "./create/CreateOfficial";
+import DoneIcon from '@mui/icons-material/Done';
 
-const Athletes = (props) => {
+const Officials = (props) => {
 
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
-    const [idAthlete, setIdAthlete] = useState('');
+    const [OfficialId, setOfficialId] = useState('');
     const [showSpinner, setShowSpinner] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState([]);
@@ -40,36 +40,32 @@ const Athletes = (props) => {
     const filteredData = data.filter(item => item.first_name.toLowerCase().includes(searchTerm.toLowerCase())
         || item.last_name.toLowerCase().includes(searchTerm.toLowerCase()));
     const [openDialog, setOpenDialog] = useState(false);
-    const [athletes, setAthletes] = useState([]);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [successDialogOpenDelete, setSuccessDialogOpenDeleteDelete] = useState(false);
 
-    const fetchAtletes = async () => {
-        axios.get(endpoints.competitions, {
-            headers: {
-                'Authorization': `Token ${usuarioSalvo.token}`
-            }
-        }).then(response => {
-            const uniqueAthletes = {};
-            response.data.results.forEach((competition) => {
-                competition.athletes.forEach((athlete) => {
-                    if (!uniqueAthletes[athlete.fed_id]) {
-                        uniqueAthletes[athlete.fed_id] = athlete;
-                    }
-                });
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(endpoints.competitions, {
+                headers: {
+                    'Authorization': `Token ${usuarioSalvo.token}`
+                }
+            }).then(response => {
+                const officialsData = response.data.results[0].officials;
+                const sortedData = officialsData.sort((a, b) => a.first_name.localeCompare(b.first_name));
+                setData(sortedData);
+                setDataCompetition(response.data.results);
+            }).catch(error => {
+                console.error(error);
             });
-            const uniqueAthletesArray = Object.values(uniqueAthletes);
-            const sortedData = uniqueAthletesArray.sort((a, b) => a.first_name.localeCompare(b.first_name));
-            setData(sortedData);
-            setDataCompetition(response.data.results);
 
-        }).catch(error => {
-            console.error(error);
-        });
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     useEffect(() => {
-        fetchAtletes();
+
+        fetchData();
 
         const timer = setTimeout(() => {
             setShowSpinner(false);
@@ -80,7 +76,8 @@ const Athletes = (props) => {
     }, []);
 
     const reload = () => {
-        fetchAtletes();
+
+        fetchData();
 
         const timer = setTimeout(() => {
             setShowSpinner(false);
@@ -88,24 +85,22 @@ const Athletes = (props) => {
 
         return () => clearTimeout(timer);
     }
-    const handleCloseSuccessDialogDelete = () => {
-        setSuccessDialogOpenDeleteDelete(false);
-    };
     const handleSearchTermChange = (event) => {
         setSearchTerm(event.target.value);
     };
-    const handleAthleteDelete = (idAthlete) => {
-
-        const athleteId = idAthlete;
+    const handleCloseSuccessDialogDelete = () => {
+        setSuccessDialogOpenDeleteDelete(false);
+    };
+    const handleOfficialDelete = (officialId) => {
 
         const competitionIds = dataCompetition
-            .filter(competition => competition.athletes.some(athlete => athlete.id === athleteId))
+            .filter(competition => competition.officials.some(official => official.id === officialId))
             .map(competition => competition.id);
 
         // console.log(competitionIds); // Output: [1, 3]
 
         competitionIds.forEach(competitionId => {
-            axios.delete(getEndpointDeleteAthleteById("athleteBy", competitionId, idAthlete), {
+            axios.delete(getEndpointDeleteOfficialById("officialBy", competitionId, officialId), {
                 headers: {
                     'Authorization': `Token ${usuarioSalvo.token}`
                 }
@@ -118,19 +113,7 @@ const Athletes = (props) => {
                         }
                     }).then(response => {
 
-                        const uniqueAthletes = {};
-                        response.data.results.forEach((competition) => {
-                            competition.athletes.forEach((athlete) => {
-                                if (!uniqueAthletes[athlete.fed_id]) {
-                                    uniqueAthletes[athlete.fed_id] = athlete;
-                                }
-                            });
-                        });
-
-                        const uniqueAthletesArray = Object.values(uniqueAthletes);
-                        setData(uniqueAthletesArray);
-
-                        setDataCompetition(response.data.results);
+                        reload();
 
                         setSuccessDialogOpenDeleteDelete(true);
                         setTimeout(() => {
@@ -141,20 +124,20 @@ const Athletes = (props) => {
                         console.error(error);
                     });
                 } else {
-                    console.error(`Failed to delete athlete ${idAthlete} from competition ${competitionId}.`);
-                    // Handle the error as needed.
+                    console.error(`Failed to delete official ${officialId} from competition ${competitionId}.`);
                 }
             }).catch(error => {
                 console.error(error);
             });
         });
     };
+
     const handleClickOpenDelete = (id) => {
-        setIdAthlete(id);
+        setOfficialId(id);
         setOpen(true);
     };
     const handleDelete = (item) => {
-        handleAthleteDelete(item)
+        handleOfficialDelete(item)
         handleClose();
     };
     const handleClose = () => {
@@ -168,7 +151,7 @@ const Athletes = (props) => {
         reload();
     };
     const handleOpenEditDialog = (id) => {
-        setIdAthlete(id);
+        setOfficialId(id);
         setOpenEditDialog(true);
     };
     const handleCloseEditDialog = () => {
@@ -187,18 +170,18 @@ const Athletes = (props) => {
                     <MDBContainer className="p-1 my-2">
                         <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{
                             fontSize: '20px'
-                        }}>Athletes</Typography>
+                        }}>Officials</Typography>
 
                         <Dialog open={open} onClose={handleClose}>
                             <DialogTitle>Confirmation</DialogTitle>
                             <DialogContent>
                                 <DialogContentText>
-                                    Are you sure you want to delete this athlete?
+                                    Are you sure you want to delete this official?
                                 </DialogContentText>
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose}>Cancelar</Button>
-                                <Button onClick={() => handleDelete(idAthlete)} color="error">
+                                <Button onClick={() => handleDelete(OfficialId)} color="error">
                                     Excluir
                                 </Button>
                             </DialogActions>
@@ -208,18 +191,18 @@ const Athletes = (props) => {
                             <DialogContent>
                                 <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <DoneIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }} />
-                                    Athlete deleted successfully!
+                                    Official deleted successfully!
                                 </DialogContentText>
                             </DialogContent>
                         </Dialog>
 
                         <Typography id="margin2">
-                            Here you can see all the athletes that are currently available. Click on the athlete to see
+                            Here you can see all the officials that are currently available. Click on the official to see
                             more details.
                         </Typography>
 
                         <TextField
-                            label="Search by athlete name"
+                            label="Search by official name"
                             variant="outlined"
                             value={searchTerm}
                             onChange={handleSearchTermChange}
@@ -236,19 +219,19 @@ const Athletes = (props) => {
                                     style={{textTransform: 'none', color: 'success', marginBottom: '3vh'}}
                                     sx={{width: '100%', maxWidth: '100%'}}
                                 >
-                                    Create athlete
+                                    Create official
                                 </Button>
                             </Grid>
                         ) : (
                             <Grid item xs={12} sm={12} sx={{display: 'flex', justifyContent: 'flex-end'}}>
                                 <Button variant="contained" startIcon={<AddIcon/>} onClick={handleOpenDialog}
                                         style={{textTransform: 'none', color: 'success', marginBottom: '1vh'}}>
-                                    Create athlete
+                                    Create official
                                 </Button>
                             </Grid>
                         )}
 
-                        <CreateAthlete
+                        <CreateOfficial
                             open={openDialog}
                             onClose={handleCloseDialog}
                         />
@@ -256,7 +239,7 @@ const Athletes = (props) => {
                         <EditAthlete
                             open={openEditDialog}
                             onClose={handleCloseEditDialog}
-                            id={idAthlete}
+                            id={OfficialId}
                         />
 
                         {data.length === 0 && showSpinner &&
@@ -270,7 +253,7 @@ const Athletes = (props) => {
 
                         {data.length === 0 && !showSpinner && (
                             <div align="left">
-                                <p id="error2">There are no athletes at the moment!</p>
+                                <p id="error2">There are no officials at the moment!</p>
                             </div>
                         )}
 
@@ -281,10 +264,10 @@ const Athletes = (props) => {
                                         <Table>
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell id="esconde">Fed id</TableCell>
+                                                    <TableCell id="esconde">Iwwf id</TableCell>
                                                     <TableCell>Name</TableCell>
                                                     <TableCell id="esconde">Country</TableCell>
-                                                    <TableCell id="esconde">Gender</TableCell>
+                                                    <TableCell id="esconde">Position</TableCell>
                                                     <TableCell>Actions</TableCell>
                                                 </TableRow>
                                             </TableHead>
@@ -293,7 +276,7 @@ const Athletes = (props) => {
                                                     <TableRow style={{cursor: 'pointer'}} key={item.id}
                                                               onMouseEnter={handleMouseEnter}
                                                               onMouseLeave={handleMouseLeave}>
-                                                        <TableCell id="esconde">{item.fed_id}</TableCell>
+                                                        <TableCell id="esconde">{item.iwwfid}</TableCell>
                                                         <TableCell>{item.first_name.charAt(0).toUpperCase() + item.first_name.slice(1).toLowerCase()
                                                             + " " + item.last_name.charAt(0).toUpperCase() + item.last_name.slice(1).toLowerCase()}
                                                         </TableCell>
@@ -304,20 +287,7 @@ const Athletes = (props) => {
                                                             </Tooltip>
                                                         </TableCell>
 
-                                                        <TableCell id="esconde">
-                                                            {item.gender === "F" && (
-                                                                <Tooltip title="Feminine"
-                                                                         className="tooltip-gender">
-                                                                    {GetGenderFlags(item.gender)}
-                                                                </Tooltip>
-                                                            )}
-                                                            {item.gender === "M" && (
-                                                                <Tooltip title="Masculine"
-                                                                         className="tooltip-gender">
-                                                                    {GetGenderFlags(item.gender)}
-                                                                </Tooltip>
-                                                            )}
-                                                        </TableCell>
+                                                        <TableCell id="esconde">{item.position.charAt(0).toUpperCase() + item.position.slice(1).toLowerCase()}</TableCell>
 
                                                         <TableCell>
                                                             <Tooltip title="Edit" className="tooltip-gender">
@@ -341,8 +311,7 @@ const Athletes = (props) => {
                                                 {filteredData.length === 0 &&
                                                     <TableRow onMouseEnter={handleMouseEnter}
                                                               onMouseLeave={handleMouseLeave}>
-                                                        <TableCell colSpan={4} id="error2" align="left"> Athlete not
-                                                            found!</TableCell>
+                                                        <TableCell colSpan={4} id="error2" align="left"> Official not found!</TableCell>
                                                     </TableRow>
                                                 }
                                             </TableBody>
@@ -358,4 +327,4 @@ const Athletes = (props) => {
     );
 };
 
-export default Athletes;
+export default Officials;

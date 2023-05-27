@@ -65,7 +65,7 @@ const EditAthlete = ({open, onClose, id}) => {
         };
 
         try {
-            const response = await axios.put(putEndpointAthleteById("athlete", competitionId, id), data, {
+            const response = await axios.put(putEndpointAthleteById("athleteBy", competitionId, id), data, {
                 headers: {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
@@ -75,7 +75,7 @@ const EditAthlete = ({open, onClose, id}) => {
             console.error('Erro ao buscar atletas:', error.request.response);
         }
     };
-    const handleCreate = async () => {
+    const handleEdit = async () => {
         if (isFormEmpty()) {
             setErrorMessage('All fields above are required!');
             setTimeout(() => {
@@ -139,7 +139,7 @@ const EditAthlete = ({open, onClose, id}) => {
                 console.log(competitionIds); // Output: [1, 3]
 
                 competitionIds.forEach(competitionId => {
-                    axios.get(getEndpointAthleteById("athlete", competitionId, athleteId), {
+                    axios.get(getEndpointAthleteById("athleteBy", competitionId, athleteId), {
                         headers: {
                             'Authorization': `Token ${usuarioSalvo.token}`
                         }
@@ -297,7 +297,7 @@ const EditAthlete = ({open, onClose, id}) => {
                 >
                     Cancel
                 </Button>
-                <Button onClick={handleCreate} color="primary">
+                <Button onClick={handleEdit} color="primary">
                     Edit
                 </Button>
             </DialogActions>

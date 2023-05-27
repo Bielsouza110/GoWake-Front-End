@@ -1,25 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, MenuItem, Grid, DialogContentText} from '@mui/material';
 import axios from "axios";
-import { endpoints, getEndpointCompetitionById, getEndpointCreateAthlete } from "../../../../api/Urls";
-import {getAllGenderFlags} from "../../dashboard/utils/Utils";
+import {endpoints, getEndpointCreateOfficial} from "../../../../api/Urls";
 import DoneIcon from '@mui/icons-material/Done';
-import {countryCodeMatrix, getYearOptions} from "../ultils/Utils";
+import {countryCodeMatrix} from "../../athetes/ultils/Utils";
 
-const CreateAthlete = ({ open, onClose}) => {
+const CreateOfficial = ({ open, onClose}) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
+    const [iwwfId, setIwwfId] = useState('');
+    const [position, setPosition] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [fedId, setFedId] = useState('');
-    const [gender, setGender] = useState('');
-    const [yearOfBirth, setYearOfBirth] = useState('');
-    const [selectedEvent, setSelectedEvent] = useState(''); // Estado para armazenar os eventos selecionados
-    const [dataCompetition, setDataCompetition] = useState([]);
-    const [events, setEvents] = useState([]);
+    const [qualification, setQualification] = useState('');
     const [country, setCountry] = useState('');
+    const [region, setRegion] = useState('');
+    const [competitions, setCompetitions] = useState([]);
+    const [selectedCompetitionId, setSelectedCompetitionId] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+    const regions = [
+        'Africa',
+        'Asia',
+        'Europe',
+        'North America',
+        'Oceania',
+        'South America'
+    ]
+    const positions = [
+        'Calculator',
+        'Chief judge',
+        'Judge',
+        'Boat driver'
+    ]
     countryCodeMatrix.sort();
     const handleFirstNameChange = (event) => {
         setFirstName(event.target.value);
@@ -27,35 +40,38 @@ const CreateAthlete = ({ open, onClose}) => {
     const handleLastNameChange = (event) => {
         setLastName(event.target.value);
     };
-    const handleFedIdChange = (event) => {
-        setFedId(event.target.value);
+    const handleIwwfIdChange = (event) => {
+        setIwwfId(event.target.value);
     };
-    const handleGenderChange = (event) => {
-        setGender(event.target.value);
+    const handlePositionChange = (event) => {
+        setPosition(event.target.value);
     };
-    const handleYearOfBirthChange = (event) => {
-        setYearOfBirth(String(event.target.value));
+    const handleQualificationChange = (event) => {
+        setQualification(String(event.target.value));
     };
     const handleCountryChange = (event) => {
         setCountry(event.target.value);
     };
-    const handleEventChange = (event) => {
-        setSelectedEvent(event.target.value); // Armazenando as opções selecionadas nos eventos
+    const handleRegionChange = (event) => {
+        setRegion(event.target.value);
     };
-    const submitCreateAthlete = async (competitionId) => {
+    const handleCompetitionChange = (event) => {
+        setSelectedCompetitionId(event.target.value);
+    };
+    const submitCreateOfficial = async () => {
 
         const data = {
-            events: [{ id: selectedEvent}],
-            fed_id: fedId.toUpperCase().trim(),
+            iwwfid: iwwfId.toUpperCase().trim(),
+            position: position.trim(),
             first_name: firstName.trim(),
             last_name: lastName.trim(),
+            qualification: qualification.toUpperCase().trim(),
             country: country.toUpperCase().trim(),
-            gender: gender.trim(),
-            year_of_birth: parseInt(yearOfBirth.trim()),
+            region: region.trim(),
         };
 
         try {
-            const response = await axios.post(getEndpointCreateAthlete("athleteBy", competitionId), data, {
+            const response = await axios.post(getEndpointCreateOfficial("officialBy", selectedCompetitionId), data, {
                 headers: {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
@@ -76,38 +92,26 @@ const CreateAthlete = ({ open, onClose}) => {
             }, 3000);
         } else {
             try {
-                const competitionIds = dataCompetition
-                    .filter((competition) =>
-                        competition.events.some((event) => event.id === selectedEvent)
-                    )
-                    .map((competition) => competition.id);
-
-                if (competitionIds.length > 0) {
-                    setSuccessDialogOpen(true);
-                    for (const competitionId of competitionIds) {
-                        await submitCreateAthlete(competitionId);
-                    }
-
-                    setTimeout(() => {
-                        cleanFieldsAndClose();
-                    }, 8000);
-                    onClose();
-                } else {
-                    console.error('No competitions found with the selected event.');
-                }
+                await submitCreateOfficial();
+                setSuccessDialogOpen(true);
+                setTimeout(() => {
+                    cleanFieldsAndClose();
+                }, 8000);
+                onClose();
             } catch (error) {
                 console.error('An error occurred while making the request.');
             }
         }
     };
     const cleanFields = () => {
-        setFedId('');
+        setIwwfId('');
+        setPosition('');
         setFirstName('');
         setLastName('');
+        setQualification('');
         setCountry('');
-        setGender('');
-        setYearOfBirth('');
-        setSelectedEvent('');
+        setRegion('');
+        setSelectedCompetitionId('');
     };
     const cleanFieldsAndClose = () => {
         cleanFields();
@@ -117,11 +121,12 @@ const CreateAthlete = ({ open, onClose}) => {
         if (
             firstName.trim() === '' ||
             lastName.trim() === '' ||
-            fedId.trim() === '' ||
-            gender.trim() === '' ||
-            yearOfBirth.trim() === '' ||
+            iwwfId.trim() === '' ||
+            position.trim() === '' ||
+            qualification.trim() === '' ||
             country.trim() === '' ||
-            selectedEvent.length === 0
+            region.trim() === '' ||
+            selectedCompetitionId === ''
         ) {
             return true; // Form is empty
         }
@@ -136,9 +141,8 @@ const CreateAthlete = ({ open, onClose}) => {
                         Authorization: `Token ${usuarioSalvo.token}`,
                     },
                 });
-
-                setDataCompetition(response.data.results);
-                setEvents(response.data.results.map(item => item.events).flat());
+                setCompetitions(response.data.results);
+               /* setEvents(response.data.results.map(item => item.events).flat());*/
             } catch (error) {
                 console.error(error);
             }
@@ -150,7 +154,7 @@ const CreateAthlete = ({ open, onClose}) => {
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
-            <DialogTitle>Create Athlete</DialogTitle>
+            <DialogTitle>Create Official</DialogTitle>
             <DialogContent>
                 <Grid container spacing={2} sx={{ marginTop: '0.0rem' }}>
                     <Grid item xs={12} sm={6}>
@@ -171,23 +175,19 @@ const CreateAthlete = ({ open, onClose}) => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            label="Fed ID"
-                            value={fedId}
-                            onChange={handleFedIdChange}
+                            label="Iwwf Id"
+                            value={iwwfId}
+                            onChange={handleIwwfIdChange}
                             fullWidth
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            select
-                            label="Gender"
-                            value={gender}
-                            onChange={handleGenderChange}
+                            label="Qualification"
+                            value={qualification}
+                            onChange={handleQualificationChange}
                             fullWidth
-                        >
-                            <MenuItem value="M">{getAllGenderFlags("M", "Masculine")}</MenuItem>
-                            <MenuItem value="F">{getAllGenderFlags("F", "Feminine")}</MenuItem>
-                        </TextField>
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
@@ -203,41 +203,54 @@ const CreateAthlete = ({ open, onClose}) => {
                                          style={{ marginRight: '1rem' }} />
                                     {code.toUpperCase()}
                                 </MenuItem>
-                                        ))}
+                            ))}
                         </TextField>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
                             select
-                            label="Year of Birth"
-                            value={yearOfBirth}
-                            onChange={handleYearOfBirthChange}
+                            label="Region"
+                            value={region}
+                            onChange={handleRegionChange}
                             fullWidth
                         >
-                            {getYearOptions().map((year) => (
-                                <MenuItem key={year} value={year}>
-                                    {year}
+                            {regions.map((r) => (
+                                <MenuItem key={r} value={r}>
+                                    {r}
                                 </MenuItem>
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={12} sm={12}>
+                    <Grid item xs={12} sm={6}>
                         <TextField
-                            label="Event"
-                            value={selectedEvent}
-                            onChange={handleEventChange}
-                            fullWidth
                             select
+                            label="Competition"
+                            value={selectedCompetitionId}
+                            onChange={handleCompetitionChange}
+                            fullWidth
                         >
-                            {events.map((event) => (
-                                <MenuItem key={event.id} value={event.id}>
-                                    {event.name.charAt(0).toUpperCase() + event.name.slice(1).toLowerCase()}
+                            {competitions.map((competition) => (
+                                <MenuItem key={competition.id} value={competition.id}>
+                                    {competition.name}
                                 </MenuItem>
                             ))}
                         </TextField>
-
                     </Grid>
-
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            select
+                            label="Position"
+                            value={position}
+                            onChange={handlePositionChange}
+                            fullWidth
+                        >
+                            {positions.map((p) => (
+                                <MenuItem key={p} value={p}>
+                                    {p}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    </Grid>
                     <Grid item xs={12} sm={12}>
                         <div align="right">
                             {errorMessage && (
@@ -250,7 +263,7 @@ const CreateAthlete = ({ open, onClose}) => {
                     <DialogContent>
                         <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <DoneIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }} />
-                            Athlete created successfully!
+                            Official created successfully!
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>
@@ -273,4 +286,4 @@ const CreateAthlete = ({ open, onClose}) => {
     );
 };
 
-export default CreateAthlete;
+export default CreateOfficial;
