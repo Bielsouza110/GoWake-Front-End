@@ -22,9 +22,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import EditAthlete from "../athetes/edit/EditAthlete";
 import CreateOfficial from "./create/CreateOfficial";
 import DoneIcon from '@mui/icons-material/Done';
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import EditOfficial from "./edit/EditOfficial"
 
 const Officials = (props) => {
 
@@ -42,6 +43,7 @@ const Officials = (props) => {
     const [openDialog, setOpenDialog] = useState(false);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [successDialogOpenDelete, setSuccessDialogOpenDeleteDelete] = useState(false);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
     const fetchData = async () => {
         try {
@@ -72,9 +74,7 @@ const Officials = (props) => {
         }, 3000); // Tempo limite de 3 segundos
 
         return () => clearTimeout(timer);
-
     }, []);
-
     const reload = () => {
 
         fetchData();
@@ -97,8 +97,6 @@ const Officials = (props) => {
             .filter(competition => competition.officials.some(official => official.id === officialId))
             .map(competition => competition.id);
 
-        // console.log(competitionIds); // Output: [1, 3]
-
         competitionIds.forEach(competitionId => {
             axios.delete(getEndpointDeleteOfficialById("officialBy", competitionId, officialId), {
                 headers: {
@@ -114,7 +112,6 @@ const Officials = (props) => {
                     }).then(response => {
 
                         reload();
-
                         setSuccessDialogOpenDeleteDelete(true);
                         setTimeout(() => {
                             setSuccessDialogOpenDeleteDelete(false);
@@ -124,14 +121,20 @@ const Officials = (props) => {
                         console.error(error);
                     });
                 } else {
-                    console.error(`Failed to delete official ${officialId} from competition ${competitionId}.`);
+                    setErrorDialogOpen(true);
+                    setTimeout(() => {
+                        setErrorDialogOpen(false);
+                    }, 3000);
                 }
             }).catch(error => {
-                console.error(error);
+                console.error(error.request.response);
+                setErrorDialogOpen(true);
+                setTimeout(() => {
+                    setErrorDialogOpen(false);
+                }, 3000);
             });
         });
     };
-
     const handleClickOpenDelete = (id) => {
         setOfficialId(id);
         setOpen(true);
@@ -196,6 +199,15 @@ const Officials = (props) => {
                             </DialogContent>
                         </Dialog>
 
+                        <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
+                            <DialogContent>
+                                <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <ReportProblemIcon sx={{ color: 'red', fontSize: 48, marginBottom: '1%' }} />
+                                    Error: Failed to delete the official. Please try again.
+                                </DialogContentText>
+                            </DialogContent>
+                        </Dialog>
+
                         <Typography id="margin2">
                             Here you can see all the officials that are currently available. Click on the official to see
                             more details.
@@ -236,7 +248,7 @@ const Officials = (props) => {
                             onClose={handleCloseDialog}
                         />
 
-                        <EditAthlete
+                        <EditOfficial
                             open={openEditDialog}
                             onClose={handleCloseEditDialog}
                             id={OfficialId}

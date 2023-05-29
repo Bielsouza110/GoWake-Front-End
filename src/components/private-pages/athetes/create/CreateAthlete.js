@@ -4,6 +4,7 @@ import axios from "axios";
 import { endpoints, getEndpointCompetitionById, getEndpointCreateAthlete } from "../../../../api/Urls";
 import {getAllGenderFlags} from "../../dashboard/utils/Utils";
 import DoneIcon from '@mui/icons-material/Done';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import {countryCodeMatrix, getYearOptions} from "../ultils/Utils";
 
 const CreateAthlete = ({ open, onClose}) => {
@@ -20,6 +21,7 @@ const CreateAthlete = ({ open, onClose}) => {
     const [country, setCountry] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
     countryCodeMatrix.sort();
     const handleFirstNameChange = (event) => {
         setFirstName(event.target.value);
@@ -61,11 +63,18 @@ const CreateAthlete = ({ open, onClose}) => {
                 },
             });
 
-            cleanFields();
-            onClose();
+            setSuccessDialogOpen(true);
+            setTimeout(() => {
+                cleanFieldsAndClose();
+                cleanFields();
+                onClose();
+            }, 3000);
         } catch (error) {
-            //Fazer um box de mensagem mal!!!
-            console.error('Erro ao buscar atletas:', error.request.response);
+            console.error(error.request.response);
+            setErrorDialogOpen(true);
+            setTimeout(() => {
+                setErrorDialogOpen(false);
+            }, 3000);
         }
     };
     const handleCreate = async () => {
@@ -83,15 +92,9 @@ const CreateAthlete = ({ open, onClose}) => {
                     .map((competition) => competition.id);
 
                 if (competitionIds.length > 0) {
-                    setSuccessDialogOpen(true);
                     for (const competitionId of competitionIds) {
                         await submitCreateAthlete(competitionId);
                     }
-
-                    setTimeout(() => {
-                        cleanFieldsAndClose();
-                    }, 8000);
-                    onClose();
                 } else {
                     console.error('No competitions found with the selected event.');
                 }
@@ -152,6 +155,16 @@ const CreateAthlete = ({ open, onClose}) => {
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
             <DialogTitle>Create Athlete</DialogTitle>
             <DialogContent>
+
+                <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
+                    <DialogContent>
+                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <ReportProblemIcon sx={{ color: 'red', fontSize: 48, marginBottom: '1%' }} />
+                            Error: Failed to create athlete. Please try again.
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
+
                 <Grid container spacing={2} sx={{ marginTop: '0.0rem' }}>
                     <Grid item xs={12} sm={6}>
                         <TextField

@@ -25,6 +25,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import EditAthlete from "./edit/EditAthlete";
 import CreateAthlete from "./create/CreateAthlete";
 import DoneIcon from "@mui/icons-material/Done";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
 const Athletes = (props) => {
 
@@ -43,6 +44,7 @@ const Athletes = (props) => {
     const [athletes, setAthletes] = useState([]);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [successDialogOpenDelete, setSuccessDialogOpenDeleteDelete] = useState(false);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
     const fetchAtletes = async () => {
         axios.get(endpoints.competitions, {
@@ -78,7 +80,6 @@ const Athletes = (props) => {
         return () => clearTimeout(timer);
 
     }, []);
-
     const reload = () => {
         fetchAtletes();
 
@@ -96,13 +97,9 @@ const Athletes = (props) => {
     };
     const handleAthleteDelete = (idAthlete) => {
 
-        const athleteId = idAthlete;
-
         const competitionIds = dataCompetition
-            .filter(competition => competition.athletes.some(athlete => athlete.id === athleteId))
+            .filter(competition => competition.athletes.some(athlete => athlete.id === idAthlete))
             .map(competition => competition.id);
-
-        // console.log(competitionIds); // Output: [1, 3]
 
         competitionIds.forEach(competitionId => {
             axios.delete(getEndpointDeleteAthleteById("athleteBy", competitionId, idAthlete), {
@@ -118,20 +115,7 @@ const Athletes = (props) => {
                         }
                     }).then(response => {
 
-                        const uniqueAthletes = {};
-                        response.data.results.forEach((competition) => {
-                            competition.athletes.forEach((athlete) => {
-                                if (!uniqueAthletes[athlete.fed_id]) {
-                                    uniqueAthletes[athlete.fed_id] = athlete;
-                                }
-                            });
-                        });
-
-                        const uniqueAthletesArray = Object.values(uniqueAthletes);
-                        setData(uniqueAthletesArray);
-
-                        setDataCompetition(response.data.results);
-
+                        reload();
                         setSuccessDialogOpenDeleteDelete(true);
                         setTimeout(() => {
                             setSuccessDialogOpenDeleteDelete(false);
@@ -141,11 +125,17 @@ const Athletes = (props) => {
                         console.error(error);
                     });
                 } else {
-                    console.error(`Failed to delete athlete ${idAthlete} from competition ${competitionId}.`);
-                    // Handle the error as needed.
+                    setErrorDialogOpen(true);
+                    setTimeout(() => {
+                        setErrorDialogOpen(false);
+                    }, 3000);
                 }
             }).catch(error => {
-                console.error(error);
+                console.error(error.request.response);
+                setErrorDialogOpen(true);
+                setTimeout(() => {
+                    setErrorDialogOpen(false);
+                }, 3000);
             });
         });
     };
@@ -209,6 +199,15 @@ const Athletes = (props) => {
                                 <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <DoneIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }} />
                                     Athlete deleted successfully!
+                                </DialogContentText>
+                            </DialogContent>
+                        </Dialog>
+
+                        <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
+                            <DialogContent>
+                                <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <ReportProblemIcon sx={{ color: 'red', fontSize: 48, marginBottom: '1%' }} />
+                                    Error: Failed to delete the athlete. Please try again.
                                 </DialogContentText>
                             </DialogContent>
                         </Dialog>

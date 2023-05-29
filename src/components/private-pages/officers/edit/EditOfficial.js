@@ -1,12 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, MenuItem, Grid, DialogContentText} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import {countryCodeMatrix, getYearOptions} from "../../athetes/ultils/Utils";
+import {Button, Grid, MenuItem, TextField} from "@mui/material";
+import {getAllGenderFlags} from "../../dashboard/utils/Utils";
+import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
-import {endpoints, getEndpointCreateOfficial} from "../../../../api/Urls";
-import DoneIcon from '@mui/icons-material/Done';
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-import {countryCodeMatrix} from "../../athetes/ultils/Utils";
+import {
+    endpoints,
+    getEndpointOfficialById, putEndpointAthleteById, putEndpointOfficialById
+} from "../../../../api/Urls";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
-const CreateOfficial = ({ open, onClose}) => {
+const EditOfficial = ({open, onClose, id}) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
     const [iwwfId, setIwwfId] = useState('');
@@ -60,7 +69,7 @@ const CreateOfficial = ({ open, onClose}) => {
     const handleCompetitionChange = (event) => {
         setSelectedCompetitionId(event.target.value);
     };
-    const submitCreateOfficial = async () => {
+    const submitEditAthlete = async (competitionId) => {
 
         const data = {
             iwwfid: iwwfId.toUpperCase().trim(),
@@ -73,7 +82,7 @@ const CreateOfficial = ({ open, onClose}) => {
         };
 
         try {
-            const response = await axios.post(getEndpointCreateOfficial("officialBy", selectedCompetitionId), data, {
+            const response = await axios.put(putEndpointOfficialById("officialBy", competitionId, id), data, {
                 headers: {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
@@ -81,8 +90,7 @@ const CreateOfficial = ({ open, onClose}) => {
 
             setSuccessDialogOpen(true);
             setTimeout(() => {
-                cleanFieldsAndClose();
-                cleanFields();
+                setSuccessDialogOpen(false);
                 onClose();
             }, 3000);
 
@@ -94,7 +102,7 @@ const CreateOfficial = ({ open, onClose}) => {
             }, 3000);
         }
     };
-    const handleCreate = async () => {
+    const handleEdit = async () => {
         if (isFormEmpty()) {
             setErrorMessage('All fields above are required!');
             setTimeout(() => {
@@ -102,27 +110,72 @@ const CreateOfficial = ({ open, onClose}) => {
             }, 3000);
         } else {
             try {
-                await submitCreateOfficial();
+                const competitionIds = competitions
+                    .filter((competition) =>
+                        competition.officials.some((official) => official.id === id)
+                    ).map((competition) => competition.id);
+
+                if (competitionIds.length > 0) {
+                    for (const competitionId of competitionIds) {
+                        await submitEditAthlete(competitionId);
+                    }
+                } else {
+                    console.error('No competitions found with the selected event.');
+                }
             } catch (error) {
                 console.error('An error occurred while making the request.');
             }
         }
     };
-    const cleanFields = () => {
-        setIwwfId('');
-        setPosition('');
-        setFirstName('');
-        setLastName('');
-        setQualification('');
-        setCountry('');
-        setRegion('');
-        setSelectedCompetitionId('');
-    };
-    const cleanFieldsAndClose = () => {
-        cleanFields();
-        setSuccessDialogOpen(false);
-        setErrorDialogOpen(false);
-    };
+
+    useEffect(() => {
+        const fetchOfficialsData = async () => {
+
+            try {
+                const competitionIds = competitions
+                    .filter(competition => competition.officials.some(official => official.id === id))
+                    .map(competition => competition.id);
+
+                competitionIds.forEach(competitionId => {
+                    axios.get(getEndpointOfficialById("officialBy", competitionId, id), {
+                        headers: {
+                            'Authorization': `Token ${usuarioSalvo.token}`
+                        }
+                    }).then(response => {
+                        const officialData = response.data;
+                        setIwwfId(officialData.iwwfid);
+                        setPosition(officialData.position);
+                        setFirstName(officialData.first_name);
+                        setLastName(officialData.last_name);
+                        setQualification(String(officialData.qualification));
+                        setCountry(String(officialData.country.toLowerCase()));
+                        setRegion(officialData.region);
+                        setSelectedCompetitionId(competitionId);
+                    }).catch(error => {
+                        console.error('An error occurred while fetching athlete data:', error);
+                    });
+                });
+            } catch (error) {
+                console.error('An error occurred while fetching athlete data:', error);
+            }
+        };
+
+        const fetchCompetitions = async () => {
+            try {
+                const response = await axios.get(endpoints.competitions, {
+                    headers: {
+                        'Authorization': `Token ${usuarioSalvo.token}`
+                    },
+                });
+                setCompetitions(response.data.results);
+            } catch (error) {
+                console.error('An error occurred while fetching events:', error);
+            }
+        };
+        fetchCompetitions();
+        fetchOfficialsData();
+    }, [id, usuarioSalvo.token]);
+
     const isFormEmpty = () => {
         if (
             firstName.trim() === '' ||
@@ -139,34 +192,15 @@ const CreateOfficial = ({ open, onClose}) => {
         return false; // Form is not empty
     };
 
-    useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                const response = await axios.get(endpoints.competitions, {
-                    headers: {
-                        Authorization: `Token ${usuarioSalvo.token}`,
-                    },
-                });
-                setCompetitions(response.data.results);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        fetchEvents();
-        cleanFields();
-    }, []);
-
     return (
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
-            <DialogTitle>Create Official</DialogTitle>
+            <DialogTitle>Edit Official</DialogTitle>
             <DialogContent>
-
                 <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
                     <DialogContent>
                         <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <ReportProblemIcon sx={{ color: 'red', fontSize: 48, marginBottom: '1%' }} />
-                            Error: Failed to create official. Please try again.
+                            Error: Failed to edit official. Please try again.
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>
@@ -274,7 +308,7 @@ const CreateOfficial = ({ open, onClose}) => {
                         </div>
                     </Grid>
                 </Grid>
-                <Dialog open={successDialogOpen} onClose={cleanFieldsAndClose}>
+                <Dialog open={successDialogOpen} onClose={() => setSuccessDialogOpen(false)}>
                     <DialogContent>
                         <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <DoneIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }} />
@@ -286,14 +320,13 @@ const CreateOfficial = ({ open, onClose}) => {
             <DialogActions>
                 <Button
                     onClick={() => {
-                        cleanFieldsAndClose();
                         onClose();
                     }}
                     color="primary"
                 >
                     Cancel
                 </Button>
-                <Button onClick={handleCreate} color="primary">
+                <Button onClick={handleEdit} color="primary">
                     Create
                 </Button>
             </DialogActions>
@@ -301,4 +334,4 @@ const CreateOfficial = ({ open, onClose}) => {
     );
 };
 
-export default CreateOfficial;
+export default EditOfficial;

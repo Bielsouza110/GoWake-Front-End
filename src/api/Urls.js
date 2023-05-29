@@ -33,7 +33,14 @@ export const getEndpointCreateOfficial = (endpoint, idCompetition) => {
     return `${endpoints[endpoint]}/${idCompetition}/officials/`;
 };
 
-export const getEndpointDeleteOfficialById = (endpoint, idCompetition, idAthlete) => {
-    //rever este endpoint officer!!!
-    return `${endpoints[endpoint]}/${idCompetition}/official/${idAthlete}/`;
+export const getEndpointDeleteOfficialById = (endpoint, idCompetition, officialId) => {
+    return `${endpoints[endpoint]}/${idCompetition}/official/${officialId}/`;
+};
+
+export const getEndpointOfficialById = (endpoint, idCompetition, officialId) => {
+    return `${endpoints[endpoint]}/${idCompetition}/official/${officialId}/`;
+};
+
+export const putEndpointOfficialById = (endpoint, idCompetition, officialId) => {
+    return `${endpoints[endpoint]}//${idCompetition}/official/${officialId}/`;
 };
