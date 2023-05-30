@@ -150,8 +150,8 @@ const Officials = (props) => {
         setOpenDialog(true);
     };
     const handleCloseDialog = () => {
-        setOpenDialog(false);
         reload();
+        setOpenDialog(false);
     };
     const handleOpenEditDialog = (id) => {
         setOfficialId(id);

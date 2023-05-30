@@ -162,8 +162,8 @@ const Athletes = (props) => {
         setOpenEditDialog(true);
     };
     const handleCloseEditDialog = () => {
-        setOpenEditDialog(false);
         reload();
+        setOpenEditDialog(false);
     };
 
     const isMobile = useMediaQuery('(max-width: 600px)');
