@@ -15,6 +15,7 @@ import {
     getEndpointCreateAthlete,
     getEndpointDeleteAthleteById, putEndpointAthleteById
 } from "../../../../api/Urls";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
 const EditAthlete = ({open, onClose, id}) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
@@ -24,12 +25,12 @@ const EditAthlete = ({open, onClose, id}) => {
     const [fedId, setFedId] = useState('');
     const [gender, setGender] = useState('');
     const [yearOfBirth, setYearOfBirth] = useState('');
-    const [selectedEvent, setSelectedEvent] = useState(''); // Estado para armazenar os eventos selecionados
-    const [dataCompetition, setDataCompetition] = useState([]);
-    const [events, setEvents] = useState([]);
+    const [competitions, setCompetitions] = useState([]);
     const [country, setCountry] = useState('');
+    const [selectedCompetitionId, setSelectedCompetitionId] = useState(''); // Estado para armazenar os eventos selecionados
     const [errorMessage, setErrorMessage] = useState('');
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
     countryCodeMatrix.sort();
     const handleFirstNameChange = (event) => {
         setFirstName(event.target.value);
@@ -49,16 +50,16 @@ const EditAthlete = ({open, onClose, id}) => {
     const handleCountryChange = (event) => {
         setCountry(event.target.value);
     };
-    const handleEventChange = (event) => {
-        setSelectedEvent(event.target.value); // Armazenando as opções selecionadas nos eventos
+    const handleCompetitionChange = (event) => {
+        setSelectedCompetitionId(event.target.value);
     };
     const submitEditAthlete = async (competitionId) => {
 
         const data = {
             events: [],
             fed_id: fedId.toUpperCase().trim(),
-            first_name: firstName.trim(),
-            last_name: lastName.trim(),
+            first_name: firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase().trim(),
+            last_name: lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase().trim(),
             country: country.toUpperCase().trim(),
             gender: gender.trim(),
             year_of_birth: parseInt(yearOfBirth.trim()),
@@ -70,9 +71,17 @@ const EditAthlete = ({open, onClose, id}) => {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
             });
-            onClose();
+            setSuccessDialogOpen(true);
+            setTimeout(() => {
+                setSuccessDialogOpen(false);
+                onClose();
+            }, 3000);
         } catch (error) {
-            console.error('Erro ao buscar atletas:', error.request.response);
+            console.error(error.request.response);
+            setErrorDialogOpen(true);
+            setTimeout(() => {
+                setErrorDialogOpen(false);
+            }, 3000);
         }
     };
     const handleEdit = async () => {
@@ -83,22 +92,16 @@ const EditAthlete = ({open, onClose, id}) => {
             }, 3000);
         } else {
             try {
-                const competitionIds = dataCompetition
+                const competitionIds = competitions
                     .filter((competition) =>
-                        competition.events.some((event) => event.id === selectedEvent)
+                        competition.athletes.some((athlete) => athlete.id === id)
                     )
                     .map((competition) => competition.id);
 
                 if (competitionIds.length > 0) {
-                    setSuccessDialogOpen(true);
                     for (const competitionId of competitionIds) {
                         await submitEditAthlete(competitionId);
                     }
-
-                    setTimeout(() => {
-                        cleanFieldsAndClose();
-                    }, 3000);
-                    onClose();
                 } else {
                     console.error('No competitions found with the selected event.');
                 }
@@ -108,9 +111,6 @@ const EditAthlete = ({open, onClose, id}) => {
         }
     };
 
-    const cleanFieldsAndClose = () => {
-        setSuccessDialogOpen(false);
-    };
     const isFormEmpty = () => {
         if (
             firstName.trim() === '' ||
@@ -119,7 +119,7 @@ const EditAthlete = ({open, onClose, id}) => {
             gender.trim() === '' ||
             yearOfBirth.trim() === '' ||
             country.trim() === '' ||
-            selectedEvent.length === 0
+            selectedCompetitionId === ''
         ) {
             return true; // Form is empty
         }
@@ -130,28 +130,25 @@ const EditAthlete = ({open, onClose, id}) => {
         const fetchAthleteData = async () => {
 
             try {
-                const athleteId = id;
 
-                const competitionIds = dataCompetition
-                    .filter(competition => competition.athletes.some(athlete => athlete.id === athleteId))
+                const competitionIds = competitions
+                    .filter(competition => competition.athletes.some(athlete => athlete.id === id))
                     .map(competition => competition.id);
 
-                console.log(competitionIds); // Output: [1, 3]
-
                 competitionIds.forEach(competitionId => {
-                    axios.get(getEndpointAthleteById("athleteBy", competitionId, athleteId), {
+                    axios.get(getEndpointAthleteById("athleteBy", competitionId, id), {
                         headers: {
                             'Authorization': `Token ${usuarioSalvo.token}`
                         }
                     }).then(response => {
                         const athleteData = response.data;
-                        setFirstName(athleteData.first_name);
-                        setLastName(athleteData.last_name);
-                        setFedId(athleteData.fed_id);
+                        setFirstName(athleteData.first_name.charAt(0).toUpperCase() + athleteData.first_name.slice(1).toLowerCase());
+                        setLastName(athleteData.last_name.charAt(0).toUpperCase() + athleteData.last_name.slice(1).toLowerCase());
+                        setFedId(athleteData.fed_id.toUpperCase());
                         setGender(athleteData.gender);
                         setYearOfBirth(String(athleteData.year_of_birth));
-                        setSelectedEvent(''); // Set the selected event to an appropriate initial value
                         setCountry(String(athleteData.country.toLowerCase()));
+                        setSelectedCompetitionId(competitionId);
                     }).catch(error => {
                         console.error('An error occurred while fetching athlete data:', error);
                     });
@@ -161,7 +158,7 @@ const EditAthlete = ({open, onClose, id}) => {
             }
         };
 
-        const fetchEvents = async () => {
+        const fetchCompetition = async () => {
             try {
                 const response = await axios.get(endpoints.competitions, {
                     headers: {
@@ -169,14 +166,13 @@ const EditAthlete = ({open, onClose, id}) => {
                     },
                 });
 
-                setDataCompetition(response.data.results);
-                setEvents(response.data.results.map(item => item.events).flat());
+                setCompetitions(response.data.results);
             } catch (error) {
-                console.error('An error occurred while fetching events:', error);
+                console.error('An error occurred while fetching competition:', error);
             }
         };
 
-        fetchEvents();
+        fetchCompetition();
         fetchAthleteData();
     }, [id, usuarioSalvo.token]);
 
@@ -184,6 +180,16 @@ const EditAthlete = ({open, onClose, id}) => {
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
             <DialogTitle>Edit Athlete</DialogTitle>
             <DialogContent>
+
+                <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
+                    <DialogContent>
+                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <ReportProblemIcon sx={{ color: 'red', fontSize: 48, marginBottom: '1%' }} />
+                            Error: Failed to edit athlete. Please try again.
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
+
                 <Grid container spacing={2} sx={{marginTop: '0.0rem'}}>
                     <Grid item xs={12} sm={6}>
                         <TextField
@@ -255,21 +261,19 @@ const EditAthlete = ({open, onClose, id}) => {
                     </Grid>
                     <Grid item xs={12} sm={12}>
                         <TextField
-                            label="Event"
-                            value={selectedEvent}
-                            onChange={handleEventChange}
-                            fullWidth
                             select
+                            label="Competition"
+                            value={selectedCompetitionId}
+                            onChange={handleCompetitionChange}
+                            fullWidth
                         >
-                            {events.map((event) => (
-                                <MenuItem key={event.id} value={event.id}>
-                                    {event.name.charAt(0).toUpperCase() + event.name.slice(1).toLowerCase()}
+                            {competitions.map((competition) => (
+                                <MenuItem key={competition.id} value={competition.id}>
+                                    {competition.name.charAt(0).toUpperCase() + competition.name.slice(1).toLowerCase()}
                                 </MenuItem>
                             ))}
                         </TextField>
-
                     </Grid>
-
                     <Grid item xs={12} sm={12}>
                         <div align="right">
                             {errorMessage && (
@@ -278,7 +282,7 @@ const EditAthlete = ({open, onClose, id}) => {
                         </div>
                     </Grid>
                 </Grid>
-                <Dialog open={successDialogOpen} onClose={cleanFieldsAndClose}>
+                <Dialog open={successDialogOpen} onClose={() => setSuccessDialogOpen(false)}>
                     <DialogContent>
                         <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                             <DoneIcon sx={{color: 'green', fontSize: 48, marginBottom: '1%'}}/>
@@ -290,7 +294,6 @@ const EditAthlete = ({open, onClose, id}) => {
             <DialogActions>
                 <Button
                     onClick={() => {
-                        cleanFieldsAndClose();
                         onClose();
                     }}
                     color="primary"

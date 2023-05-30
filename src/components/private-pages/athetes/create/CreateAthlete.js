@@ -15,10 +15,9 @@ const CreateAthlete = ({ open, onClose}) => {
     const [fedId, setFedId] = useState('');
     const [gender, setGender] = useState('');
     const [yearOfBirth, setYearOfBirth] = useState('');
-    const [selectedEvent, setSelectedEvent] = useState(''); // Estado para armazenar os eventos selecionados
-    const [dataCompetition, setDataCompetition] = useState([]);
-    const [events, setEvents] = useState([]);
+    const [competitions, setCompetitions] = useState([]);
     const [country, setCountry] = useState('');
+    const [selectedCompetitionId, setSelectedCompetitionId] = useState(''); // Estado para armazenar os eventos selecionados
     const [errorMessage, setErrorMessage] = useState('');
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
@@ -41,23 +40,23 @@ const CreateAthlete = ({ open, onClose}) => {
     const handleCountryChange = (event) => {
         setCountry(event.target.value);
     };
-    const handleEventChange = (event) => {
-        setSelectedEvent(event.target.value); // Armazenando as opções selecionadas nos eventos
+    const handleCompetitionChange = (event) => {
+        setSelectedCompetitionId(event.target.value);
     };
-    const submitCreateAthlete = async (competitionId) => {
+    const submitCreateAthlete = async () => {
 
         const data = {
-            events: [{ id: selectedEvent}],
+            events: [],
             fed_id: fedId.toUpperCase().trim(),
-            first_name: firstName.trim(),
-            last_name: lastName.trim(),
+            first_name: firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase().trim(),
+            last_name: lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase().trim(),
             country: country.toUpperCase().trim(),
             gender: gender.trim(),
             year_of_birth: parseInt(yearOfBirth.trim()),
         };
 
         try {
-            const response = await axios.post(getEndpointCreateAthlete("athleteBy", competitionId), data, {
+            const response = await axios.post(getEndpointCreateAthlete("athleteBy", selectedCompetitionId), data, {
                 headers: {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
@@ -85,19 +84,7 @@ const CreateAthlete = ({ open, onClose}) => {
             }, 3000);
         } else {
             try {
-                const competitionIds = dataCompetition
-                    .filter((competition) =>
-                        competition.events.some((event) => event.id === selectedEvent)
-                    )
-                    .map((competition) => competition.id);
-
-                if (competitionIds.length > 0) {
-                    for (const competitionId of competitionIds) {
-                        await submitCreateAthlete(competitionId);
-                    }
-                } else {
-                    console.error('No competitions found with the selected event.');
-                }
+                await submitCreateAthlete();
             } catch (error) {
                 console.error('An error occurred while making the request.');
             }
@@ -110,11 +97,13 @@ const CreateAthlete = ({ open, onClose}) => {
         setCountry('');
         setGender('');
         setYearOfBirth('');
-        setSelectedEvent('');
+        setSelectedCompetitionId('')
     };
+
     const cleanFieldsAndClose = () => {
         cleanFields();
         setSuccessDialogOpen(false);
+        setErrorDialogOpen(false);
     };
     const isFormEmpty = () => {
         if (
@@ -124,7 +113,7 @@ const CreateAthlete = ({ open, onClose}) => {
             gender.trim() === '' ||
             yearOfBirth.trim() === '' ||
             country.trim() === '' ||
-            selectedEvent.length === 0
+            selectedCompetitionId === ''
         ) {
             return true; // Form is empty
         }
@@ -132,22 +121,20 @@ const CreateAthlete = ({ open, onClose}) => {
     };
 
     useEffect(() => {
-        const fetchEvents = async () => {
+        const fetchCompetition = async () => {
             try {
                 const response = await axios.get(endpoints.competitions, {
                     headers: {
                         Authorization: `Token ${usuarioSalvo.token}`,
                     },
                 });
-
-                setDataCompetition(response.data.results);
-                setEvents(response.data.results.map(item => item.events).flat());
+                setCompetitions(response.data.results);
             } catch (error) {
                 console.error(error);
             }
         };
 
-        fetchEvents();
+        fetchCompetition();
         cleanFields();
     }, []);
 
@@ -236,19 +223,18 @@ const CreateAthlete = ({ open, onClose}) => {
                     </Grid>
                     <Grid item xs={12} sm={12}>
                         <TextField
-                            label="Event"
-                            value={selectedEvent}
-                            onChange={handleEventChange}
-                            fullWidth
                             select
+                            label="Competition"
+                            value={selectedCompetitionId}
+                            onChange={handleCompetitionChange}
+                            fullWidth
                         >
-                            {events.map((event) => (
-                                <MenuItem key={event.id} value={event.id}>
-                                    {event.name.charAt(0).toUpperCase() + event.name.slice(1).toLowerCase()}
+                            {competitions.map((competition) => (
+                                <MenuItem key={competition.id} value={competition.id}>
+                                    {competition.name.charAt(0).toUpperCase() + competition.name.slice(1).toLowerCase()}
                                 </MenuItem>
                             ))}
                         </TextField>
-
                     </Grid>
 
                     <Grid item xs={12} sm={12}>

@@ -74,8 +74,8 @@ const EditOfficial = ({open, onClose, id}) => {
         const data = {
             iwwfid: iwwfId.toUpperCase().trim(),
             position: position.trim(),
-            first_name: firstName.trim(),
-            last_name: lastName.trim(),
+            first_name: firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase().trim(),
+            last_name: lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase().trim(),
             qualification: qualification.toUpperCase().trim(),
             country: country.toUpperCase().trim(),
             region: region.trim(),
@@ -143,11 +143,11 @@ const EditOfficial = ({open, onClose, id}) => {
                         }
                     }).then(response => {
                         const officialData = response.data;
-                        setIwwfId(officialData.iwwfid);
+                        setIwwfId(officialData.iwwfid.toUpperCase());
                         setPosition(officialData.position);
-                        setFirstName(officialData.first_name);
-                        setLastName(officialData.last_name);
-                        setQualification(String(officialData.qualification));
+                        setFirstName(officialData.first_name.charAt(0).toUpperCase() + officialData.first_name.slice(1).toLowerCase().trim());
+                        setLastName(officialData.last_name.charAt(0).toUpperCase() + officialData.last_name.slice(1).toLowerCase().trim());
+                        setQualification(String(officialData.qualification.toUpperCase()));
                         setCountry(String(officialData.country.toLowerCase()));
                         setRegion(officialData.region);
                         setSelectedCompetitionId(competitionId);
@@ -169,7 +169,7 @@ const EditOfficial = ({open, onClose, id}) => {
                 });
                 setCompetitions(response.data.results);
             } catch (error) {
-                console.error('An error occurred while fetching events:', error);
+                console.error('An error occurred while fetching competition:', error);
             }
         };
         fetchCompetitions();
@@ -280,7 +280,7 @@ const EditOfficial = ({open, onClose, id}) => {
                         >
                             {competitions.map((competition) => (
                                 <MenuItem key={competition.id} value={competition.id}>
-                                    {competition.name}
+                                    {competition.name.charAt(0).toUpperCase() + competition.name.slice(1).toLowerCase()}
                                 </MenuItem>
                             ))}
                         </TextField>
@@ -312,7 +312,7 @@ const EditOfficial = ({open, onClose, id}) => {
                     <DialogContent>
                         <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <DoneIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }} />
-                            Official created successfully!
+                            Official successfully edited!
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>

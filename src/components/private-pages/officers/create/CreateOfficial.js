@@ -65,8 +65,8 @@ const CreateOfficial = ({ open, onClose}) => {
         const data = {
             iwwfid: iwwfId.toUpperCase().trim(),
             position: position.trim(),
-            first_name: firstName.trim(),
-            last_name: lastName.trim(),
+            first_name: firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase(),
+            last_name: lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase(),
             qualification: qualification.toUpperCase().trim(),
             country: country.toUpperCase().trim(),
             region: region.trim(),
