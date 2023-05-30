@@ -203,7 +203,7 @@ const CreateAthlete = ({ open, onClose}) => {
                                          style={{ marginRight: '1rem' }} />
                                     {code.toUpperCase()}
                                 </MenuItem>
-                                        ))}
+                            ))}
                         </TextField>
                     </Grid>
                     <Grid item xs={12} sm={6}>

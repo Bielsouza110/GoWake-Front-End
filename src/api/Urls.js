@@ -42,5 +42,5 @@ export const getEndpointOfficialById = (endpoint, idCompetition, officialId) => 
 };
 
 export const putEndpointOfficialById = (endpoint, idCompetition, officialId) => {
-    return `${endpoints[endpoint]}//${idCompetition}/official/${officialId}/`;
+    return `${endpoints[endpoint]}/${idCompetition}/official/${officialId}/`;
 };

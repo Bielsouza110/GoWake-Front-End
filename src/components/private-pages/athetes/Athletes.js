@@ -154,8 +154,8 @@ const Athletes = (props) => {
         setOpenDialog(true);
     };
     const handleCloseDialog = () => {
-        setOpenDialog(false);
         reload();
+        setOpenDialog(false);
     };
     const handleOpenEditDialog = (id) => {
         setIdAthlete(id);

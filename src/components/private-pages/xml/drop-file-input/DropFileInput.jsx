@@ -23,7 +23,7 @@ const DropFileInput = props => {
         updatedList.splice(fileList.indexOf(file),1);
         setFileList(updatedList);
         props.onFileChange(updatedList);
-        //console.log(file);
+        console.log(file);
     }
     return (
         <>
