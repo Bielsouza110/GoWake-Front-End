@@ -53,6 +53,7 @@ const EditAthlete = ({open, onClose, id}) => {
     const handleCompetitionChange = (event) => {
         setSelectedCompetitionId(event.target.value);
     };
+
     const submitEditAthlete = async (competitionId) => {
 
         const data = {

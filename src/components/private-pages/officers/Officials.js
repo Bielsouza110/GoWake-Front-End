@@ -158,8 +158,8 @@ const Officials = (props) => {
         setOpenEditDialog(true);
     };
     const handleCloseEditDialog = () => {
-        reload();
         setOpenEditDialog(false);
+        reload();
     };
 
     const isMobile = useMediaQuery('(max-width: 600px)');

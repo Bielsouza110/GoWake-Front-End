@@ -18,19 +18,21 @@ import ListItemText from '@mui/material/ListItemText';
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import StreamIcon from '@mui/icons-material/Stream';
 import KitesurfingIcon from '@mui/icons-material/Kitesurfing';
 import PublishIcon from '@mui/icons-material/Publish';
 import AddIcon from '@mui/icons-material/Add';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import {Link, useNavigate} from 'react-router-dom';
-import LoginIcon from "@mui/icons-material/Logout";
-import {Delete as DeleteIcon} from "@mui/icons-material";
 import FitbitIcon from '@mui/icons-material/Fitbit';
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import LogoutIcon from "@mui/icons-material/Logout";
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
+import LoginIcon from "@mui/icons-material/Login";
 
 const drawerWidth = 240;
-
 const openedMixin = (theme) => ({
     width: drawerWidth,
     transition: theme.transitions.create('width', {
@@ -39,7 +41,6 @@ const openedMixin = (theme) => ({
     }),
     overflowX: 'hidden',
 });
-
 const closedMixin = (theme) => ({
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
@@ -61,9 +62,7 @@ const DrawerHeader = styled('div')(({theme}) => ({
     ...theme.mixins.toolbar,
 }));
 
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})(({theme, open}) => ({
+const AppBar = styled(MuiAppBar, {shouldForwardProp: (prop) => prop !== 'open',})(({theme, open}) => ({
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
@@ -79,8 +78,7 @@ const AppBar = styled(MuiAppBar, {
     }),
 }));
 
-const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
-    ({theme, open}) => ({
+const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(({theme, open}) => ({
         width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap',
@@ -93,10 +91,20 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
             ...closedMixin(theme),
             '& .MuiDrawer-paper': closedMixin(theme),
         }),
-    }),
-);
+    }),);
 
 function MiniDrawer (){
+
+    const theme = useTheme();
+    const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
+    const [open, setOpen] = React.useState(false);
+    const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [anchorElProfile, setAnchorElProfile] = React.useState(null);
+    const [userDetails, setUserDetails] = React.useState({
+        name: usuarioSalvo.username.charAt(0).toUpperCase() + usuarioSalvo.username.slice(1).toLowerCase().trim(),
+        role: usuarioSalvo.role.charAt(0).toUpperCase() + usuarioSalvo.role.slice(1).toLowerCase().trim()
+    });
 
     const itemsList = [
         {
@@ -142,21 +150,12 @@ function MiniDrawer (){
             link: "/login/modidyevent"
         },
     ]
-
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-
     const handleDrawerOpen = () => {
         setOpen(true);
     };
-
     const handleDrawerClose = () => {
         setOpen(false);
     };
-
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
-
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -168,6 +167,14 @@ function MiniDrawer (){
     };
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+
+    const handleOpenProfileMenu = (event) => {
+        setAnchorElProfile(event.currentTarget);
+    };
+
+    const handleCloseProfileMenu = () => {
+        setAnchorElProfile(null);
     };
 
     const navigate = useNavigate();
@@ -208,14 +215,54 @@ function MiniDrawer (){
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}/>
 
                     <Box id="ssd">
-                        <Box sx={{flexGrow: 0}}>
-                            <Tooltip title="Logout" href="/">
-                                <IconButton onClick={handleOpenUserMenu} sx={{p: 1}}>
-                                    <LoginIcon/>
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title="Profile">
+                                <IconButton onClick={handleOpenProfileMenu} sx={{ p: 1 }}>
+                                    <AccountCircleSharpIcon   fontSize="large" />
                                 </IconButton>
                             </Tooltip>
                         </Box>
                     </Box>
+
+                    <Menu
+                        id="profile-menu"
+                        anchorEl={anchorElProfile}
+                        open={Boolean(anchorElProfile)}
+                        onClose={handleCloseProfileMenu}
+                        anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "right"
+                        }}
+                        transformOrigin={{
+                            vertical: "top",
+                            horizontal: "right"
+                        }}
+                    >
+                        <MenuItem disabled>
+                            <Typography variant="subtitle1" gutterBottom style={{ display: 'block', marginBottom: 0 }}>
+                                {userDetails.name}
+                            </Typography>
+                        </MenuItem>
+                        <MenuItem disabled>
+                            <Typography variant="body2" gutterBottom style={{ display: 'block', marginBottom: 0 }}>
+                                {userDetails.role}
+                            </Typography>
+                        </MenuItem>
+
+                        <Divider />
+                        <MenuItem onClick={() => navigate('/')}>
+                            <ListItemIcon>
+                                <Tooltip>
+                                    <Box display="flex" alignItems="left">
+                                        <LogoutIcon fontSize="small" />
+                                        <Typography variant="body2" style={{ marginLeft: '4px' }}>
+                                            Logout
+                                        </Typography>
+                                    </Box>
+                                </Tooltip>
+                            </ListItemIcon>
+                        </MenuItem>
+                    </Menu>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>

@@ -327,7 +327,7 @@ const EditOfficial = ({open, onClose, id}) => {
                     Cancel
                 </Button>
                 <Button onClick={handleEdit} color="primary">
-                    Edit
+                    Create
                 </Button>
             </DialogActions>
         </Dialog>

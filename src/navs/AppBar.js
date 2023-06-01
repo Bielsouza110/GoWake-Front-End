@@ -9,7 +9,12 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import LoginIcon from '@mui/icons-material/Login';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import LogoutIcon from "@mui/icons-material/Logout";
+import Typography from "@mui/material/Typography";
+import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
 
 const menuItems = [
     { label: 'Live Results', path: "/"},
@@ -18,6 +23,7 @@ const menuItems = [
 /*const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];*/
 
 function ResponsiveAppBar() {
+    const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -27,7 +33,6 @@ function ResponsiveAppBar() {
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
-
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
@@ -59,14 +64,14 @@ function ResponsiveAppBar() {
                         </Button>
                     </Box>
 
-                    <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
+                    <Box sx={{flexGrow: 0, display: {xs: 'flex', md: 'none'}}}>
                         <IconButton
                             size="large"
                             aria-label="account of current user"
                             aria-controls="menu-appbar"
                             aria-haspopup="true"
                             onClick={handleOpenNavMenu}
-                            color='#808080'
+                            color="inherit"
                         >
                             <MenuIcon/>
                         </IconButton>
@@ -107,7 +112,8 @@ function ResponsiveAppBar() {
                             })}
                         </Menu>
                     </Box>
-                    <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
+
+                    <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
 
                         {menuItems.map(({ label, path }) => {
                             return (
@@ -120,14 +126,6 @@ function ResponsiveAppBar() {
                                 </Button>
                             );
                         })}
-                    </Box>
-
-                    <Box sx={{flexGrow: 0}}>
-                        <Tooltip title="Login" href="/">
-                            <IconButton onClick={handleOpenUserMenu} sx={{p: 1}}>
-                                <LoginIcon/>
-                            </IconButton>
-                        </Tooltip>
                     </Box>
                 </Toolbar>
             </Container>
