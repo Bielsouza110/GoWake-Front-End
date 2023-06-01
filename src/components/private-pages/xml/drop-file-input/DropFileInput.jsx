@@ -52,7 +52,7 @@ const DropFileInput = props => {
                                     <img src={ImageConfig[item.type.split('/')[1] || ImageConfig['default']]} alt=""/>
                                     <div className="drop-file-preview_item_info">
                                         <p>{item.name}</p>
-                                        <p>{item.size}</p>
+                                        {/*<p>{item.size}</p>*/}
                                     </div>
                                     <span className="drop-file-preview_item_del" onClick={()=> fileRemove(item)}>x</span>
                                 </div>

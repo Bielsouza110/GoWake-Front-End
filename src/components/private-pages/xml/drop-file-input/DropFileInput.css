@@ -48,6 +48,7 @@
 
 .drop-file-preview p{
     font-weight: 500;
+    margin-top: 15px;
 }
 .drop-file-preview_title{
     margin-bottom: 20px;
@@ -59,10 +60,12 @@
     background-color: var(--input-bg);
     padding: 15px;
     border-radius: 20px;
+    height: 80px;
 }
 .drop-file-preview_item img{
     width: 50px;
     margin-right: 20px;
+    height: 50px;
 }
 .drop-file-preview_item_info{
     display: flex;
@@ -80,11 +83,12 @@
     justify-content: center;
     position: absolute;
     right: 10px;
-    top: 50%;
+    /*top: 50%;*/
+    margin-top: 5px;
     transform: translate(-50%);
     box-shadow: var(--box-shadow);
     cursor: pointer;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.3s ease;
 }
 
