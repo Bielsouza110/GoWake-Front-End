@@ -25,6 +25,47 @@ const DropFileInput = props => {
         props.onFileChange(updatedList);
         console.log(file);
     }
+
+    const handleFileSubmit = () => {
+        if (fileList[0]) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const fileUrl = reader.result;
+                console.log(fileUrl);
+                // Perform further actions with the file URL
+
+                fetch(fileUrl).then(response => {
+
+                    return response.text();
+                }).then(xmlString => {
+                    const xmlDocument = new DOMParser().parseFromString(xmlString, "text/html");
+                    const tutorials = xmlDocument.querySelectorAll("book");
+
+                    for (const t of tutorials) {
+                        const author = t.querySelector("author").textContent;
+                        const title = t.querySelector("title").textContent;
+                        const genre = t.querySelector("genre").textContent;
+                        console.log(author, title, genre);
+                    }
+                });
+
+
+
+            };
+            reader.readAsDataURL(fileList[0]);
+        }
+
+
+
+
+
+
+    };
+
+
+
+
+
     return (
         <>
             <div
@@ -54,7 +95,7 @@ const DropFileInput = props => {
                                         <p>{item.name}</p>
                                         {/*<p>{item.size}</p>*/}
                                     </div>
-                                    <button className="drop-file-preview_btn" >Check</button>
+                                    <button  className="drop-file-preview_btn"  onClick={handleFileSubmit}>Check</button>
                                     <span className="drop-file-preview_item_del" onClick={()=> fileRemove(item)}>x</span>
                                 </div>
                             ))
