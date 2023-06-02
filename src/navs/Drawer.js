@@ -30,7 +30,9 @@ import MenuItem from "@mui/material/MenuItem";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
-import LoginIcon from "@mui/icons-material/Login";
+import PeopleIcon from '@mui/icons-material/People';
+import EventIcon from '@mui/icons-material/Event';
+import FestivalIcon from '@mui/icons-material/Festival';
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -111,18 +113,11 @@ function MiniDrawer (){
             text: 'Dashboard',
             icon: <DashboardIcon/>,
             link: "/login/dashboard"
-
         },
         {
-            text: 'Wakeboard Rules',
-            icon: <PictureAsPdfIcon/>,
-            link: "/login/rules"
-
-        },
-        {
-            text: 'Live Results',
-            icon: <StreamIcon/>,
-            link: "/login/liveresults"
+            text: 'Officers',
+            icon: <PeopleIcon/>,
+            link: "/login/officers"
         },
         {
             text: 'Athletes',
@@ -130,9 +125,14 @@ function MiniDrawer (){
             link: "/login/athletes"
         },
         {
-            text: 'Officers',
-            icon: <FitbitIcon/>,
-            link: "/login/officers"
+            text: 'Events',
+            icon: <EventIcon/>,
+            link: "/login/events"
+        },
+        {
+            text: 'Competitions',
+            icon: <FestivalIcon/>,
+            link: "/login/competitions"
         },
         {
             text: 'Upload XML',
@@ -140,14 +140,14 @@ function MiniDrawer (){
             link: "/login/uploadxml"
         },
         {
-            text: 'Create Event',
-            icon: <AddIcon/>,
-            link: "/login/createevent"
+            text: 'Wakeboard Rules',
+            icon: <PictureAsPdfIcon/>,
+            link: "/login/rules"
         },
         {
-            text: 'Modify Event',
-            icon: <ModeEditIcon/>,
-            link: "/login/modidyevent"
+            text: 'Live Results',
+            icon: <StreamIcon/>,
+            link: "/login/liveresults"
         },
     ]
     const handleDrawerOpen = () => {

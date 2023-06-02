@@ -6,7 +6,7 @@ import DrawerHeader from "../../../navs/DrawerHeader";
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 
-const ModidyEvent = () => {
+const Competitons = () => {
 
     return (
         <div className="sdd">
@@ -16,7 +16,7 @@ const ModidyEvent = () => {
                     <DrawerHeader/>
                     <MDBContainer className="p-1 my-2">
                         <Typography paragraph className="my-3 pb-0">
-                            Page Modidy Event
+                            Page competitions
                         </Typography>
                     </MDBContainer>
                 </Container>
@@ -25,4 +25,4 @@ const ModidyEvent = () => {
     );
 };
 
-export default ModidyEvent;
+export default Competitons;
