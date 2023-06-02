@@ -6,7 +6,7 @@ import DrawerHeader from "../../../navs/DrawerHeader";
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 
-const CreateEvent = () => {
+const Events = () => {
 
     return (
         <div className="sdd">
@@ -16,7 +16,7 @@ const CreateEvent = () => {
                     <DrawerHeader/>
                     <MDBContainer className="p-1 my-2">
                         <Typography paragraph className="my-3 pb-0">
-                            Page Create Event
+                            Page Events
                         </Typography>
                     </MDBContainer>
                 </Container>
@@ -25,4 +25,4 @@ const CreateEvent = () => {
     );
 };
 
-export default CreateEvent;
+export default Events;
