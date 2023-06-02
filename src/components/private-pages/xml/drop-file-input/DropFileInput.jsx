@@ -54,6 +54,7 @@ const DropFileInput = props => {
                                         <p>{item.name}</p>
                                         {/*<p>{item.size}</p>*/}
                                     </div>
+                                    <button className="drop-file-preview_btn" >Check</button>
                                     <span className="drop-file-preview_item_del" onClick={()=> fileRemove(item)}>x</span>
                                 </div>
                             ))

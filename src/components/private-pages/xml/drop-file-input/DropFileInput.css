@@ -96,4 +96,17 @@
     opacity: 1;
 }
 
+.drop-file-preview_item .drop-file-preview_btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    border-radius: 10%;
+    right: 100px;
+    margin-top: 10px;
+    width: 70px;
+    /*background-color: red;*/
+    box-shadow: var(--box-shadow);
+}
+
 
