@@ -22,18 +22,20 @@ const onFileChange = (files) =>{
                         <Typography paragraph className="my-3 pb-0">
                             Page Upload XML
                         </Typography>
+
+                        <Container id="marginDrawerHeader">
+                            <div className="box">
+                                <h2 className="header">
+                                    Input XML file
+                                </h2>
+                                <DropFileInput onFileChange={(files)=>onFileChange(files)}/>
+                            </div>
+                        </Container>
+
                     </MDBContainer>
                 </Container>
             </Box>
 
-            <Container id="marginDrawerHeader">
-                <div className="box">
-                    <h2 className="header">
-                        Input XML file
-                    </h2>
-                    <DropFileInput onFileChange={(files)=>onFileChange(files)}/>
-                </div>
-                </Container>
         </div>
     );
 };
