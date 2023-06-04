@@ -10,17 +10,17 @@ const DropFileInput = props => {
     const onDragEnter = () => wrapperRef.current.classList.add('dragover');
     const onDragLeave = () => wrapperRef.current.classList.remove('dragover');
     const onDrop = () => wrapperRef.current.classList.add('dragover');
-    const onFileDrop = (e) =>{
+    const onFileDrop = (e) => {
         const newFile = e.target.files[0];
-        if(newFile) {
+        if (newFile) {
             const updatedList = [...fileList, newFile];
             setFileList((updatedList));
             props.onFileChange(updatedList);
         }
     }
-    const fileRemove = (file) =>{
+    const fileRemove = (file) => {
         const updatedList = [...fileList];
-        updatedList.splice(fileList.indexOf(file),1);//splice serve para add, remover ou alterar algo no array
+        updatedList.splice(fileList.indexOf(file), 1);//splice serve para add, remover ou alterar algo no array
         setFileList(updatedList);
         props.onFileChange(updatedList);
         console.log(file);
@@ -28,8 +28,10 @@ const DropFileInput = props => {
 
     const handleFileSubmit = (file) => {
 
-const index = fileList.indexOf(file);
-let juri = [];
+        const index = fileList.indexOf(file);
+        let juriList = [];//Array dos jurados
+        let eventList = [];//Lista
+        let athletesList = []; //Lista dos atletas
         if (fileList[index]) {
             const reader = new FileReader();
             reader.onload = () => {
@@ -41,19 +43,27 @@ let juri = [];
                     return response.text();
                 }).then(xmlString => {
                     const xmlDocument = new DOMParser().parseFromString(xmlString, "text/xml");
-                    const tutorials = xmlDocument.querySelectorAll("book");
+
+                    const events = xmlDocument.querySelectorAll("events");
                     const officials = xmlDocument.querySelectorAll("officials");
+                    const athletes = xmlDocument.querySelectorAll("athletes");
 
 
-                    for (const t of tutorials) {
-                        const author = t.querySelector("author").textContent;
-                        const title = t.querySelector("title").textContent;
-                        const genre = t.querySelector("genre").textContent;
-                        console.log(author, title, genre);
+                    /*for (const event of events) {
+                        const code_Event = event.querySelector("code").textContent;
+                        const rounds = event.querySelector("rounds");
+                        const classEvent = event.querySelector("event_class");
+                        const name = event.querySelector("name");
+                        eventList.push({
+                            code: code_Event,
+                            rounds: rounds,
+                            classEvent: classEvent,
+                            name: name
+                        })
+                        /* console.log(eventList);*/
+                    //}
 
-                    }
-
-                    for(const official of officials){
+                    for (const official of officials) {
                         const iwwfID = official.querySelector("iwwfid").textContent;
                         const position = official.querySelector("position").textContent;
                         const lastName = official.querySelector("last_name").textContent;
@@ -62,23 +72,58 @@ let juri = [];
                         const country = official.querySelector("country").textContent;
                         const region = official.querySelector("region").textContent;
                         /*console.log(iwwfID, position, lastName,firstName,qualification,country,region);*/
-                        juri.push({id: iwwfID, category: position, name: lastName +" "+ firstName, qualification:qualification, country:country, region: region});
+                        juriList.push({
+                            id: iwwfID,
+                            category: position,
+                            name: lastName + " " + firstName,
+                            qualification: qualification,
+                            country: country,
+                            region: region
+                        });
                     }
-console.log(juri);
+                    /*console.log(juriList);*/
+
+                    for (const athlete of athletes) {
+                        const fed_id = athlete.querySelector("fed_id").textContent;
+                        const lastName = athlete.querySelector("last_name").textContent;
+                        const firstName = athlete.querySelector("first_name").textContent;
+                        const country = athlete.querySelector("country").textContent;
+                        const gender = athlete.querySelector("gender").textContent;
+                        const birthYear = athlete.querySelector("year_of_birth").textContent;
+                        const code = athlete.querySelector("code").textContent;
+                        const division = athlete.querySelector("division");
+                        const entry_type = athlete.querySelector("entry_type","EntryType");
+                        const participation = athlete.querySelector("participation").textContent;
+                        const category = athlete.querySelector("real_category").textContent;
+                        const competitionCategory = athlete.querySelector("category_in_competition").textContent;
+                        athletesList.push({
+                            id: fed_id,
+                            lastName: lastName,
+                            firstName: firstName,
+                            country: country,
+                            gender: gender,
+                            year: birthYear,
+                            code: code,
+                            division: division,
+                            entry_type: entry_type,
+                            participation: participation,
+                            category: category,
+                            competitionCategory: competitionCategory
+                        })
 
 
+                    }
+
+                    console.log(athletesList);
                 });
 
             };
 
-                reader.readAsDataURL(fileList[index]);
+            reader.readAsDataURL(fileList[index]);
 
         }
 
     };
-
-
-
 
 
     return (
@@ -110,13 +155,16 @@ console.log(juri);
                                         <p>{item.name}</p>
                                         {/*<p>{item.size}</p>*/}
                                     </div>
-                                    <button  className="drop-file-preview_btn"  onClick={()=> handleFileSubmit(item)}>Check</button>
-                                    <span className="drop-file-preview_item_del" onClick={()=> fileRemove(item)}>x</span>
+                                    <button className="drop-file-preview_btn"
+                                            onClick={() => handleFileSubmit(item)}>Check
+                                    </button>
+                                    <span className="drop-file-preview_item_del"
+                                          onClick={() => fileRemove(item)}>x</span>
                                 </div>
                             ))
                         }
                     </div>
-                ): null
+                ) : null
             }
 
         </>
