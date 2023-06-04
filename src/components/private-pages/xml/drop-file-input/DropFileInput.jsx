@@ -29,19 +29,21 @@ const DropFileInput = props => {
     const handleFileSubmit = (file) => {
 
 const index = fileList.indexOf(file);
-
+let juri = [];
         if (fileList[index]) {
             const reader = new FileReader();
             reader.onload = () => {
                 const fileUrl = reader.result;
-                console.log(fileUrl);
+                /*console.log(fileUrl);*/
 
                 fetch(fileUrl).then(response => {
 
                     return response.text();
                 }).then(xmlString => {
-                    const xmlDocument = new DOMParser().parseFromString(xmlString, "text/html");
+                    const xmlDocument = new DOMParser().parseFromString(xmlString, "text/xml");
                     const tutorials = xmlDocument.querySelectorAll("book");
+                    const officials = xmlDocument.querySelectorAll("officials");
+
 
                     for (const t of tutorials) {
                         const author = t.querySelector("author").textContent;
@@ -50,6 +52,21 @@ const index = fileList.indexOf(file);
                         console.log(author, title, genre);
 
                     }
+
+                    for(const official of officials){
+                        const iwwfID = official.querySelector("iwwfid").textContent;
+                        const position = official.querySelector("position").textContent;
+                        const lastName = official.querySelector("last_name").textContent;
+                        const firstName = official.querySelector("first_name").textContent;
+                        const qualification = official.querySelector("qualification");
+                        const country = official.querySelector("country").textContent;
+                        const region = official.querySelector("region").textContent;
+                        /*console.log(iwwfID, position, lastName,firstName,qualification,country,region);*/
+                        juri.push({id: iwwfID, category: position, name: lastName +" "+ firstName, qualification:qualification, country:country, region: region});
+                    }
+console.log(juri);
+
+
                 });
 
             };
