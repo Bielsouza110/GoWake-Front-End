@@ -20,19 +20,21 @@ const DropFileInput = props => {
     }
     const fileRemove = (file) =>{
         const updatedList = [...fileList];
-        updatedList.splice(fileList.indexOf(file),1);
+        updatedList.splice(fileList.indexOf(file),1);//splice serve para add, remover ou alterar algo no array
         setFileList(updatedList);
         props.onFileChange(updatedList);
         console.log(file);
     }
 
-    const handleFileSubmit = () => {
-        if (fileList[0]) {
+    const handleFileSubmit = (file) => {
+
+const index = fileList.indexOf(file);
+
+        if (fileList[index]) {
             const reader = new FileReader();
             reader.onload = () => {
                 const fileUrl = reader.result;
                 console.log(fileUrl);
-                // Perform further actions with the file URL
 
                 fetch(fileUrl).then(response => {
 
@@ -46,19 +48,15 @@ const DropFileInput = props => {
                         const title = t.querySelector("title").textContent;
                         const genre = t.querySelector("genre").textContent;
                         console.log(author, title, genre);
+
                     }
                 });
 
-
-
             };
-            reader.readAsDataURL(fileList[0]);
+
+                reader.readAsDataURL(fileList[index]);
+
         }
-
-
-
-
-
 
     };
 
@@ -95,7 +93,7 @@ const DropFileInput = props => {
                                         <p>{item.name}</p>
                                         {/*<p>{item.size}</p>*/}
                                     </div>
-                                    <button  className="drop-file-preview_btn"  onClick={handleFileSubmit}>Check</button>
+                                    <button  className="drop-file-preview_btn"  onClick={()=> handleFileSubmit(item)}>Check</button>
                                     <span className="drop-file-preview_item_del" onClick={()=> fileRemove(item)}>x</span>
                                 </div>
                             ))
