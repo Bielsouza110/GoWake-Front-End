@@ -29,9 +29,11 @@ const DropFileInput = props => {
     const handleFileSubmit = (file) => {
 
         const index = fileList.indexOf(file);
+        let count = 0;
         let juriList = [];//Array dos jurados
-        let eventList = [];//Lista
+        let eventList = [];//Lista dos eventos --> só pode ter 1 competição por XML, apesar de ser só 1 tive que fazer num array
         let athletesList = []; //Lista dos atletas
+        let competitionList = [];
         if (fileList[index]) {
             const reader = new FileReader();
             reader.onload = () => {
@@ -43,39 +45,73 @@ const DropFileInput = props => {
                     return response.text();
                 }).then(xmlString => {
                     const xmlDocument = new DOMParser().parseFromString(xmlString, "text/xml");
-
+                    //const competitions = xmlDocument.querySelectorAll("");//ver mais tarde sobre o inicio do XML
                     const events = xmlDocument.querySelectorAll("events");
                     const officials = xmlDocument.querySelectorAll("officials");
                     const athletes = xmlDocument.querySelectorAll("athletes");
 
 
-                    /*for (const event of events) {
-                        const code_Event = event.querySelector("code").textContent;
-                        const rounds = event.querySelector("rounds");
-                        const classEvent = event.querySelector("event_class");
-                        const name = event.querySelector("name");
-                        eventList.push({
-                            code: code_Event,
-                            rounds: rounds,
-                            classEvent: classEvent,
-                            name: name
-                        })
-                        /* console.log(eventList);*/
-                    //}
+                    const discipline = xmlDocument.querySelector("discipline, Discipline").textContent;
+                    const code = xmlDocument.querySelector("code,Code").textContent;
+                    const name = xmlDocument.querySelector("name,Name").textContent;
+                    const orgCountry = xmlDocument.querySelector("organizing_country,OrganizingCountry").textContent;
+                    const tournament_type = xmlDocument.querySelector("tournament_type,TournamentType").textContent;
+                    const venue = xmlDocument.querySelector("venue,Venue").textContent;
+                    const site_code = xmlDocument.querySelector("site_code,SiteCode").textContent;
+                    const startDate = xmlDocument.querySelector("beginning_date,BeginningDate").textContent;
+                    const endDate = xmlDocument.querySelector("end_date,EndDate").textContent;
+                    const age_groups = xmlDocument.querySelector("age_groups,AgeGroup").textContent;
+
+                    competitionList.push({
+                        discipline: discipline,
+                        code: code,
+                        name: name,
+                        orgCountry: orgCountry,
+                        tournament_type: tournament_type,
+                        venue: venue,
+                        site_code: site_code,
+                        startDate: startDate,
+                        endDate: endDate,
+                        age_groups: age_groups
+                    })
+                    console.log(competitionList);
+
+
+                    for (const event of events) {
+
+                        if (count === 0) {
+                            const code_Event = event.querySelector("code,Code").textContent;
+                            const rounds = event.querySelector("rounds,Rounds").textContent;
+                            const classEvent = event.querySelector("event_class,Event_Class").textContent;
+                            const name = event.querySelector("name,Name").textContent;
+                            eventList.push({
+                                code: code_Event,
+                                rounds: rounds,
+                                classEvent: classEvent,
+                                name: name
+                            });
+                            count++;
+                        } else {
+                            break;
+                        }
+                    }
+                    //console.log(eventList);
+
 
                     for (const official of officials) {
-                        const iwwfID = official.querySelector("iwwfid").textContent;
-                        const position = official.querySelector("position").textContent;
-                        const lastName = official.querySelector("last_name").textContent;
-                        const firstName = official.querySelector("first_name").textContent;
-                        const qualification = official.querySelector("qualification");
-                        const country = official.querySelector("country").textContent;
-                        const region = official.querySelector("region").textContent;
+                        const iwwfID = official.querySelector("iwwfid,Iwwfid").textContent;
+                        const position = official.querySelector("position,Position").textContent;
+                        const lastName = official.querySelector("last_name,LastName").textContent;
+                        const firstName = official.querySelector("first_name,FirstName").textContent;
+                        const qualification = official.querySelector("qualification,Qualification");
+                        const country = official.querySelector("country,Country").textContent;
+                        const region = official.querySelector("region,Region").textContent;
                         /*console.log(iwwfID, position, lastName,firstName,qualification,country,region);*/
                         juriList.push({
                             id: iwwfID,
                             category: position,
-                            name: lastName + " " + firstName,
+                            lastName: lastName,
+                            firstName:firstName,
                             qualification: qualification,
                             country: country,
                             region: region
@@ -84,18 +120,18 @@ const DropFileInput = props => {
                     /*console.log(juriList);*/
 
                     for (const athlete of athletes) {
-                        const fed_id = athlete.querySelector("fed_id").textContent;
-                        const lastName = athlete.querySelector("last_name").textContent;
-                        const firstName = athlete.querySelector("first_name").textContent;
-                        const country = athlete.querySelector("country").textContent;
-                        const gender = athlete.querySelector("gender").textContent;
-                        const birthYear = athlete.querySelector("year_of_birth").textContent;
-                        const code = athlete.querySelector("code").textContent;
-                        const division = athlete.querySelector("division");
-                        const entry_type = athlete.querySelector("entry_type","EntryType");
-                        const participation = athlete.querySelector("participation").textContent;
-                        const category = athlete.querySelector("real_category").textContent;
-                        const competitionCategory = athlete.querySelector("category_in_competition").textContent;
+                        const fed_id = athlete.querySelector("fed_id,FedId").textContent;
+                        const lastName = athlete.querySelector("last_name,LastName").textContent;
+                        const firstName = athlete.querySelector("first_name,FirstName").textContent;
+                        const country = athlete.querySelector("country,Country").textContent;
+                        const gender = athlete.querySelector("gender,Gender").textContent;
+                        const birthYear = athlete.querySelector("year_of_birth,YearOfBirth").textContent;
+                        const code = athlete.querySelector("code,Code").textContent;
+                        const division = athlete.querySelector("division,Division").textContent;
+                        const entry_type = athlete.querySelector("entry_type,EntryType").textContent;
+                        const participation = athlete.querySelector("participation,Participation").textContent;
+                        const category = athlete.querySelector("real_category,RealCategory").textContent;
+                        const competitionCategory = athlete.querySelector("category_in_competition,CategoryInCompetition").textContent;
                         athletesList.push({
                             id: fed_id,
                             lastName: lastName,
@@ -111,10 +147,9 @@ const DropFileInput = props => {
                             competitionCategory: competitionCategory
                         })
 
-
                     }
 
-                    console.log(athletesList);
+                    //console.log(athletesList);
                 });
 
             };
