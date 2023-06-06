@@ -10,7 +10,7 @@ import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../dashboard/utils/Utils";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
-import {endpoints, getEndpointDeleteAthleteById} from "../../../api/Urls";
+import {endpoints, getEndpointAthleteById, getEndpointDeleteAthleteById} from "../../../api/Urls";
 import {Edit as EditIcon, Delete as DeleteIcon} from '@mui/icons-material';
 import {IconButton} from '@mui/material';
 import {Button} from '@mui/material';
@@ -34,14 +34,11 @@ const Athletes = (props) => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [idAthlete, setIdAthlete] = useState('');
+    const [idCompetition, setIdCompetition] = useState('');
     const [showSpinner, setShowSpinner] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [data, setData] = useState([]);
     const [dataCompetition, setDataCompetition] = useState([]);
-    const filteredData = data.filter(item => item.first_name.toLowerCase().includes(searchTerm.toLowerCase())
-        || item.last_name.toLowerCase().includes(searchTerm.toLowerCase()));
     const [openDialog, setOpenDialog] = useState(false);
-    const [athletes, setAthletes] = useState([]);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [successDialogOpenDelete, setSuccessDialogOpenDeleteDelete] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
@@ -52,7 +49,7 @@ const Athletes = (props) => {
                 'Authorization': `Token ${usuarioSalvo.token}`
             }
         }).then(response => {
-            const uniqueAthletes = {};
+            /*const uniqueAthletes = {};
             response.data.results.forEach((competition) => {
                 competition.athletes.forEach((athlete) => {
                     if (!uniqueAthletes[athlete.fed_id]) {
@@ -62,9 +59,8 @@ const Athletes = (props) => {
             });
             const uniqueAthletesArray = Object.values(uniqueAthletes);
             const sortedData = uniqueAthletesArray.sort((a, b) => a.first_name.localeCompare(b.first_name));
-            setData(sortedData);
+            setData(sortedData);*/
             setDataCompetition(response.data.results);
-
         }).catch(error => {
             console.error(error);
         });
@@ -78,7 +74,6 @@ const Athletes = (props) => {
         }, 3000); // Tempo limite de 3 segundos
 
         return () => clearTimeout(timer);
-
     }, []);
     const reload = () => {
         fetchAtletes();
@@ -92,59 +87,37 @@ const Athletes = (props) => {
     const handleCloseSuccessDialogDelete = () => {
         setSuccessDialogOpenDeleteDelete(false);
     };
-    const handleSearchTermChange = (event) => {
-        setSearchTerm(event.target.value);
-    };
-    const handleAthleteDelete = (idAthlete) => {
+    const handleAthleteDelete = async (idComp, idAthl) => {
 
-        const competitionIds = dataCompetition
-            .filter(competition => competition.athletes.some(athlete => athlete.id === idAthlete))
-            .map(competition => competition.id);
-
-        competitionIds.forEach(competitionId => {
-            axios.delete(getEndpointDeleteAthleteById("athleteBy", competitionId, idAthlete), {
+        try {
+            const response = await axios.delete(getEndpointDeleteAthleteById("athleteBy", idComp, idAthl), {
                 headers: {
                     'Authorization': `Token ${usuarioSalvo.token}`
                 }
-            }).then(response => {
-
-                if (response.status === 204) {
-                    axios.get(endpoints.competitions, {
-                        headers: {
-                            'Authorization': `Token ${usuarioSalvo.token}`
-                        }
-                    }).then(response => {
-
-                        reload();
-                        setSuccessDialogOpenDeleteDelete(true);
-                        setTimeout(() => {
-                            setSuccessDialogOpenDeleteDelete(false);
-                        }, 3000);
-
-                    }).catch(error => {
-                        console.error(error);
-                    });
-                } else {
-                    setErrorDialogOpen(true);
-                    setTimeout(() => {
-                        setErrorDialogOpen(false);
-                    }, 3000);
-                }
-            }).catch(error => {
-                console.error(error.request.response);
-                setErrorDialogOpen(true);
-                setTimeout(() => {
-                    setErrorDialogOpen(false);
-                }, 3000);
             });
-        });
+
+            reload();
+            setSuccessDialogOpenDeleteDelete(true);
+            setTimeout(() => {
+                setSuccessDialogOpenDeleteDelete(false);
+            }, 3000);
+
+        } catch (error) {
+            console.error('An error occurred while fetching the athlete.');
+            setErrorDialogOpen(true);
+            setTimeout(() => {
+                setErrorDialogOpen(false);
+            }, 3000);
+        }
     };
-    const handleClickOpenDelete = (id) => {
-        setIdAthlete(id);
+    const handleClickOpenDelete = (compId, athlId) => {
+        //console.log(compId, athlID);
+        setIdCompetition(compId);
+        setIdAthlete(athlId);
         setOpen(true);
     };
-    const handleDelete = (item) => {
-        handleAthleteDelete(item)
+    const handleDelete = (idComp, idAthl) => {
+        handleAthleteDelete(idComp, idAthl)
         handleClose();
     };
     const handleClose = () => {
@@ -154,11 +127,14 @@ const Athletes = (props) => {
         setOpenDialog(true);
     };
     const handleCloseDialog = () => {
-        reload();
+        fetchAtletes();
         setOpenDialog(false);
     };
-    const handleOpenEditDialog = (id) => {
-        setIdAthlete(id);
+    const handleOpenEditDialog = (competitionId, athleteId) => {
+        //  reload();
+        //  console.log(competitionId, athleteId);
+        setIdCompetition(competitionId);
+        setIdAthlete(athleteId);
         setOpenEditDialog(true);
     };
     const handleCloseEditDialog = () => {
@@ -167,6 +143,10 @@ const Athletes = (props) => {
     };
 
     const isMobile = useMediaQuery('(max-width: 600px)');
+
+    const handleSearchTermChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
 
     return (
         <div className="sdd">
@@ -188,7 +168,7 @@ const Athletes = (props) => {
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose}>Cancelar</Button>
-                                <Button onClick={() => handleDelete(idAthlete)} color="error">
+                                <Button onClick={() => handleDelete(idCompetition, idAthlete)} color="error">
                                     Excluir
                                 </Button>
                             </DialogActions>
@@ -196,8 +176,9 @@ const Athletes = (props) => {
 
                         <Dialog open={successDialogOpenDelete} onClose={handleCloseSuccessDialogDelete}>
                             <DialogContent>
-                                <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <DoneIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }} />
+                                <DialogContentText
+                                    sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                    <DoneIcon sx={{color: 'green', fontSize: 48, marginBottom: '1%'}}/>
                                     Athlete deleted successfully!
                                 </DialogContentText>
                             </DialogContent>
@@ -205,16 +186,17 @@ const Athletes = (props) => {
 
                         <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
                             <DialogContent>
-                                <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <ReportProblemIcon sx={{ color: 'red', fontSize: 48, marginBottom: '1%' }} />
+                                <DialogContentText
+                                    sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                    <ReportProblemIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
                                     Error: Failed to delete the athlete. Please try again.
                                 </DialogContentText>
                             </DialogContent>
                         </Dialog>
 
                         <Typography id="margin2">
-                            Here you can see all the athletes that are currently available. Click on the athlete to see
-                            more details.
+                            Here you can see all the athletes that are currently available. Click on the athlete to
+                            see more details.
                         </Typography>
 
                         <TextField
@@ -223,7 +205,7 @@ const Athletes = (props) => {
                             value={searchTerm}
                             onChange={handleSearchTermChange}
                             size="large"
-                            sx={{width: '100%', margin: '0 0 1rem'}}
+                            sx={{ width: '100%', margin: '0 0 1rem' }}
                         />
 
                         {isMobile ? (
@@ -255,10 +237,11 @@ const Athletes = (props) => {
                         <EditAthlete
                             open={openEditDialog}
                             onClose={handleCloseEditDialog}
-                            id={idAthlete}
+                            idAth={idAthlete}
+                            idComp={idCompetition}
                         />
 
-                        {data.length === 0 && showSpinner &&
+                        {dataCompetition.length === 0 && showSpinner &&
                             (
                                 <div align="left">
                                     <Spinner id="load" animation="border" variant="secondary" size="3rem"/>
@@ -267,13 +250,13 @@ const Athletes = (props) => {
                             )
                         }
 
-                        {data.length === 0 && !showSpinner && (
+                        {dataCompetition.length === 0 && !showSpinner && (
                             <div align="left">
                                 <p id="error2">There are no athletes at the moment!</p>
                             </div>
                         )}
 
-                        {data.length !== 0 && (
+                        {dataCompetition.length !== 0 && (
                             <div>
                                 <div>
                                     <TableContainer component={Paper}>
@@ -288,62 +271,74 @@ const Athletes = (props) => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {filteredData.length > 0 && filteredData.map((item) => (
-                                                    <TableRow style={{cursor: 'pointer'}} key={item.id}
-                                                              onMouseEnter={handleMouseEnter}
-                                                              onMouseLeave={handleMouseLeave}>
-                                                        <TableCell id="esconde">{item.fed_id}</TableCell>
-                                                        <TableCell>{item.first_name.charAt(0).toUpperCase() + item.first_name.slice(1).toLowerCase()
-                                                            + " " + item.last_name.charAt(0).toUpperCase() + item.last_name.slice(1).toLowerCase()}
-                                                        </TableCell>
-
-                                                        <TableCell id="esconde">
-                                                            <Tooltip title={item.country.toUpperCase()}>
-                                                                {getCountryFlag(item.country)}
-                                                            </Tooltip>
-                                                        </TableCell>
-
-                                                        <TableCell id="esconde">
-                                                            {item.gender === "F" && (
-                                                                <Tooltip title="Feminine"
-                                                                         className="tooltip-gender">
-                                                                    {GetGenderFlags(item.gender)}
-                                                                </Tooltip>
-                                                            )}
-                                                            {item.gender === "M" && (
-                                                                <Tooltip title="Masculine"
-                                                                         className="tooltip-gender">
-                                                                    {GetGenderFlags(item.gender)}
-                                                                </Tooltip>
-                                                            )}
-                                                        </TableCell>
-
-                                                        <TableCell>
-                                                            <Tooltip title="Edit" className="tooltip-gender">
-                                                                <IconButton
-                                                                    onClick={() => handleOpenEditDialog(item.id)}>
-                                                                    <EditIcon color="gray"
-                                                                              style={{cursor: 'pointer'}}/>
-                                                                </IconButton>
-                                                            </Tooltip>
-                                                            <Tooltip title="Remove" className="tooltip-gender">
-                                                                <IconButton
-                                                                    onClick={() => handleClickOpenDelete(item.id)}>
-                                                                    <DeleteIcon color="error"
-                                                                                style={{cursor: 'pointer'}}/>
-                                                                </IconButton>
-                                                            </Tooltip>
-                                                        </TableCell>
-                                                    </TableRow>
+                                                {dataCompetition.map((competition) => (
+                                                    competition.athletes
+                                                        .filter((athlete) =>
+                                                            athlete.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                                            athlete.last_name.toLowerCase().includes(searchTerm.toLowerCase())
+                                                        )
+                                                        .map((athlete) => (
+                                                            <TableRow style={{cursor: 'pointer'}} key={athlete.id}
+                                                                      onMouseEnter={handleMouseEnter}
+                                                                      onMouseLeave={handleMouseLeave}>
+                                                                <TableCell id="esconde">{athlete.fed_id}</TableCell>
+                                                                <TableCell>
+                                                                    {athlete.first_name.charAt(0).toUpperCase() + athlete.first_name.slice(1).toLowerCase()}{" "}
+                                                                    {athlete.last_name.charAt(0).toUpperCase() + athlete.last_name.slice(1).toLowerCase()}
+                                                                </TableCell>
+                                                                <TableCell id="esconde">
+                                                                    <Tooltip title={athlete.country.toUpperCase()}>
+                                                                        {getCountryFlag(athlete.country)}
+                                                                    </Tooltip>
+                                                                </TableCell>
+                                                                <TableCell id="esconde">
+                                                                    {athlete.gender === "F" && (
+                                                                        <Tooltip title="Feminine"
+                                                                                 className="tooltip-gender">
+                                                                            {GetGenderFlags(athlete.gender)}
+                                                                        </Tooltip>
+                                                                    )}
+                                                                    {athlete.gender === "M" && (
+                                                                        <Tooltip title="Masculine"
+                                                                                 className="tooltip-gender">
+                                                                            {GetGenderFlags(athlete.gender)}
+                                                                        </Tooltip>
+                                                                    )}
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Tooltip title="Edit" className="tooltip-gender">
+                                                                        <IconButton
+                                                                            onClick={() => handleOpenEditDialog(competition.id, athlete.id)}>
+                                                                            <EditIcon color="gray"
+                                                                                      style={{cursor: 'pointer'}}/>
+                                                                        </IconButton>
+                                                                    </Tooltip>
+                                                                    <Tooltip title="Remove" className="tooltip-gender">
+                                                                        <IconButton
+                                                                            onClick={() => handleClickOpenDelete(competition.id, athlete.id)}>
+                                                                            <DeleteIcon color="error"
+                                                                                        style={{cursor: 'pointer'}}/>
+                                                                        </IconButton>
+                                                                    </Tooltip>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        ))
                                                 ))}
-
-                                                {filteredData.length === 0 &&
-                                                    <TableRow onMouseEnter={handleMouseEnter}
-                                                              onMouseLeave={handleMouseLeave}>
-                                                        <TableCell colSpan={4} id="error2" align="left"> Athlete not
-                                                            found!</TableCell>
-                                                    </TableRow>
-                                                }
+                                                {dataCompetition.every((competition) => {
+                                                    return competition.athletes.every((athlete) =>
+                                                        athlete.first_name.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
+                                                        athlete.last_name.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1
+                                                    );
+                                                }) && (
+                                                        <TableRow
+                                                            onMouseEnter={handleMouseEnter}
+                                                            onMouseLeave={handleMouseLeave}
+                                                        >
+                                                            <TableCell colSpan={5} id="error2" align="left">
+                                                                Athlete not found!
+                                                            </TableCell>
+                                                        </TableRow>
+                                                )}
                                             </TableBody>
                                         </Table>
                                     </TableContainer>

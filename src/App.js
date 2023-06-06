@@ -7,7 +7,7 @@ import Dashboard from "./components/private-pages/dashboard/Dashboard";
 import Athletes from "./components/private-pages/athetes/Athletes";
 import Events from "./components/private-pages/events/Events";
 import LiveResults from "./components/private-pages/results/LiveResults";
-import Competitons from "./components/private-pages/events/Competitions";
+import Competitons from "./components/private-pages/competitions/Competitions";
 import UploadXML from "./components/private-pages/xml/UploadXML";
 import Rules from "./components/private-pages/rules/Rules";
 import RulesLogin from "./components/public-pages/rules/RulesLogin";

@@ -10,7 +10,7 @@ import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../dashboard/utils/Utils";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
-import {endpoints, getEndpointDeleteOfficialById} from "../../../api/Urls";
+import {endpoints, getEndpointDeleteAthleteById, getEndpointDeleteOfficialById} from "../../../api/Urls";
 import {Edit as EditIcon, Delete as DeleteIcon} from '@mui/icons-material';
 import {IconButton} from '@mui/material';
 import {Button} from '@mui/material';
@@ -33,41 +33,35 @@ const Officials = (props) => {
 
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
-    const [OfficialId, setOfficialId] = useState('');
+    const [idOfficial, setIdOfficial] = useState('');
+    const [idCompetition, setIdCompetition] = useState('');
     const [showSpinner, setShowSpinner] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState([]);
     const [dataCompetition, setDataCompetition] = useState([]);
-    const filteredData = data.filter(item => item.first_name.toLowerCase().includes(searchTerm.toLowerCase())
-        || item.last_name.toLowerCase().includes(searchTerm.toLowerCase()));
     const [openDialog, setOpenDialog] = useState(false);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [successDialogOpenDelete, setSuccessDialogOpenDeleteDelete] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
 
-    const fetchData = async () => {
-        try {
-            const response = await axios.get(endpoints.competitions, {
-                headers: {
-                    'Authorization': `Token ${usuarioSalvo.token}`
-                }
-            }).then(response => {
-                const officialsData = response.data.results[0].officials;
-                const sortedData = officialsData.sort((a, b) => a.first_name.localeCompare(b.first_name));
-                setData(sortedData);
-                setDataCompetition(response.data.results);
-            }).catch(error => {
-                console.error(error);
-            });
-
-        } catch (error) {
-            console.log(error);
-        }
+    const fetchOfficials = async () => {
+        axios.get(endpoints.competitions, {
+            headers: {
+                'Authorization': `Token ${usuarioSalvo.token}`
+            }
+        }).then(response => {
+            /*const officialsData = response.data.results[0].officials;
+            const sortedData = officialsData.sort((a, b) => a.first_name.localeCompare(b.first_name));
+            setData(sortedData);*/
+            setDataCompetition(response.data.results);
+        }).catch(error => {
+            console.error(error);
+        });
     };
 
     useEffect(() => {
 
-        fetchData();
+        fetchOfficials();
 
         const timer = setTimeout(() => {
             setShowSpinner(false);
@@ -77,7 +71,7 @@ const Officials = (props) => {
     }, []);
     const reload = () => {
 
-        fetchData();
+        fetchOfficials();
 
         const timer = setTimeout(() => {
             setShowSpinner(false);
@@ -91,56 +85,38 @@ const Officials = (props) => {
     const handleCloseSuccessDialogDelete = () => {
         setSuccessDialogOpenDeleteDelete(false);
     };
-    const handleOfficialDelete = (officialId) => {
 
-        const competitionIds = dataCompetition
-            .filter(competition => competition.officials.some(official => official.id === officialId))
-            .map(competition => competition.id);
+    const handleOfficialDelete = async (idComp, idOffic) => {
 
-        competitionIds.forEach(competitionId => {
-            axios.delete(getEndpointDeleteOfficialById("officialBy", competitionId, officialId), {
+        try {
+            const response = await axios.delete(getEndpointDeleteOfficialById("officialBy", idComp, idOffic), {
                 headers: {
                     'Authorization': `Token ${usuarioSalvo.token}`
                 }
-            }).then(response => {
-
-                if (response.status === 204) {
-                    axios.get(endpoints.competitions, {
-                        headers: {
-                            'Authorization': `Token ${usuarioSalvo.token}`
-                        }
-                    }).then(response => {
-
-                        reload();
-                        setSuccessDialogOpenDeleteDelete(true);
-                        setTimeout(() => {
-                            setSuccessDialogOpenDeleteDelete(false);
-                        }, 3000);
-
-                    }).catch(error => {
-                        console.error(error);
-                    });
-                } else {
-                    setErrorDialogOpen(true);
-                    setTimeout(() => {
-                        setErrorDialogOpen(false);
-                    }, 3000);
-                }
-            }).catch(error => {
-                console.error(error.request.response);
-                setErrorDialogOpen(true);
-                setTimeout(() => {
-                    setErrorDialogOpen(false);
-                }, 3000);
             });
-        });
+
+            reload();
+            setSuccessDialogOpenDeleteDelete(true);
+            setTimeout(() => {
+                setSuccessDialogOpenDeleteDelete(false);
+            }, 3000);
+
+        } catch (error) {
+            console.error('An error occurred while fetching the athlete.');
+            setErrorDialogOpen(true);
+            setTimeout(() => {
+                setErrorDialogOpen(false);
+            }, 3000);
+        }
     };
-    const handleClickOpenDelete = (id) => {
-        setOfficialId(id);
+
+    const handleClickOpenDelete = (compId, officId) => {
+        setIdCompetition(compId);
+        setIdOfficial(officId);
         setOpen(true);
     };
-    const handleDelete = (item) => {
-        handleOfficialDelete(item)
+    const handleDelete = (idComp, idOffic) => {
+        handleOfficialDelete(idComp, idOffic)
         handleClose();
     };
     const handleClose = () => {
@@ -150,11 +126,13 @@ const Officials = (props) => {
         setOpenDialog(true);
     };
     const handleCloseDialog = () => {
-        reload();
+        fetchOfficials();
         setOpenDialog(false);
     };
-    const handleOpenEditDialog = (id) => {
-        setOfficialId(id);
+    const handleOpenEditDialog = (competitionId, officId) => {
+        //reload();
+        setIdCompetition(competitionId);
+        setIdOfficial(officId);
         setOpenEditDialog(true);
     };
     const handleCloseEditDialog = () => {
@@ -184,7 +162,7 @@ const Officials = (props) => {
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose}>Cancelar</Button>
-                                <Button onClick={() => handleDelete(OfficialId)} color="error">
+                                <Button onClick={() => handleDelete(idCompetition, idOfficial)} color="error">
                                     Excluir
                                 </Button>
                             </DialogActions>
@@ -192,8 +170,9 @@ const Officials = (props) => {
 
                         <Dialog open={successDialogOpenDelete} onClose={handleCloseSuccessDialogDelete}>
                             <DialogContent>
-                                <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <DoneIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }} />
+                                <DialogContentText
+                                    sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                    <DoneIcon sx={{color: 'green', fontSize: 48, marginBottom: '1%'}}/>
                                     Official deleted successfully!
                                 </DialogContentText>
                             </DialogContent>
@@ -201,15 +180,17 @@ const Officials = (props) => {
 
                         <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
                             <DialogContent>
-                                <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <ReportProblemIcon sx={{ color: 'red', fontSize: 48, marginBottom: '1%' }} />
+                                <DialogContentText
+                                    sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                    <ReportProblemIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
                                     Error: Failed to delete the official. Please try again.
                                 </DialogContentText>
                             </DialogContent>
                         </Dialog>
 
                         <Typography id="margin2">
-                            Here you can see all the officials that are currently available. Click on the official to see
+                            Here you can see all the officials that are currently available. Click on the official to
+                            see
                             more details.
                         </Typography>
 
@@ -251,10 +232,11 @@ const Officials = (props) => {
                         <EditOfficial
                             open={openEditDialog}
                             onClose={handleCloseEditDialog}
-                            id={OfficialId}
+                            idOffic={idOfficial}
+                            idComp={idCompetition}
                         />
 
-                        {data.length === 0 && showSpinner &&
+                        {dataCompetition.length === 0 && showSpinner &&
                             (
                                 <div align="left">
                                     <Spinner id="load" animation="border" variant="secondary" size="3rem"/>
@@ -263,13 +245,13 @@ const Officials = (props) => {
                             )
                         }
 
-                        {data.length === 0 && !showSpinner && (
+                        {dataCompetition.length === 0 && !showSpinner && (
                             <div align="left">
                                 <p id="error2">There are no officials at the moment!</p>
                             </div>
                         )}
 
-                        {data.length !== 0 && (
+                        {dataCompetition.length !== 0 && (
                             <div>
                                 <div>
                                     <TableContainer component={Paper}>
@@ -284,48 +266,65 @@ const Officials = (props) => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {filteredData.length > 0 && filteredData.map((item) => (
-                                                    <TableRow style={{cursor: 'pointer'}} key={item.id}
-                                                              onMouseEnter={handleMouseEnter}
-                                                              onMouseLeave={handleMouseLeave}>
-                                                        <TableCell id="esconde">{item.iwwfid}</TableCell>
-                                                        <TableCell>{item.first_name.charAt(0).toUpperCase() + item.first_name.slice(1).toLowerCase()
-                                                            + " " + item.last_name.charAt(0).toUpperCase() + item.last_name.slice(1).toLowerCase()}
-                                                        </TableCell>
+                                                {dataCompetition.map((competition) => (
+                                                    competition.officials
+                                                        .filter((official) =>
+                                                            official.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                                            official.last_name.toLowerCase().includes(searchTerm.toLowerCase())
+                                                        )
+                                                        .map((official) => (
+                                                            <TableRow style={{cursor: 'pointer'}} key={official.id}
+                                                                      onMouseEnter={handleMouseEnter}
+                                                                      onMouseLeave={handleMouseLeave}>
+                                                                <TableCell id="esconde">{official.iwwfid}</TableCell>
+                                                                <TableCell>{official.first_name.charAt(0).toUpperCase() + official.first_name.slice(1).toLowerCase()
+                                                                    + " " + official.last_name.charAt(0).toUpperCase() + official.last_name.slice(1).toLowerCase()}
+                                                                </TableCell>
 
-                                                        <TableCell id="esconde">
-                                                            <Tooltip title={item.country.toUpperCase()}>
-                                                                {getCountryFlag(item.country)}
-                                                            </Tooltip>
-                                                        </TableCell>
+                                                                <TableCell id="esconde">
+                                                                    <Tooltip title={official.country.toUpperCase()}>
+                                                                        {getCountryFlag(official.country)}
+                                                                    </Tooltip>
+                                                                </TableCell>
 
-                                                        <TableCell id="esconde">{item.position.charAt(0).toUpperCase() + item.position.slice(1).toLowerCase()}</TableCell>
+                                                                <TableCell
+                                                                    id="esconde">{official.position.charAt(0).toUpperCase() + official.position.slice(1).toLowerCase()}</TableCell>
 
-                                                        <TableCell>
-                                                            <Tooltip title="Edit" className="tooltip-gender">
-                                                                <IconButton
-                                                                    onClick={() => handleOpenEditDialog(item.id)}>
-                                                                    <EditIcon color="gray"
-                                                                              style={{cursor: 'pointer'}}/>
-                                                                </IconButton>
-                                                            </Tooltip>
-                                                            <Tooltip title="Remove" className="tooltip-gender">
-                                                                <IconButton
-                                                                    onClick={() => handleClickOpenDelete(item.id)}>
-                                                                    <DeleteIcon color="error"
-                                                                                style={{cursor: 'pointer'}}/>
-                                                                </IconButton>
-                                                            </Tooltip>
-                                                        </TableCell>
-                                                    </TableRow>
+                                                                <TableCell>
+                                                                    <Tooltip title="Edit" className="tooltip-gender">
+                                                                        <IconButton
+                                                                            onClick={() => handleOpenEditDialog(competition.id, official.id)}>
+                                                                            <EditIcon color="gray"
+                                                                                      style={{cursor: 'pointer'}}/>
+                                                                        </IconButton>
+                                                                    </Tooltip>
+                                                                    <Tooltip title="Remove" className="tooltip-gender">
+                                                                        <IconButton
+                                                                            onClick={() => handleClickOpenDelete(competition.id, official.id)}>
+                                                                            <DeleteIcon color="error"
+                                                                                        style={{cursor: 'pointer'}}/>
+                                                                        </IconButton>
+                                                                    </Tooltip>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        ))
                                                 ))}
 
-                                                {filteredData.length === 0 &&
-                                                    <TableRow onMouseEnter={handleMouseEnter}
-                                                              onMouseLeave={handleMouseLeave}>
-                                                        <TableCell colSpan={4} id="error2" align="left"> Official not found!</TableCell>
+                                                {dataCompetition.every((competition) => {
+                                                    return competition.officials.every((official) =>
+                                                        official.first_name.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
+                                                        official.last_name.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1
+                                                    );
+                                                }) && (
+                                                    <TableRow
+                                                        onMouseEnter={handleMouseEnter}
+                                                        onMouseLeave={handleMouseLeave}
+                                                    >
+                                                        <TableCell colSpan={5} id="error2" align="left">
+                                                            Official not found!
+                                                        </TableCell>
                                                     </TableRow>
-                                                }
+                                                )}
                                             </TableBody>
                                         </Table>
                                     </TableContainer>

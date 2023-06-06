@@ -13,11 +13,11 @@ import {
     endpoints,
     getEndpointAthleteById,
     getEndpointCreateAthlete,
-    getEndpointDeleteAthleteById, putEndpointAthleteById
+    getEndpointDeleteAthleteById, getEndpointOfficialById, putEndpointAthleteById
 } from "../../../../api/Urls";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
-const EditAthlete = ({open, onClose, id}) => {
+const EditAthlete = ({open, onClose, idAth, idComp}) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
     const [firstName, setFirstName] = useState('');
@@ -54,7 +54,7 @@ const EditAthlete = ({open, onClose, id}) => {
         setSelectedCompetitionId(event.target.value);
     };
 
-    const submitEditAthlete = async (competitionId) => {
+    const submitEditAthlete = async () => {
 
         const data = {
             events: [],
@@ -62,12 +62,12 @@ const EditAthlete = ({open, onClose, id}) => {
             first_name: firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase().trim(),
             last_name: lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase().trim(),
             country: country.toUpperCase().trim(),
-            gender: gender.trim(),
+            gender: gender.charAt(0).toUpperCase().trim(),
             year_of_birth: parseInt(yearOfBirth.trim()),
         };
 
         try {
-            const response = await axios.put(putEndpointAthleteById("athleteBy", competitionId, id), data, {
+            const response = await axios.put(putEndpointAthleteById("athleteBy", selectedCompetitionId, idAth), data, {
                 headers: {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
@@ -78,7 +78,7 @@ const EditAthlete = ({open, onClose, id}) => {
                 onClose();
             }, 3000);
         } catch (error) {
-            console.error(error.request.response);
+            //console.error(error.request.response);
             setErrorDialogOpen(true);
             setTimeout(() => {
                 setErrorDialogOpen(false);
@@ -86,6 +86,7 @@ const EditAthlete = ({open, onClose, id}) => {
         }
     };
     const handleEdit = async () => {
+        //console.log(idCompetition, idAthlete);
         if (isFormEmpty()) {
             setErrorMessage('All fields above are required!');
             setTimeout(() => {
@@ -93,19 +94,7 @@ const EditAthlete = ({open, onClose, id}) => {
             }, 3000);
         } else {
             try {
-                const competitionIds = competitions
-                    .filter((competition) =>
-                        competition.athletes.some((athlete) => athlete.id === id)
-                    )
-                    .map((competition) => competition.id);
-
-                if (competitionIds.length > 0) {
-                    for (const competitionId of competitionIds) {
-                        await submitEditAthlete(competitionId);
-                    }
-                } else {
-                    console.error('No competitions found with the selected event.');
-                }
+                await submitEditAthlete();
             } catch (error) {
                 console.error('An error occurred while making the request.');
             }
@@ -128,54 +117,44 @@ const EditAthlete = ({open, onClose, id}) => {
     };
 
     useEffect(() => {
-        const fetchAthleteData = async () => {
-
+        const fetchAthletesData = async () => {
             try {
-
-                const competitionIds = competitions
-                    .filter(competition => competition.athletes.some(athlete => athlete.id === id))
-                    .map(competition => competition.id);
-
-                competitionIds.forEach(competitionId => {
-                    axios.get(getEndpointAthleteById("athleteBy", competitionId, id), {
-                        headers: {
-                            'Authorization': `Token ${usuarioSalvo.token}`
-                        }
-                    }).then(response => {
-                        const athleteData = response.data;
-                        setFirstName(athleteData.first_name.charAt(0).toUpperCase() + athleteData.first_name.slice(1).toLowerCase());
-                        setLastName(athleteData.last_name.charAt(0).toUpperCase() + athleteData.last_name.slice(1).toLowerCase());
-                        setFedId(athleteData.fed_id.toUpperCase());
-                        setGender(athleteData.gender);
-                        setYearOfBirth(String(athleteData.year_of_birth));
-                        setCountry(String(athleteData.country.toLowerCase()));
-                        setSelectedCompetitionId(competitionId);
-                    }).catch(error => {
-                        console.error('An error occurred while fetching athlete data:', error);
-                    });
+                const response = await axios.get(getEndpointAthleteById("athleteBy", idComp, idAth), {
+                    headers: {
+                        Authorization: `Token ${usuarioSalvo.token}`,
+                    },
                 });
+                const athleteData = response.data;
+                setFirstName(athleteData.first_name.charAt(0).toUpperCase() + athleteData.first_name.slice(1).toLowerCase());
+                setLastName(athleteData.last_name.charAt(0).toUpperCase() + athleteData.last_name.slice(1).toLowerCase());
+                setFedId(athleteData.fed_id.toUpperCase());
+                setGender(athleteData.gender.charAt(0).toUpperCase().trim());
+                setYearOfBirth(String(athleteData.year_of_birth));
+                setCountry(String(athleteData.country.toLowerCase()));
+                setSelectedCompetitionId(idComp);
             } catch (error) {
-                console.error('An error occurred while fetching athlete data:', error);
+                console.error('An error occurred while fetching the athlete.');
             }
         };
 
-        const fetchCompetition = async () => {
+        const fetchCompetitions = async () => {
             try {
                 const response = await axios.get(endpoints.competitions, {
                     headers: {
                         'Authorization': `Token ${usuarioSalvo.token}`
                     },
                 });
-
                 setCompetitions(response.data.results);
             } catch (error) {
                 console.error('An error occurred while fetching competition:', error);
             }
         };
 
-        fetchCompetition();
-        fetchAthleteData();
-    }, [id, usuarioSalvo.token]);
+        if (open) {
+            fetchAthletesData();
+            fetchCompetitions();
+        }
+    }, [open, idAth, idComp, usuarioSalvo.token]);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>

@@ -10,12 +10,12 @@ import {getAllGenderFlags} from "../../dashboard/utils/Utils";
 import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
 import {
-    endpoints,
+    endpoints, getEndpointAthleteById,
     getEndpointOfficialById, putEndpointAthleteById, putEndpointOfficialById
 } from "../../../../api/Urls";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
-const EditOfficial = ({open, onClose, id}) => {
+const EditOfficial = ({open, onClose, idOffic, idComp}) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
     const [iwwfId, setIwwfId] = useState('');
@@ -26,7 +26,7 @@ const EditOfficial = ({open, onClose, id}) => {
     const [country, setCountry] = useState('');
     const [region, setRegion] = useState('');
     const [competitions, setCompetitions] = useState([]);
-    const [selectedCompetitionId, setSelectedCompetitionId] = useState('');
+    const [selectedCompetitionId, setSelectedCompetitionId] = useState("");
     const [errorMessage, setErrorMessage] = useState('');
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
@@ -69,7 +69,7 @@ const EditOfficial = ({open, onClose, id}) => {
     const handleCompetitionChange = (event) => {
         setSelectedCompetitionId(event.target.value);
     };
-    const submitEditAthlete = async (competitionId) => {
+    const submitEditOfficial = async () => {
 
         const data = {
             iwwfid: iwwfId.toUpperCase().trim(),
@@ -82,7 +82,7 @@ const EditOfficial = ({open, onClose, id}) => {
         };
 
         try {
-            const response = await axios.put(putEndpointOfficialById("officialBy", competitionId, id), data, {
+            const response = await axios.put(putEndpointOfficialById("officialBy", selectedCompetitionId, idOffic), data, {
                 headers: {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
@@ -110,18 +110,7 @@ const EditOfficial = ({open, onClose, id}) => {
             }, 3000);
         } else {
             try {
-                const competitionIds = competitions
-                    .filter((competition) =>
-                        competition.officials.some((official) => official.id === id)
-                    ).map((competition) => competition.id);
-
-                if (competitionIds.length > 0) {
-                    for (const competitionId of competitionIds) {
-                        await submitEditAthlete(competitionId);
-                    }
-                } else {
-                    console.error('No competitions found with the selected event.');
-                }
+                await submitEditOfficial();
             } catch (error) {
                 console.error('An error occurred while making the request.');
             }
@@ -132,33 +121,24 @@ const EditOfficial = ({open, onClose, id}) => {
         const fetchOfficialsData = async () => {
 
             try {
-                const competitionIds = competitions
-                    .filter(competition => competition.officials.some(official => official.id === id))
-                    .map(competition => competition.id);
-
-                competitionIds.forEach(competitionId => {
-                    axios.get(getEndpointOfficialById("officialBy", competitionId, id), {
-                        headers: {
-                            'Authorization': `Token ${usuarioSalvo.token}`
-                        }
-                    }).then(response => {
-                        const officialData = response.data;
-                        setIwwfId(officialData.iwwfid.toUpperCase());
-                        setPosition(officialData.position);
-                        setFirstName(officialData.first_name.charAt(0).toUpperCase() + officialData.first_name.slice(1).toLowerCase().trim());
-                        setLastName(officialData.last_name.charAt(0).toUpperCase() + officialData.last_name.slice(1).toLowerCase().trim());
-                        setQualification(String(officialData.qualification.toUpperCase()));
-                        setCountry(String(officialData.country.toLowerCase()));
-                        setRegion(officialData.region);
-                        setSelectedCompetitionId(competitionId);
-                    }).catch(error => {
-                        console.error('An error occurred while fetching athlete data:', error);
-                    });
+                const response = await axios.get(getEndpointOfficialById("officialBy", idComp, idOffic), {
+                    headers: {
+                        Authorization: `Token ${usuarioSalvo.token}`,
+                    },
                 });
+                const officialData = response.data;
+                setIwwfId(officialData.iwwfid.toUpperCase());
+                setPosition(officialData.position);
+                setFirstName(officialData.first_name.charAt(0).toUpperCase() + officialData.first_name.slice(1).toLowerCase().trim());
+                setLastName(officialData.last_name.charAt(0).toUpperCase() + officialData.last_name.slice(1).toLowerCase().trim());
+                setQualification(String(officialData.qualification.toUpperCase()));
+                setCountry(String(officialData.country.toLowerCase()));
+                setRegion(officialData.region);
+                setSelectedCompetitionId(idComp);
             } catch (error) {
                 console.error('An error occurred while fetching athlete data:', error);
             }
-        };
+        }
 
         const fetchCompetitions = async () => {
             try {
@@ -172,9 +152,11 @@ const EditOfficial = ({open, onClose, id}) => {
                 console.error('An error occurred while fetching competition:', error);
             }
         };
-        fetchCompetitions();
-        fetchOfficialsData();
-    }, [id, usuarioSalvo.token]);
+        if (open) {
+            fetchOfficialsData();
+            fetchCompetitions();
+        }
+    }, [open, idOffic, idComp, usuarioSalvo.token]);
 
     const isFormEmpty = () => {
         if (
@@ -198,14 +180,14 @@ const EditOfficial = ({open, onClose, id}) => {
             <DialogContent>
                 <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
                     <DialogContent>
-                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <ReportProblemIcon sx={{ color: 'red', fontSize: 48, marginBottom: '1%' }} />
+                        <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                            <ReportProblemIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
                             Error: Failed to edit official. Please try again.
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>
 
-                <Grid container spacing={2} sx={{ marginTop: '0.0rem' }}>
+                <Grid container spacing={2} sx={{marginTop: '0.0rem'}}>
                     <Grid item xs={12} sm={6}>
                         <TextField
                             label="First Name"
@@ -249,7 +231,7 @@ const EditOfficial = ({open, onClose, id}) => {
                             {countryCodeMatrix.map((code) => (
                                 <MenuItem key={code.toUpperCase()} value={code}>
                                     <img src={`https://flagcdn.com/16x12/${code}.png`} alt={code}
-                                         style={{ marginRight: '1rem' }} />
+                                         style={{marginRight: '1rem'}}/>
                                     {code.toUpperCase()}
                                 </MenuItem>
                             ))}
@@ -310,8 +292,8 @@ const EditOfficial = ({open, onClose, id}) => {
                 </Grid>
                 <Dialog open={successDialogOpen} onClose={() => setSuccessDialogOpen(false)}>
                     <DialogContent>
-                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <DoneIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }} />
+                        <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                            <DoneIcon sx={{color: 'green', fontSize: 48, marginBottom: '1%'}}/>
                             Official successfully edited!
                         </DialogContentText>
                     </DialogContent>
@@ -327,7 +309,7 @@ const EditOfficial = ({open, onClose, id}) => {
                     Cancel
                 </Button>
                 <Button onClick={handleEdit} color="primary">
-                    Create
+                    Edit
                 </Button>
             </DialogActions>
         </Dialog>
