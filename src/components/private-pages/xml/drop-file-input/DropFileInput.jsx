@@ -4,7 +4,16 @@ import './DropFileInput.css';
 import {ImageConfig} from "../config/ImageConfig";
 import uploadImg from '../../../../assets/cloud-upload-regular-240.png'
 
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+
 const DropFileInput = props => {
+
+
     const [fileList, setFileList] = useState([]);
     const wrapperRef = useRef(null);
     const onDragEnter = () => wrapperRef.current.classList.add('dragover');
@@ -26,6 +35,16 @@ const DropFileInput = props => {
         console.log(file);
     }
 
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     const handleFileSubmit = (file) => {
 
         const index = fileList.indexOf(file);
@@ -34,6 +53,7 @@ const DropFileInput = props => {
         let eventList = [];//Lista dos eventos --> só pode ter 1 competição por XML, apesar de ser só 1 tive que fazer num array
         let athletesList = []; //Lista dos atletas
         let competitionList = [];
+
         if (fileList[index]) {
             const reader = new FileReader();
             reader.onload = () => {
@@ -111,7 +131,7 @@ const DropFileInput = props => {
                             id: iwwfID,
                             category: position,
                             lastName: lastName,
-                            firstName:firstName,
+                            firstName: firstName,
                             qualification: qualification,
                             country: country,
                             region: region
@@ -191,12 +211,34 @@ const DropFileInput = props => {
                                         {/*<p>{item.size}</p>*/}
                                     </div>
                                     <button className="drop-file-preview_btn"
-                                            onClick={() => handleFileSubmit(item)}>Check
+                                            /*onClick={() => handleFileSubmit(item)}>Check*/
+                                            variant="contained" onClick = {handleOpen} >Check
+
+
+
+                                        <Dialog open={open} onClose={handleClose}>
+                                            <DialogTitle>Pop Teste</DialogTitle>
+                                            <DialogContent>
+                                                <DialogContentText>
+                                                    Bla Bla Bla
+                                                </DialogContentText>
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <Button onClick={handleClose}>Fechar</Button>
+                                            </DialogActions>
+                                        </Dialog>
+
+
+
+
                                     </button>
                                     <span className="drop-file-preview_item_del"
                                           onClick={() => fileRemove(item)}>x</span>
+
                                 </div>
+
                             ))
+
                         }
                     </div>
                 ) : null
