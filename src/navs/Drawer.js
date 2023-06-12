@@ -120,11 +120,6 @@ function MiniDrawer (){
             link: "/login/officers"
         },
         {
-            text: 'Athletes',
-            icon: <KitesurfingIcon/>,
-            link: "/login/athletes"
-        },
-        {
             text: 'Events',
             icon: <EventIcon/>,
             link: "/login/events"
@@ -194,7 +189,9 @@ function MiniDrawer (){
                             ...(open && {display: 'none'}),
                         }}
                     >
-                        <MenuIcon/>
+                        <Tooltip title="Menu">
+                            <MenuIcon/>
+                        </Tooltip>
                     </IconButton>
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>

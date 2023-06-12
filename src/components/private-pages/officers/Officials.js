@@ -58,17 +58,6 @@ const Officials = (props) => {
             console.error(error);
         });
     };
-
-    useEffect(() => {
-
-        fetchOfficials();
-
-        const timer = setTimeout(() => {
-            setShowSpinner(false);
-        }, 3000); // Tempo limite de 3 segundos
-
-        return () => clearTimeout(timer);
-    }, []);
     const reload = () => {
 
         fetchOfficials();
@@ -79,15 +68,23 @@ const Officials = (props) => {
 
         return () => clearTimeout(timer);
     }
+    useEffect(() => {
+
+        fetchOfficials();
+
+        const timer = setTimeout(() => {
+            setShowSpinner(false);
+        }, 3000); // Tempo limite de 3 segundos
+
+        return () => clearTimeout(timer);
+    }, []);
     const handleSearchTermChange = (event) => {
         setSearchTerm(event.target.value);
     };
     const handleCloseSuccessDialogDelete = () => {
         setSuccessDialogOpenDeleteDelete(false);
     };
-
     const handleOfficialDelete = async (idComp, idOffic) => {
-
         try {
             const response = await axios.delete(getEndpointDeleteOfficialById("officialBy", idComp, idOffic), {
                 headers: {
@@ -109,7 +106,6 @@ const Officials = (props) => {
             }, 3000);
         }
     };
-
     const handleClickOpenDelete = (compId, officId) => {
         setIdCompetition(compId);
         setIdOfficial(officId);
@@ -130,7 +126,6 @@ const Officials = (props) => {
         setOpenDialog(false);
     };
     const handleOpenEditDialog = (competitionId, officId) => {
-        //reload();
         setIdCompetition(competitionId);
         setIdOfficial(officId);
         setOpenEditDialog(true);

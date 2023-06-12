@@ -207,6 +207,7 @@
 #error2 {
     color: red;
     font-size: 13px;
+    margin-top: 1vh;
 }
 
 #load {

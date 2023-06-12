@@ -22,20 +22,26 @@ import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from
 import ShareLocationOutlinedIcon from '@mui/icons-material/ShareLocationOutlined';
 import AutoAwesomeMotionOutlinedIcon from '@mui/icons-material/AutoAwesomeMotionOutlined';
 import moment from 'moment';
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
-import {Spinner} from "react-bootstrap";
+import {Button} from '@mui/material';
+import Athletes from "../../athetes/Athletes";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MenuIcon from "@mui/icons-material/Menu";
+import IconButton from "@mui/material/IconButton";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import ListItemIcon from "@mui/material/ListItemIcon";
 import Tooltip from "@mui/material/Tooltip";
 
 function DetailCompetitions() {
     const [data, setData] = useState(null);
     const {id} = useParams();
     const [showSpinner, setShowSpinner] = useState(true);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
     useEffect(() => {
-        //competitionsByIdApi();
         axios.get(getEndpointCompetitionById("competitionsBy", id), {
             headers: {
                 'Authorization': `Token ${usuarioSalvo.token}`
@@ -53,6 +59,30 @@ function DetailCompetitions() {
         return () => clearTimeout(timer);
     }, []);
 
+    const [activeButton, setActiveButton] = useState(1); // Definindo o Item 1 como ativo inicialmente
+
+    const handleButtonHover = (index) => {
+        setActiveButton(index);
+    };
+    const renderContent = () => {
+        switch (activeButton) {
+            case 1:
+                return <div>Conteúdo do botão 1</div>;
+            case 2:
+                return <Athletes idComp={id}/>;
+            case 3:
+                return <div>Conteúdo do botão 3</div>;
+            default:
+                return null;
+        }
+    };
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <div className="sdd">
             <Box sx={{display: "flex"}}>
@@ -60,48 +90,108 @@ function DetailCompetitions() {
                 <Container id="marginDrawerHeader">
                     <DrawerHeader/>
                     <MDBContainer className="p-1 my-2">
-
                         <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{
                             fontSize: '20px'
-                        }}>Competition details</Typography>
+                        }}>
+
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleClick}
+                                edge="start"
+                                sx={{
+                                    marginRight: 0.5,
+                                }}
+                            >
+                                <Tooltip title="Menu">
+                                    <MenuIcon/>
+                                </Tooltip>
+                            </IconButton>
+
+                            Competition details
+                        </Typography>
+
+                        <div>
+                            <Menu
+                                anchorEl={anchorEl}
+                                open={Boolean(anchorEl)}
+                                onClose={handleClose}
+                            >
+                                <MenuItem onClick={() => {
+                                    handleButtonHover(1); // Ativar o Item 1
+                                    handleClose();
+                                }}>Events</MenuItem>
+                                <MenuItem onClick={() => {
+                                    handleButtonHover(2); // Ativar o Item 2
+                                    handleClose();
+                                }}>Athletes</MenuItem>
+                                <MenuItem onClick={() => {
+                                    handleButtonHover(3); // Ativar o Item 3
+                                    handleClose();
+                                }}>Officials</MenuItem>
+                            </Menu>
+                        </div>
 
                         {data && (
-                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{
-                                fontSize: '16px'
-                            }}>{getCountryFlag(data.organizing_country)} {data.name.charAt(0).toUpperCase() + data.name.slice(1).toLowerCase()} </Typography>
+                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{fontSize: '16px'}}>
+                                <Tooltip title={data.organizing_country}>{getCountryFlag(data.organizing_country)}</Tooltip> {data.name.charAt(0).toUpperCase() + data.name.slice(1).toLowerCase()}
+                            </Typography>
                         )}
 
-                        {data && (
-                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{
-                                fontSize: '16px'
-                            }}><CalendarMonthOutlinedIcon/> {moment(data.beginning_date).format('DD/MM/YYYY')}
-                                <WatchLaterOutlinedIcon/> {moment(data.beginning_date).format('HH:mm')}
+                        <Typography id="margin3" variant="h6" fontWeight="bold" style={{ fontSize: '16px' }}>
+                            <Tooltip title="Start Date">
+                                <CalendarMonthIcon sx={{ marginRight: '0.2em' }}/>
+                            </Tooltip>
+                            {data && data.beginning_date && moment(data.beginning_date).format('DD/MM/YYYY')}
+                            <Tooltip title="Start Time">
+                                <WatchLaterOutlinedIcon sx={{ marginLeft: 1 }} />
+                            </Tooltip>
+                            {data && data.beginning_date && moment(data.beginning_date).format('HH:mm')}
+                        </Typography>
+
+                        {data && data.end_date && (
+                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{ fontSize: '16px' }}>
+                                <Tooltip title="End Date">
+                                    <CalendarMonthIcon sx={{ marginRight: '0.2em' }}/>
+                                </Tooltip>
+                                {moment(data.end_date).format('DD/MM/YYYY')}
+                                <Tooltip title="End Time">
+                                    <WatchLaterOutlinedIcon sx={{marginLeft: 1}}/>
+                                </Tooltip>
+                                {moment(data.end_date).format('HH:mm')}
                             </Typography>
                         )}
 
                         {data && (
-                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{
-                                fontSize: '16px'
-                            }}><CalendarMonthOutlinedIcon/> {moment(data.end_date).format('DD/MM/YYYY')}
-                                <WatchLaterOutlinedIcon/> {moment(data.end_date).format('HH:mm')}
+                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{ fontSize: '16px' }}>
+                                <Tooltip title="Discipline">
+                                    <AutoAwesomeMotionOutlinedIcon sx={{ marginRight: '0.3em' }} />
+                                </Tooltip>
+                                {data.discipline.charAt(0).toUpperCase() + data.discipline.slice(1).toLowerCase()}
                             </Typography>
                         )}
 
                         {data && (
-                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{
-                                fontSize: '16px'
-                            }}><AutoAwesomeMotionOutlinedIcon/> {data.discipline.charAt(0).toUpperCase() + data.discipline.slice(1).toLowerCase()}
+                            <Typography id="margin5" variant="h6" fontWeight="bold" style={{ fontSize: '16px' }}>
+                                <Tooltip title="Location">
+                                    <ShareLocationOutlinedIcon sx={{ marginRight: '0.3em'  }} />
+                                </Tooltip>
+                                {data.venue.charAt(0).toUpperCase() + data.venue.slice(1).toLowerCase()}
                             </Typography>
                         )}
 
-                        {data && (
-                            <Typography id="margin5" variant="h6" fontWeight="bold" style={{
-                                fontSize: '16px'
-                            }}><ShareLocationOutlinedIcon/> {data.venue.charAt(0).toUpperCase() + data.venue.slice(1).toLowerCase()}
-                            </Typography>
-                        )}
+                        {renderContent()} {/* Renderizar o conteúdo com base no item ativo */}
+                    </MDBContainer>
+                </Container>
+            </Box>
+        </div>
+    );
+}
 
-                        {data && (
+export default DetailCompetitions;
+
+
+{/*{data && (
                             <Grid container spacing={4}>
                                 <Grid item xs={12} md={6}>
 
@@ -154,7 +244,7 @@ function DetailCompetitions() {
                                 </Grid>
 
 
-                                {/* Tabela 2 */}
+                                 Tabela 2
                                 <Grid item xs={12} md={6}>
                                     <Typography variant="h6" id="margin4" fontWeight="bold" style={{
                                         fontSize: '16px'
@@ -216,7 +306,7 @@ function DetailCompetitions() {
                                     )}
                                 </Grid>
 
-                                {/* Tabela 3 */}
+                                 Tabela 3
                                 <Grid item xs={12} md={12}>
                                     <Typography variant="h6" id="margin4" fontWeight="bold" style={{
                                         fontSize: '16px'
@@ -269,12 +359,5 @@ function DetailCompetitions() {
                                     )}
                                 </Grid>
                             </Grid>
-                        )}
-                    </MDBContainer>
-                </Container>
-            </Box>
-        </div>
-    );
+                        )}*/
 }
-
-export default DetailCompetitions;
