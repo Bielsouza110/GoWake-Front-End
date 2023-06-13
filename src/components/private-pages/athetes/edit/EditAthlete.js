@@ -53,7 +53,6 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
     const handleCompetitionChange = (event) => {
         setSelectedCompetitionId(event.target.value);
     };
-
     const submitEditAthlete = async () => {
 
         const data = {
@@ -100,7 +99,6 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
             }
         }
     };
-
     const isFormEmpty = () => {
         if (
             firstName.trim() === '' ||

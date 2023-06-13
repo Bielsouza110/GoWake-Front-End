@@ -53,3 +53,11 @@ export const getEndpointDeleteEventById = (endpoint, idCompetition, idEvent) => 
 export const getEndpointCreateEvent = (endpoint, idCompetition) => {
     return `${endpoints[endpoint]}/${idCompetition}/events/`;
 };
+
+export const getEndpointEventById = (endpoint, idCompetition, idEvent) => {
+    return `${endpoints[endpoint]}/${idCompetition}/event/${idEvent}/`;
+};
+
+export const putEndpointEventById = (endpoint, idCompetition, idEvent) => {
+    return `${endpoints[endpoint]}/${idCompetition}/event/${idEvent}/`;
+};

@@ -30,7 +30,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DoneIcon from "@mui/icons-material/Done";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import CreateEvent from "../events/create/CreateEvent";
-import EditAthlete from "../athetes/edit/EditAthlete";
+import EditEvent from "../../private-pages/events/edit/EditEvent";
 import AddIcon from "@mui/icons-material/Add";
 import {Spinner} from "react-bootstrap";
 import WarningIcon from "@mui/icons-material/Warning";
@@ -75,7 +75,6 @@ const Events = ({idComp}) => {
     useEffect(() => {
         reload();
     }, []);
-
     const handleCloseSuccessDialogDelete = () => {
         setSuccessDialogOpenDeleteDelete(false);
     };
@@ -174,10 +173,10 @@ const Events = ({idComp}) => {
                 idComp={idComp}
             />
 
-            <EditAthlete
+            <EditEvent
                 open={openEditDialog}
                 onClose={handleCloseEditDialog}
-                idAth={idEvent}
+                idEvent={idEvent}
                 idComp={idComp}
             />
 
@@ -278,6 +277,7 @@ const Events = ({idComp}) => {
                     </Grid>
                 </Grid>
             )}
+
         </MDBContainer>
     );
 };

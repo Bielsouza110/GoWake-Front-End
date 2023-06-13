@@ -4,89 +4,69 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import {countryCodeMatrix, getYearOptions} from "../ultils/Utils";
 import {Button, Grid, MenuItem, TextField} from "@mui/material";
-import {getAllGenderFlags} from "../../dashboard/utils/Utils";
 import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
 import {
     endpoints,
-    getEndpointAthleteById,
-    getEndpointCreateAthlete,
-    getEndpointDeleteAthleteById, getEndpointOfficialById, putEndpointAthleteById
+    putEndpointEventById, getEndpointEventById
 } from "../../../../api/Urls";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
-const EditAthlete = ({open, onClose, idAth, idComp}) => {
+const EditEvent = ({open, onClose, idEvent, idComp}) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [fedId, setFedId] = useState('');
-    const [gender, setGender] = useState('');
-    const [yearOfBirth, setYearOfBirth] = useState('');
-    const [competitions, setCompetitions] = useState([]);
-    const [country, setCountry] = useState('');
-    const [selectedCompetitionId, setSelectedCompetitionId] = useState(''); // Estado para armazenar os eventos selecionados
+    const [code, setCode] = useState('');
+    const [name, setName] = useState('');
+    const [eventClass, setEventClass] = useState('');
+    const [round, setRound] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
-    countryCodeMatrix.sort();
-    const handleFirstNameChange = (event) => {
-        setFirstName(event.target.value);
-    };
-    const handleLastNameChange = (event) => {
-        setLastName(event.target.value);
-    };
-    const handleFedIdChange = (event) => {
-        setFedId(event.target.value);
-    };
-    const handleGenderChange = (event) => {
-        setGender(event.target.value);
-    };
-    const handleYearOfBirthChange = (event) => {
-        setYearOfBirth(String(event.target.value));
-    };
-    const handleCountryChange = (event) => {
-        setCountry(event.target.value);
-    };
-    const handleCompetitionChange = (event) => {
-        setSelectedCompetitionId(event.target.value);
-    };
 
-    const submitEditAthlete = async () => {
+    const handleCodeChange = (event) => {
+        setCode(event.target.value);
+    };
+    const handleNameChange = (event) => {
+        setName(event.target.value);
+    };
+    const handleEventClassChange = (event) => {
+        setEventClass(event.target.value);
+    };
+    const handleRoundChange = (event) => {
+        setRound(event.target.value);
+    };
+    const submitEditEvent = async () => {
 
         const data = {
-            events: [],
-            fed_id: fedId.toUpperCase().trim(),
-            first_name: firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase().trim(),
-            last_name: lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase().trim(),
-            country: country.toUpperCase().trim(),
-            gender: gender.charAt(0).toUpperCase().trim(),
-            year_of_birth: parseInt(yearOfBirth.trim()),
+            code: code,
+            rounds: round,
+            event_class: eventClass,
+            name: name.charAt(0).toUpperCase() + name.slice(1).toLowerCase().trim(),
         };
 
         try {
-            const response = await axios.put(putEndpointAthleteById("athleteBy", selectedCompetitionId, idAth), data, {
+            const response = await axios.put(putEndpointEventById("eventBy", idComp, idEvent), data, {
                 headers: {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
             });
+
             setSuccessDialogOpen(true);
             setTimeout(() => {
                 setSuccessDialogOpen(false);
                 onClose();
             }, 3000);
         } catch (error) {
-            //console.error(error.request.response);
+            console.error(error.request.response);
             setErrorDialogOpen(true);
             setTimeout(() => {
                 setErrorDialogOpen(false);
             }, 3000);
         }
     };
+
     const handleEdit = async () => {
-        //console.log(idCompetition, idAthlete);
         if (isFormEmpty()) {
             setErrorMessage('All fields above are required!');
             setTimeout(() => {
@@ -94,23 +74,18 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
             }, 3000);
         } else {
             try {
-                await submitEditAthlete();
+                await submitEditEvent();
             } catch (error) {
                 console.error('An error occurred while making the request.');
             }
         }
     };
-
+    const fieldsAndClose = () => {
+        setSuccessDialogOpen(false);
+        setErrorDialogOpen(false);
+    };
     const isFormEmpty = () => {
-        if (
-            firstName.trim() === '' ||
-            lastName.trim() === '' ||
-            fedId.trim() === '' ||
-            gender.trim() === '' ||
-            yearOfBirth.trim() === '' ||
-            country.trim() === '' ||
-            selectedCompetitionId === ''
-        ) {
+        if (name.trim() === '' || eventClass.trim() === '' || round === '' || code === '') {
             return true; // Form is empty
         }
         return false; // Form is not empty
@@ -119,107 +94,62 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
     useEffect(() => {
         const fetchAthletesData = async () => {
             try {
-                const response = await axios.get(getEndpointAthleteById("athleteBy", idComp, idAth), {
+                const response = await axios.get(getEndpointEventById("eventBy", idComp, idEvent), {
                     headers: {
                         Authorization: `Token ${usuarioSalvo.token}`,
                     },
                 });
-                const athleteData = response.data;
-                setFirstName(athleteData.first_name.charAt(0).toUpperCase() + athleteData.first_name.slice(1).toLowerCase());
-                setLastName(athleteData.last_name.charAt(0).toUpperCase() + athleteData.last_name.slice(1).toLowerCase());
-                setFedId(athleteData.fed_id.toUpperCase());
-                setGender(athleteData.gender.charAt(0).toUpperCase().trim());
-                setYearOfBirth(String(athleteData.year_of_birth));
-                setCountry(String(athleteData.country.toLowerCase()));
-                setSelectedCompetitionId(idComp);
+
+                const eventData = response.data;
+                setCode(eventData.code);
+                setName(eventData.name.charAt(0).toUpperCase() + eventData.name.slice(1).toLowerCase());
+                setEventClass(eventData.event_class);
+                setRound(eventData.rounds);
+
             } catch (error) {
-                console.error('An error occurred while fetching the athlete.');
+                console.error('An error occurred while fetching the Event.');
             }
         };
 
-        const fetchCompetitions = async () => {
-            try {
-                const response = await axios.get(endpoints.competitions, {
-                    headers: {
-                        'Authorization': `Token ${usuarioSalvo.token}`
-                    },
-                });
-                setCompetitions(response.data.results);
-            } catch (error) {
-                console.error('An error occurred while fetching competition:', error);
-            }
-        };
 
         if (open) {
             fetchAthletesData();
-            fetchCompetitions();
+          //  fetchCompetitions();
         }
-    }, [open, idAth, idComp, usuarioSalvo.token]);
+    }, [open, idEvent, idComp, usuarioSalvo.token]);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
-            <DialogTitle>Edit Athlete</DialogTitle>
+            <DialogTitle>Edit Event</DialogTitle>
             <DialogContent>
-
                 <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
                     <DialogContent>
-                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <ReportProblemIcon sx={{ color: 'red', fontSize: 48, marginBottom: '1%' }} />
-                            Error: Failed to edit athlete. Please try again.
+                        <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                            <ReportProblemIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
+                            Error: Failed to edit event. Please try again.
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>
-
                 <Grid container spacing={2} sx={{marginTop: '0.0rem'}}>
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            label="First Name"
-                            value={firstName}
-                            onChange={handleFirstNameChange}
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            label="Last Name"
-                            value={lastName}
-                            onChange={handleLastNameChange}
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            label="Fed ID"
-                            value={fedId}
-                            onChange={handleFedIdChange}
+                            label="Event name"
+                            value={name}
+                            onChange={handleNameChange}
                             fullWidth
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
                             select
-                            label="Gender"
-                            value={gender}
-                            onChange={handleGenderChange}
+                            label="Code"
+                            value={code}
+                            onChange={handleCodeChange}
                             fullWidth
                         >
-                            <MenuItem value="M">{getAllGenderFlags("M", "Masculine")}</MenuItem>
-                            <MenuItem value="F">{getAllGenderFlags("F", "Feminine")}</MenuItem>
-                        </TextField>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            select
-                            label="Country"
-                            value={country}
-                            onChange={handleCountryChange}
-                            fullWidth
-                        >
-                            {countryCodeMatrix.map((code) => (
-                                <MenuItem key={code.toUpperCase()} value={code}>
-                                    <img src={`https://flagcdn.com/16x12/${code}.png`} alt={code}
-                                         style={{marginRight: '1rem'}}/>
-                                    {code.toUpperCase()}
+                            {Array.from({length: 61}, (_, index) => (
+                                <MenuItem key={index} value={index + 100}>
+                                    {index + 100}
                                 </MenuItem>
                             ))}
                         </TextField>
@@ -227,46 +157,44 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
                     <Grid item xs={12} sm={6}>
                         <TextField
                             select
-                            label="Year of Birth"
-                            value={yearOfBirth}
-                            onChange={handleYearOfBirthChange}
+                            label="Event class"
+                            value={eventClass}
+                            onChange={handleEventClassChange}
                             fullWidth
                         >
-                            {getYearOptions().map((year) => (
-                                <MenuItem key={year} value={year}>
-                                    {year}
-                                </MenuItem>
-                            ))}
+                            <MenuItem value="5 Star">5 Star</MenuItem>
+                            <MenuItem value="4 Star">4 Star</MenuItem>
+                            <MenuItem value="3 Star">3 Star</MenuItem>
+                            <MenuItem value="2 Star">2 Star</MenuItem>
+                            <MenuItem value="1 Star">1 Star</MenuItem>
                         </TextField>
                     </Grid>
-                    <Grid item xs={12} sm={12}>
+                    <Grid item xs={12} sm={6}>
                         <TextField
                             select
-                            label="Competition"
-                            value={selectedCompetitionId}
-                            onChange={handleCompetitionChange}
+                            label="Rounds"
+                            value={round}
+                            onChange={handleRoundChange}
                             fullWidth
                         >
-                            {competitions.map((competition) => (
-                                <MenuItem key={competition.id} value={competition.id}>
-                                    {competition.name.charAt(0).toUpperCase() + competition.name.slice(1).toLowerCase()}
+                            {Array.from({length: 100}, (_, index) => (
+                                <MenuItem key={index} value={index + 1}>
+                                    {index + 1}
                                 </MenuItem>
                             ))}
                         </TextField>
                     </Grid>
                     <Grid item xs={12} sm={12}>
                         <div align="right">
-                            {errorMessage && (
-                                <p id="error">{errorMessage}</p>
-                            )}
+                            {errorMessage && (<p id="error">{errorMessage}</p>)}
                         </div>
                     </Grid>
                 </Grid>
-                <Dialog open={successDialogOpen} onClose={() => setSuccessDialogOpen(false)}>
+                <Dialog open={successDialogOpen} onClose={fieldsAndClose}>
                     <DialogContent>
                         <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                             <DoneIcon sx={{color: 'green', fontSize: 48, marginBottom: '1%'}}/>
-                            Athlete successfully edited!
+                            Event edited Successfully!
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>
@@ -274,6 +202,7 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
             <DialogActions>
                 <Button
                     onClick={() => {
+                        fieldsAndClose();
                         onClose();
                     }}
                     color="primary"
@@ -288,4 +217,4 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
     );
 };
 
-export default EditAthlete;
+export default EditEvent;
