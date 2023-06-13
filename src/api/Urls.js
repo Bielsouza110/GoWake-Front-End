@@ -7,6 +7,7 @@ export const endpoints = {
   /*  athlete: `${API_ROOT}/api/competition/`,*/
     athleteBy: `${API_ROOT}/api/competition`,
     officialBy: `${API_ROOT}/api/competition`,
+    eventBy: `${API_ROOT}/api/competition`,
 };
 
 export const getEndpointCompetitionById = (endpoint, id) => {
@@ -43,4 +44,12 @@ export const getEndpointOfficialById = (endpoint, idCompetition, officialId) => 
 
 export const putEndpointOfficialById = (endpoint, idCompetition, officialId) => {
     return `${endpoints[endpoint]}/${idCompetition}/official/${officialId}/`;
+};
+
+export const getEndpointDeleteEventById = (endpoint, idCompetition, idEvent) => {
+    return `${endpoints[endpoint]}/${idCompetition}/event/${idEvent}/`;
+};
+
+export const getEndpointCreateEvent = (endpoint, idCompetition) => {
+    return `${endpoints[endpoint]}/${idCompetition}/events/`;
 };

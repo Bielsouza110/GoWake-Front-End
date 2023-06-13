@@ -120,11 +120,6 @@ function MiniDrawer (){
             link: "/login/officers"
         },
         {
-            text: 'Events',
-            icon: <EventIcon/>,
-            link: "/login/events"
-        },
-        {
             text: 'Competitions',
             icon: <FestivalIcon/>,
             link: "/login/competitions"
@@ -278,7 +273,7 @@ function MiniDrawer (){
                             </Tooltip>
                             <ListItemText primary={item.text} />
                         </ListItem>
-                            {index === 5 && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>}
+                            {index === 3 && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>}
                         </div>
                     ))}
                 </List>

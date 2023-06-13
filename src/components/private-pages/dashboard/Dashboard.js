@@ -12,6 +12,7 @@ import DrawerHeader from "../../../navs/DrawerHeader";
 import {endpoints} from "../../../api/Urls";
 import {getCountryFlag, handleMouseEnter, handleMouseLeave} from "./utils/Utils";
 import Tooltip from "@mui/material/Tooltip";
+import WarningIcon from "@mui/icons-material/Warning";
 
 const Dashboard = () => {
 
@@ -72,7 +73,7 @@ const Dashboard = () => {
 
                         {data.length === 0 && showSpinner &&
                             (
-                                <div align="left">
+                                <div align="center">
                                     <Spinner id="load" animation="border" variant="secondary" size="3rem"/>
                                     <p id="load2">Loading...</p>
                                 </div>
@@ -80,7 +81,8 @@ const Dashboard = () => {
                         }
 
                         {data.length === 0 && !showSpinner && (
-                            <div align="left">
+                            <div align="center">
+                                <WarningIcon style={{ color: 'red' , marginTop: '3vh'  }} />
                                 <p id="error2">There are no competitions at the moment!</p>
                             </div>
                             )

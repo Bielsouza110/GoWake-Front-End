@@ -25,12 +25,12 @@ import moment from 'moment';
 import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
 import {Button} from '@mui/material';
 import Athletes from "../../athetes/Athletes";
+import Events from "../../events/Events";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import ListItemIcon from "@mui/material/ListItemIcon";
 import Tooltip from "@mui/material/Tooltip";
 
 function DetailCompetitions() {
@@ -42,6 +42,7 @@ function DetailCompetitions() {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
     useEffect(() => {
+
         axios.get(getEndpointCompetitionById("competitionsBy", id), {
             headers: {
                 'Authorization': `Token ${usuarioSalvo.token}`
@@ -67,7 +68,7 @@ function DetailCompetitions() {
     const renderContent = () => {
         switch (activeButton) {
             case 1:
-                return <div>Conteúdo do botão 1</div>;
+                return <Events idComp={id}/>;
             case 2:
                 return <Athletes idComp={id}/>;
             case 3:
@@ -134,25 +135,28 @@ function DetailCompetitions() {
 
                         {data && (
                             <Typography id="margin3" variant="h6" fontWeight="bold" style={{fontSize: '16px'}}>
-                                <Tooltip title={data.organizing_country}>{getCountryFlag(data.organizing_country)}</Tooltip> {data.name.charAt(0).toUpperCase() + data.name.slice(1).toLowerCase()}
+                                <Tooltip
+                                    title={data.organizing_country}>{getCountryFlag(data.organizing_country)}</Tooltip> {data.name.charAt(0).toUpperCase() + data.name.slice(1).toLowerCase()}
                             </Typography>
                         )}
 
-                        <Typography id="margin3" variant="h6" fontWeight="bold" style={{ fontSize: '16px' }}>
-                            <Tooltip title="Start Date">
-                                <CalendarMonthIcon sx={{ marginRight: '0.2em' }}/>
-                            </Tooltip>
-                            {data && data.beginning_date && moment(data.beginning_date).format('DD/MM/YYYY')}
-                            <Tooltip title="Start Time">
-                                <WatchLaterOutlinedIcon sx={{ marginLeft: 1 }} />
-                            </Tooltip>
-                            {data && data.beginning_date && moment(data.beginning_date).format('HH:mm')}
-                        </Typography>
+                        {data && (
+                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{fontSize: '16px'}}>
+                                <Tooltip title="Start Date">
+                                    <CalendarMonthIcon sx={{marginRight: '0.2em'}}/>
+                                </Tooltip>
+                                {data && data.beginning_date && moment(data.beginning_date).format('DD/MM/YYYY')}
+                                <Tooltip title="Start Time">
+                                    <WatchLaterOutlinedIcon sx={{marginLeft: 1}}/>
+                                </Tooltip>
+                                {data && data.beginning_date && moment(data.beginning_date).format('HH:mm')}
+                            </Typography>
+                        )}
 
                         {data && data.end_date && (
-                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{ fontSize: '16px' }}>
+                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{fontSize: '16px'}}>
                                 <Tooltip title="End Date">
-                                    <CalendarMonthIcon sx={{ marginRight: '0.2em' }}/>
+                                    <CalendarMonthIcon sx={{marginRight: '0.2em'}}/>
                                 </Tooltip>
                                 {moment(data.end_date).format('DD/MM/YYYY')}
                                 <Tooltip title="End Time">
@@ -163,18 +167,18 @@ function DetailCompetitions() {
                         )}
 
                         {data && (
-                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{ fontSize: '16px' }}>
+                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{fontSize: '16px'}}>
                                 <Tooltip title="Discipline">
-                                    <AutoAwesomeMotionOutlinedIcon sx={{ marginRight: '0.3em' }} />
+                                    <AutoAwesomeMotionOutlinedIcon sx={{marginRight: '0.3em'}}/>
                                 </Tooltip>
                                 {data.discipline.charAt(0).toUpperCase() + data.discipline.slice(1).toLowerCase()}
                             </Typography>
                         )}
 
                         {data && (
-                            <Typography id="margin5" variant="h6" fontWeight="bold" style={{ fontSize: '16px' }}>
+                            <Typography id="margin5" variant="h6" fontWeight="bold" style={{fontSize: '16px'}}>
                                 <Tooltip title="Location">
-                                    <ShareLocationOutlinedIcon sx={{ marginRight: '0.3em'  }} />
+                                    <ShareLocationOutlinedIcon sx={{marginRight: '0.3em'}}/>
                                 </Tooltip>
                                 {data.venue.charAt(0).toUpperCase() + data.venue.slice(1).toLowerCase()}
                             </Typography>

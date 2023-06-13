@@ -40,8 +40,6 @@ const Athletes = ({idComp}) => {
     const [open, setOpen] = useState(false);
     const [idAthlete, setIdAthlete] = useState('');
     const [showSpinner, setShowSpinner] = useState(true);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [dataCompetition, setDataCompetition] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [successDialogOpenDelete, setSuccessDialogOpenDeleteDelete] = useState(false);
@@ -124,9 +122,6 @@ const Athletes = ({idComp}) => {
     };
 
     const isMobile = useMediaQuery('(max-width: 600px)');
-    const handleSearchTermChange = (e) => {
-        setSearchTerm(e.target.value);
-    };
 
     return (
 
@@ -139,9 +134,9 @@ const Athletes = ({idComp}) => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancelar</Button>
+                    <Button onClick={handleClose}>Delete</Button>
                     <Button onClick={() => handleDelete(idComp, idAthlete)} color="error">
-                        Excluir
+                        Delete
                     </Button>
                 </DialogActions>
             </Dialog>
