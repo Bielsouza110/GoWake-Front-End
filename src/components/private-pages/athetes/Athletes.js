@@ -82,9 +82,7 @@ const Athletes = ({idComp}) => {
 
             reload();
             setSuccessDialogOpenDeleteDelete(true);
-            setTimeout(() => {
-                setSuccessDialogOpenDeleteDelete(false);
-            }, 3000);
+            setTimeout(() => {setSuccessDialogOpenDeleteDelete(false);}, 3000);
 
         } catch (error) {
             console.error('An error occurred while fetching the athlete.');
@@ -124,7 +122,6 @@ const Athletes = ({idComp}) => {
     const isMobile = useMediaQuery('(max-width: 600px)');
 
     return (
-
         <MDBContainer className="p-1 my-2">
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Confirmation</DialogTitle>

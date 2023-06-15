@@ -26,6 +26,7 @@ import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
 import {Button} from '@mui/material';
 import Athletes from "../../athetes/Athletes";
 import Events from "../../events/Events";
+import Officials from "../../officers/Officials";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from "@mui/icons-material/Menu";
@@ -72,7 +73,7 @@ function DetailCompetitions() {
             case 2:
                 return <Athletes idComp={id}/>;
             case 3:
-                return <div>Conteúdo do botão 3</div>;
+                return <Officials idComp={id}/>;
             default:
                 return null;
         }
