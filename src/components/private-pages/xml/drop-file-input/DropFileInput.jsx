@@ -1,7 +1,7 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import './DropFileInput.css';
-import {ImageConfig} from "../config/ImageConfig";
+import { ImageConfig } from "../config/ImageConfig";
 import uploadImg from '../../../../assets/cloud-upload-regular-240.png'
 
 import Button from '@mui/material/Button';
@@ -11,41 +11,41 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 
-const DropFileInput = props => {
-
-
+const DropFileInput = (props) => {
     const [fileList, setFileList] = useState([]);
     const wrapperRef = useRef(null);
+    const [openDialogIndex, setOpenDialogIndex] = useState(null);
+
     const onDragEnter = () => wrapperRef.current.classList.add('dragover');
     const onDragLeave = () => wrapperRef.current.classList.remove('dragover');
     const onDrop = () => wrapperRef.current.classList.add('dragover');
+
     const onFileDrop = (e) => {
         const newFile = e.target.files[0];
         if (newFile) {
             const updatedList = [...fileList, newFile];
-            setFileList((updatedList));
+            setFileList(updatedList);
             props.onFileChange(updatedList);
         }
-    }
-    const fileRemove = (file) => {
-        const updatedList = [...fileList];
-        updatedList.splice(fileList.indexOf(file), 1);//splice serve para add, remover ou alterar algo no array
-        setFileList(updatedList);
-        props.onFileChange(updatedList);
-        console.log(file);
-    }
-
-    const [open, setOpen] = useState(false);
-
-    const handleOpen = () => {
-        setOpen(true);
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const fileRemove = (file) => {
+        const updatedList = [...fileList];
+        updatedList.splice(fileList.indexOf(file), 1);
+        setFileList(updatedList);
+        props.onFileChange(updatedList);
+    };
+
+    const handleOpenDialog = (index) => {
+        setOpenDialogIndex(index);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialogIndex(null);
     };
 
     const handleFileSubmit = (file) => {
+
 
         const index = fileList.indexOf(file);
         let count = 0;
@@ -94,7 +94,7 @@ const DropFileInput = props => {
                         endDate: endDate,
                         age_groups: age_groups
                     })
-                    console.log(competitionList);
+                    // console.log(competitionList);
 
 
                     for (const event of events) {
@@ -137,7 +137,7 @@ const DropFileInput = props => {
                             region: region
                         });
                     }
-                    /*console.log(juriList);*/
+                    // console.log(juriList);
 
                     for (const athlete of athletes) {
                         const fed_id = athlete.querySelector("fed_id,FedId").textContent;
@@ -169,17 +169,35 @@ const DropFileInput = props => {
 
                     }
 
-                    //console.log(athletesList);
+                    console.log(athletesList);
                 });
 
             };
 
             reader.readAsDataURL(fileList[index]);
-
         }
+        {handleOpenDialog(1)}
 
     };
 
+    const renderDialog = () => {
+        if (openDialogIndex !== null) {
+            return (
+                <Dialog open={true} onClose={handleCloseDialog}>
+                    <DialogTitle>Pop Teste</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Bla Bla Bla
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseDialog}>Fechar</Button>
+                    </DialogActions>
+                </Dialog>
+            );
+        }
+        return null;
+    };
 
     return (
         <>
@@ -191,64 +209,40 @@ const DropFileInput = props => {
                 onDrop={onDrop}
             >
                 <div className="drop-file-input_label">
-                    <img src={uploadImg} alt={""}/>
+                    <img src={uploadImg} alt="" />
                     <p>Drag & Drop your files here!</p>
                 </div>
-                <input type="file" value="" onChange={onFileDrop}/>
+                <input type="file" value="" onChange={onFileDrop} />
             </div>
-            {
-                fileList.length > 0 ? (
-                    <div className="drop-file-preview">
-                        <p className="drop-file-preview_title">
-                            Ready to upload
-                        </p>
-                        {
-                            fileList.map((item, index) => (
-                                <div key={index} className="drop-file-preview_item">
-                                    <img src={ImageConfig[item.type.split('/')[1] || ImageConfig['default']]} alt=""/>
-                                    <div className="drop-file-preview_item_info">
-                                        <p>{item.name}</p>
-                                        {/*<p>{item.size}</p>*/}
-                                    </div>
-                                    <button className="drop-file-preview_btn"
-                                            /*onClick={() => handleFileSubmit(item)}>Check*/
-                                            variant="contained" onClick = {handleOpen} >Check
-
-
-
-                                        <Dialog open={open} onClose={handleClose}>
-                                            <DialogTitle>Pop Teste</DialogTitle>
-                                            <DialogContent>
-                                                <DialogContentText>
-                                                    Bla Bla Bla
-                                                </DialogContentText>
-                                            </DialogContent>
-                                            <DialogActions>
-                                                <Button onClick={handleClose}>Fechar</Button>
-                                            </DialogActions>
-                                        </Dialog>
-
-
-
-
-                                    </button>
-                                    <span className="drop-file-preview_item_del"
-                                          onClick={() => fileRemove(item)}>x</span>
-
-                                </div>
-
-                            ))
-
-                        }
-                    </div>
-                ) : null
-            }
-
+            {fileList.length > 0 ? (
+                <div className="drop-file-preview">
+                    <p className="drop-file-preview_title">Ready to upload</p>
+                    {fileList.map((item, index) => (
+                        <div key={index} className="drop-file-preview_item">
+                            <img src={ImageConfig[item.type.split('/')[1] || ImageConfig['default']]} alt="" />
+                            <div className="drop-file-preview_item_info">
+                                <p>{item.name}</p>
+                            </div>
+                            {/*<button className="drop-file-preview_btn" variant="contained" onClick={() => handleOpenDialog(index)}>
+                                Check
+                            </button>*/}
+                            <button className="drop-file-preview_btn" variant="contained" onClick={() => handleFileSubmit(item)}>
+                                Check
+                            </button>
+                            <span className="drop-file-preview_item_del" onClick={() => fileRemove(item)}>
+                x
+              </span>
+                        </div>
+                    ))}
+                </div>
+            ) : null}
+            {renderDialog()}
         </>
-
     );
-}
+};
+
 DropFileInput.propTypes = {
-    onFileChange: PropTypes.func
-}
+    onFileChange: PropTypes.func.isRequired,
+};
+
 export default DropFileInput;
