@@ -129,20 +129,10 @@
     /*position: absolute;*/
 }
 
-.competition-preview .competition-attribute {
-    display: inline-block;
-    margin: 10px;
-    color: black;
-}
-
-.competition-preview .value {
-    color: darkblue;
-}
 
 .value {
     color: darkblue;
 }
-
 
 
 .competition-table {
@@ -164,23 +154,23 @@
 .competition-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
-.event{
-    border-radius: 3%;
+
+.event {
+    border-radius: 5%;
     color: black;
-    /*border: 1px solid black;*/
     border: 1px dashed var(--border-color);
-    /*background-color: var(--box-bg);*/
-    /*justify-content: center;*/
-    /*width: fit-content;*/
-    width: 200px;
+    width: fit-content;
     height: 180px;
-    /*display: flex;*/
-    margin-left: 500px;
     padding: 20px;
-
-
+    max-width: 400px;
     background-color: var(--input-bg);
 
 }
 
+.event-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+}
 

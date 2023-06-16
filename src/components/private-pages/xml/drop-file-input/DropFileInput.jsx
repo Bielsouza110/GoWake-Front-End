@@ -247,15 +247,13 @@ const DropFileInput = (props) => {
     const displayEvent=()=>{
         if (openDialogIndex !== null) {
             return (
-                <div className="event">
-                    <p>Event: <span
-                        className="value">{eventList[0].name}</span></p>
-                    <p>Code: <span
-                        className="value">{eventList[0].code}</span></p>
-                    <p>Class event: <span
-                        className="value">{eventList[0].classEvent}</span></p>
-                    <p>Rounds: <span
-                        className="value">{eventList[0].rounds}</span></p>
+                <div className="event-container">
+                    <div className="event">
+                        <p>Event: <span className="value">{eventList[0].name}</span></p>
+                        <p>Code: <span className="value">{eventList[0].code}</span></p>
+                        <p>Class event: <span className="value">{eventList[0].classEvent}</span></p>
+                        <p>Rounds: <span className="value">{eventList[0].rounds}</span></p>
+                    </div>
                 </div>
 
             )
