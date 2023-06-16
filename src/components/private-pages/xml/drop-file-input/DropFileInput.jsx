@@ -139,6 +139,7 @@ const DropFileInput = (props) => {
                         const lastName = official.querySelector("last_name,LastName").textContent;
                         const firstName = official.querySelector("first_name,FirstName").textContent;
                         const qualification = official.querySelector("qualification,Qualification");
+                        const qualificationValue = qualification ? qualification.textContent : '';
                         const country = official.querySelector("country,Country").textContent;
                         const region = official.querySelector("region,Region").textContent;
 
@@ -147,7 +148,7 @@ const DropFileInput = (props) => {
                             category: position,
                             lastName: lastName,
                             firstName: firstName,
-                            qualification: qualification,
+                            qualification: qualificationValue,
                             country: country,
                             region: region
                         });
@@ -244,6 +245,35 @@ const DropFileInput = (props) => {
         }
     }
 
+    const displayJuri = () => {
+        if (openDialogIndex !== null) {
+            return (
+                <div className="juri-container">
+                    <h5>Juri painel</h5>
+                    <div className="juri-blank-container">
+
+                        {juriList.map((item, index) => (
+                            <div className="juri-item" key={index}>
+                                <span>ID: <span className="value">{item.id}</span></span>
+                                <span>Position: <span className="value">{item.category}</span></span>
+                                <span>Last Name: <span className="value">{item.lastName}</span></span>
+                                <span>First Name: <span className="value">{item.firstName}</span></span>
+                                <span>Qualification: <span className="value">{item.qualification}</span></span>
+                                <span>Country: <span className="value">{item.country}</span></span>
+                                <span>Region: <span className="value">{item.region}</span></span>
+                            </div>
+                        ))}
+
+                    </div>
+
+                </div>
+            );
+        }
+
+        return null; // Retorna null se openDialogIndex for null
+    };
+
+
     const displayEvent=()=>{
         if (openDialogIndex !== null) {
             return (
@@ -280,6 +310,21 @@ const DropFileInput = (props) => {
 
                         </div>
                         {displayCompetition()}
+
+                        {displayJuri()}
+
+                        {/*juriList.map((item, index) => (
+                            <div className="juri-item" key={index}>
+                                <p>ID: <span className="value">{item.id}</span></p>
+                                <p>Position: <span className="value">{item.position}</span></p>
+                                <p>Last Name: <span className="value">{item.lastName}</span></p>
+                                <p>First Name: <span className="value">{item.firstName}</span></p>
+                                <p>Qualification: <span className="value">{item.qualification}</span></p>
+                                <p>Country: <span className="value">{item.country}</span></p>
+                                <p>Region: <span className="value">{item.region}</span></p>
+                            </div>
+                        ))*/}
+
                         <DialogContentText>
 
                         </DialogContentText>

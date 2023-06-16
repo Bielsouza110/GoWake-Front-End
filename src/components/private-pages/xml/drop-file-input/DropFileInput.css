@@ -174,3 +174,30 @@
     margin-bottom: 50px;
 }
 
+.juri-container{
+    margin-top: 50px;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+    /*border: 1px solid black;*/
+}
+.juri-item{
+    /*padding-bottom: 20px;*/
+    display: inline-grid;
+    border-radius: 5%;
+    color: black;
+    border: 1px dashed var(--border-color);
+    width: 250px;
+    height: 220px;
+    padding: 20px;
+    margin: 10px;
+    /*max-width: 400px;*/
+    background-color: var(--input-bg);
+}
+.juri-blank-container{
+    padding-left: 22px;
+    border: 1px dashed black;
+    background-color: #f2f2f2;;
+}
+
