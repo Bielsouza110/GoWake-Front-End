@@ -10,7 +10,7 @@ import DropFileInput from "./drop-file-input/DropFileInput";
 
 const UploadXML = () => {
     const onFileChange = (files) => {
-        console.log(files);
+        //console.log(files);
     }
     return (
         <div className="sdd">

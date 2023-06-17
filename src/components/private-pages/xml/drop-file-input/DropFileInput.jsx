@@ -1,17 +1,34 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import './DropFileInput.css';
-import { ImageConfig } from "../config/ImageConfig";
+import {ImageConfig} from "../config/ImageConfig";
 import uploadImg from '../../../../assets/cloud-upload-regular-240.png'
-
+import { Card, CardContent, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
+import {IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../../dashboard/utils/Utils";
+import Tooltip from "@mui/material/Tooltip";
+import {Delete as DeleteIcon, Edit as EditIcon} from "@mui/icons-material";
+
+
+let juriList = [];//Array global dos jurados
+let eventList = [];//Lista global dos eventos --> só pode ter 1 competição por XML, apesar de ser só 1 tive que fazer num array
+let athletesList = []; //Lista global dos atletas
+let competitionList = [];
 
 const DropFileInput = (props) => {
+    const clear = () => {
+        juriList = [];
+        eventList = [];
+        athletesList = [];
+        competitionList = [];
+    }
+
     const [fileList, setFileList] = useState([]);
     const wrapperRef = useRef(null);
     const [openDialogIndex, setOpenDialogIndex] = useState(null);
@@ -44,15 +61,17 @@ const DropFileInput = (props) => {
         setOpenDialogIndex(null);
     };
 
+
     const handleFileSubmit = (file) => {
+        clear();
 
 
         const index = fileList.indexOf(file);
         let count = 0;
-        let juriList = [];//Array dos jurados
-        let eventList = [];//Lista dos eventos --> só pode ter 1 competição por XML, apesar de ser só 1 tive que fazer num array
-        let athletesList = []; //Lista dos atletas
-        let competitionList = [];
+        // let juriList = [];//Array dos jurados
+        //let eventList = [];//Lista dos eventos --> só pode ter 1 competição por XML, apesar de ser só 1 tive que fazer num array
+        //let athletesList = []; //Lista dos atletas
+        //let competitionList = [];
 
         if (fileList[index]) {
             const reader = new FileReader();
@@ -94,8 +113,7 @@ const DropFileInput = (props) => {
                         endDate: endDate,
                         age_groups: age_groups
                     })
-                    // console.log(competitionList);
-
+                    //console.log(competitionList);
 
                     for (const event of events) {
 
@@ -104,6 +122,7 @@ const DropFileInput = (props) => {
                             const rounds = event.querySelector("rounds,Rounds").textContent;
                             const classEvent = event.querySelector("event_class,Event_Class").textContent;
                             const name = event.querySelector("name,Name").textContent;
+
                             eventList.push({
                                 code: code_Event,
                                 rounds: rounds,
@@ -124,20 +143,22 @@ const DropFileInput = (props) => {
                         const lastName = official.querySelector("last_name,LastName").textContent;
                         const firstName = official.querySelector("first_name,FirstName").textContent;
                         const qualification = official.querySelector("qualification,Qualification");
+                        const qualificationValue = qualification ? qualification.textContent : '';
                         const country = official.querySelector("country,Country").textContent;
                         const region = official.querySelector("region,Region").textContent;
-                        /*console.log(iwwfID, position, lastName,firstName,qualification,country,region);*/
+
                         juriList.push({
                             id: iwwfID,
                             category: position,
                             lastName: lastName,
                             firstName: firstName,
-                            qualification: qualification,
+                            qualification: qualificationValue,
                             country: country,
                             region: region
                         });
                     }
                     // console.log(juriList);
+
 
                     for (const athlete of athletes) {
                         const fed_id = athlete.querySelector("fed_id,FedId").textContent;
@@ -152,6 +173,7 @@ const DropFileInput = (props) => {
                         const participation = athlete.querySelector("participation,Participation").textContent;
                         const category = athlete.querySelector("real_category,RealCategory").textContent;
                         const competitionCategory = athlete.querySelector("category_in_competition,CategoryInCompetition").textContent;
+
                         athletesList.push({
                             id: fed_id,
                             lastName: lastName,
@@ -168,34 +190,248 @@ const DropFileInput = (props) => {
                         })
 
                     }
-
-                    console.log(athletesList);
+                    //console.log("primeiro")
+                    handleOpenDialog(1);
                 });
 
-            };
 
+            };
+            //console.log("segundo");
             reader.readAsDataURL(fileList[index]);
         }
-        {handleOpenDialog(1)}
+
+
+        athletesList.map((item, index) => {
+            console.log({item});
+        })
+
+        //console.log("terceiro");
 
     };
 
-    const renderDialog = () => {
+
+    const displayCompetition = () => {
         if (openDialogIndex !== null) {
             return (
-                <Dialog open={true} onClose={handleCloseDialog}>
-                    <DialogTitle>Pop Teste</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Bla Bla Bla
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseDialog}>Fechar</Button>
-                    </DialogActions>
-                </Dialog>
+                <div className="competition-container">
+                    <h6>Competition name: <span className="value">{competitionList[0].name}</span></h6>
+
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+
+                                    <TableCell className="competition-table" id="esconde">Code</TableCell>
+                                    <TableCell className="competition-table">Discipline</TableCell>
+                                    <TableCell className="competition-table" id="esconde">Country</TableCell>
+                                    <TableCell className="competition-table" id="esconde">Type</TableCell>
+                                    <TableCell className="competition-table">Venue</TableCell>
+                                    <TableCell className="competition-table">Site code</TableCell>
+                                    <TableCell className="competition-table">Group Age</TableCell>
+                                    <TableCell className="competition-table">Start date</TableCell>
+                                    <TableCell className="competition-table">End date</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                <TableRow>
+
+                                    <TableCell id="esconde">{competitionList[0].code}</TableCell>
+                                    <TableCell>{competitionList[0].discipline}</TableCell>
+                                    <TableCell id="esconde">{competitionList[0].orgCountry}</TableCell>
+                                    <TableCell id="esconde">{competitionList[0].tournament_type}</TableCell>
+                                    <TableCell>{competitionList[0].site_code}</TableCell>
+                                    <TableCell>{competitionList[0].venue}</TableCell>
+                                    <TableCell>{competitionList[0].age_groups}</TableCell>
+                                    <TableCell>{competitionList[0].startDate}</TableCell>
+                                    <TableCell>{competitionList[0].endDate}</TableCell>
+
+                                </TableRow>
+
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+
+                </div>
+            )
+        }
+    }
+
+
+    const displayJuri = () => {
+        if (openDialogIndex !== null) {
+            return (
+                <div className="juri-container">
+                    <h5>Juri painel</h5>
+                    <div className="juri-blank-container">
+                        {juriList.map((item, index) => (
+                            <Card className="juri-item" key={index}>
+                                <CardContent>
+                                    <Typography variant="body1" component="div">
+                                        <strong>ID:</strong> {item.id}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Position:</strong> {item.category}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Last Name:</strong> {item.lastName}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>First Name:</strong> {item.firstName}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Qualification:</strong> {item.qualification}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Country:</strong> {item.country}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Region:</strong> {item.region}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
             );
         }
+
+        return null; // Retorna null se openDialogIndex for null
+    };
+
+
+    /*const displayJuri = () => {
+        if (openDialogIndex !== null) {
+            return (
+                <div className="juri-container">
+                    <h5>Juri painel</h5>
+                    <div className="juri-blank-container">
+
+                        {juriList.map((item, index) => (
+                            <div className="juri-item" key={index}>
+                                <span>ID: <span className="value">{item.id}</span></span>
+                                <span>Position: <span className="value">{item.category}</span></span>
+                                <span>Last Name: <span className="value">{item.lastName}</span></span>
+                                <span>First Name: <span className="value">{item.firstName}</span></span>
+                                <span>Qualification: <span className="value">{item.qualification}</span></span>
+                                <span>Country: <span className="value">{item.country}</span></span>
+                                <span>Region: <span className="value">{item.region}</span></span>
+                            </div>
+                        ))}
+
+                    </div>
+
+                </div>
+            );
+        }
+
+        return null; // Retorna null se openDialogIndex for null
+    };*/
+
+
+    const displayEvent = () => {
+        if (openDialogIndex !== null) {
+            return (
+                <div className="event-container1">
+                    <h6>Event description </h6>
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+
+                                    <TableCell className="event-table">Event</TableCell>
+                                    <TableCell className="event-table">Code</TableCell>
+                                    <TableCell className="event-table">Class event</TableCell>
+                                    <TableCell className="event-table">Rounds</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                <TableRow>
+
+                                    <TableCell>{eventList[0].name}</TableCell>
+                                    <TableCell>{eventList[0].code}</TableCell>
+                                    <TableCell>{eventList[0].classEvent}</TableCell>
+                                    <TableCell>{eventList[0].rounds}</TableCell>
+
+                                </TableRow>
+
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+
+
+                    {/*<div className="event">
+                        <p>Event: <span className="value">{eventList[0].name}</span></p>
+                        <p>Code: <span className="value">{eventList[0].code}</span></p>
+                        <p>Class event: <span className="value">{eventList[0].classEvent}</span></p>
+                        <p>Rounds: <span className="value">{eventList[0].rounds}</span></p>
+                    </div>*/}
+                </div>
+
+            )
+        }
+    }
+
+
+    const renderDialog = () => {
+
+        if (openDialogIndex !== null) {
+            //console.log(athletesList[0].id);
+
+            return (
+                <Dialog open={true} onClose={handleCloseDialog} maxWidth="lg">
+                    {/*maxWidth="md" fullWidth = "800"*/}
+                    {/*sx={{width: '100%', maxWidth: '100%'}}*/}
+
+                    <DialogTitle>XML Preview</DialogTitle>
+                    <DialogContent>
+
+
+                        {displayCompetition()}
+                        {displayEvent()}
+
+                        {displayJuri()}
+
+                        {/*juriList.map((item, index) => (
+                            <div className="juri-item" key={index}>
+                                <p>ID: <span className="value">{item.id}</span></p>
+                                <p>Position: <span className="value">{item.position}</span></p>
+                                <p>Last Name: <span className="value">{item.lastName}</span></p>
+                                <p>First Name: <span className="value">{item.firstName}</span></p>
+                                <p>Qualification: <span className="value">{item.qualification}</span></p>
+                                <p>Country: <span className="value">{item.country}</span></p>
+                                <p>Region: <span className="value">{item.region}</span></p>
+                            </div>
+                        ))*/}
+
+                        <DialogContentText>
+
+                        </DialogContentText>
+
+                        <DialogContentText>
+
+
+                        </DialogContentText>
+
+                        {/*athletesList.map((item, index) => (
+                            <div key={index}>
+                                <p>{"Aqui " + item.id}</p>
+                            </div>
+                        ))*/}
+
+
+                    </DialogContent>
+
+                    <DialogActions>
+
+                        <Button onClick={handleCloseDialog}>Fechar</Button>
+                    </DialogActions>
+
+                </Dialog>
+
+            );
+
+        }
+
         return null;
     };
 
@@ -209,29 +445,28 @@ const DropFileInput = (props) => {
                 onDrop={onDrop}
             >
                 <div className="drop-file-input_label">
-                    <img src={uploadImg} alt="" />
+                    <img src={uploadImg} alt=""/>
                     <p>Drag & Drop your files here!</p>
                 </div>
-                <input type="file" value="" onChange={onFileDrop} />
+                <input type="file" value="" onChange={onFileDrop}/>
             </div>
             {fileList.length > 0 ? (
                 <div className="drop-file-preview">
                     <p className="drop-file-preview_title">Ready to upload</p>
                     {fileList.map((item, index) => (
                         <div key={index} className="drop-file-preview_item">
-                            <img src={ImageConfig[item.type.split('/')[1] || ImageConfig['default']]} alt="" />
+                            <img src={ImageConfig[item.type.split('/')[1] || ImageConfig['default']]} alt=""/>
                             <div className="drop-file-preview_item_info">
                                 <p>{item.name}</p>
                             </div>
                             {/*<button className="drop-file-preview_btn" variant="contained" onClick={() => handleOpenDialog(index)}>
                                 Check
                             </button>*/}
-                            <button className="drop-file-preview_btn" variant="contained" onClick={() => handleFileSubmit(item)}>
+                            <button className="drop-file-preview_btn" variant="contained"
+                                    onClick={() => handleFileSubmit(item)}>
                                 Check
                             </button>
-                            <span className="drop-file-preview_item_del" onClick={() => fileRemove(item)}>
-                x
-              </span>
+                            <span className="drop-file-preview_item_del" onClick={() => fileRemove(item)}> x </span>
                         </div>
                     ))}
                 </div>
