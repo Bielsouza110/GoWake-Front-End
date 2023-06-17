@@ -161,6 +161,7 @@ const Athletes = ({idComp}) => {
             <CreateAthlete
                 open={openDialog}
                 onClose={handleCloseDialog}
+                idComp={idComp}
             />
 
             <EditAthlete
@@ -224,6 +225,7 @@ const Athletes = ({idComp}) => {
                                             <TableCell>Name</TableCell>
                                             <TableCell id="esconde">Country</TableCell>
                                             <TableCell id="esconde">Gender</TableCell>
+                                            <TableCell id="esconde">Category in competition</TableCell>
                                             <TableCell>Actions</TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -255,6 +257,9 @@ const Athletes = ({idComp}) => {
                                                             {GetGenderFlags(athlete.gender)}
                                                         </Tooltip>
                                                     )}
+                                                </TableCell>
+                                                <TableCell id="esconde">
+                                                    {athlete.category_in_competition.toUpperCase()}
                                                 </TableCell>
                                                 <TableCell>
                                                     <Tooltip title="Edit" className="tooltip-gender">

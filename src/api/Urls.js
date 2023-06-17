@@ -1,4 +1,4 @@
-const API_ROOT = 'https://mmonteiro.pythonanywhere.com';
+const API_ROOT = 'https://gowake.daletech.pt';
 export const endpoints = {
     login: `${API_ROOT}/account/login/`,
     createAccount: `${API_ROOT}/account/register/`,

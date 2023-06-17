@@ -20,9 +20,10 @@ const EditEvent = ({open, onClose, idEvent, idComp}) => {
     const [name, setName] = useState('');
     const [eventClass, setEventClass] = useState('');
     const [round, setRound] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+    const [warningDialogOpen, setWarningDialogOpen] = useState(false);
 
     const handleCodeChange = (event) => {
         setCode(event.target.value);
@@ -65,12 +66,11 @@ const EditEvent = ({open, onClose, idEvent, idComp}) => {
             }, 3000);
         }
     };
-
     const handleEdit = async () => {
         if (isFormEmpty()) {
-            setErrorMessage('All fields above are required!');
+            setWarningDialogOpen(true);
             setTimeout(() => {
-                setErrorMessage('');
+                setWarningDialogOpen(false);
             }, 3000);
         } else {
             try {
@@ -111,10 +111,8 @@ const EditEvent = ({open, onClose, idEvent, idComp}) => {
             }
         };
 
-
         if (open) {
             fetchAthletesData();
-          //  fetchCompetitions();
         }
     }, [open, idEvent, idComp, usuarioSalvo.token]);
 
@@ -122,6 +120,16 @@ const EditEvent = ({open, onClose, idEvent, idComp}) => {
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
             <DialogTitle>Edit Event</DialogTitle>
             <DialogContent>
+
+                <Dialog open={warningDialogOpen} onClose={() => setWarningDialogOpen(false)}>
+                    <DialogContent>
+                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <ReportProblemIcon sx={{ color: 'orange', fontSize: 48, marginBottom: '1%' }} />
+                            All fields above are required!
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
+
                 <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
                     <DialogContent>
                         <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
@@ -130,6 +138,7 @@ const EditEvent = ({open, onClose, idEvent, idComp}) => {
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>
+
                 <Grid container spacing={2} sx={{marginTop: '0.0rem'}}>
                     <Grid item xs={12} sm={6}>
                         <TextField
@@ -184,11 +193,6 @@ const EditEvent = ({open, onClose, idEvent, idComp}) => {
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={12} sm={12}>
-                        <div align="right">
-                            {errorMessage && (<p id="error">{errorMessage}</p>)}
-                        </div>
-                    </Grid>
                 </Grid>
                 <Dialog open={successDialogOpen} onClose={fieldsAndClose}>
                     <DialogContent>
@@ -200,13 +204,7 @@ const EditEvent = ({open, onClose, idEvent, idComp}) => {
                 </Dialog>
             </DialogContent>
             <DialogActions>
-                <Button
-                    onClick={() => {
-                        fieldsAndClose();
-                        onClose();
-                    }}
-                    color="primary"
-                >
+                <Button onClick={() => {fieldsAndClose(); onClose();}} color="primary">
                     Cancel
                 </Button>
                 <Button onClick={handleEdit} color="primary">

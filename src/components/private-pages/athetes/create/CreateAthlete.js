@@ -7,7 +7,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import {countryCodeMatrix, getYearOptions} from "../ultils/Utils";
 
-const CreateAthlete = ({ open, onClose}) => {
+const CreateAthlete = ({ open, onClose, idComp}) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
     const [firstName, setFirstName] = useState('');
@@ -15,13 +15,22 @@ const CreateAthlete = ({ open, onClose}) => {
     const [fedId, setFedId] = useState('');
     const [gender, setGender] = useState('');
     const [yearOfBirth, setYearOfBirth] = useState('');
-    const [competitions, setCompetitions] = useState([]);
+    const [realCategory, setRealCategory] = useState([]);
+    const [categoryInCompetition, setCategoryInCompetition] = useState([]);
     const [country, setCountry] = useState('');
-    const [selectedCompetitionId, setSelectedCompetitionId] = useState(''); // Estado para armazenar os eventos selecionados
-    const [errorMessage, setErrorMessage] = useState('');
+
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+    const [warningDialogOpen, setWarningDialogOpen] = useState(false);
+
     countryCodeMatrix.sort();
+
+    const handleRealCategory = (event) => {
+        setRealCategory(event.target.value);
+    };
+    const handleCategoryInCompetition= (event) => {
+        setCategoryInCompetition(event.target.value);
+    };
     const handleFirstNameChange = (event) => {
         setFirstName(event.target.value);
     };
@@ -40,9 +49,6 @@ const CreateAthlete = ({ open, onClose}) => {
     const handleCountryChange = (event) => {
         setCountry(event.target.value);
     };
-    const handleCompetitionChange = (event) => {
-        setSelectedCompetitionId(event.target.value);
-    };
     const submitCreateAthlete = async () => {
 
         const data = {
@@ -53,10 +59,12 @@ const CreateAthlete = ({ open, onClose}) => {
             country: country.toUpperCase().trim(),
             gender: gender.trim(),
             year_of_birth: parseInt(yearOfBirth.trim()),
+            real_category: realCategory.toUpperCase(),
+            category_in_competition: categoryInCompetition.toUpperCase()
         };
 
         try {
-            const response = await axios.post(getEndpointCreateAthlete("athleteBy", selectedCompetitionId), data, {
+            const response = await axios.post(getEndpointCreateAthlete("athleteBy", idComp), data, {
                 headers: {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
@@ -78,9 +86,9 @@ const CreateAthlete = ({ open, onClose}) => {
     };
     const handleCreate = async () => {
         if (isFormEmpty()) {
-            setErrorMessage('All fields above are required!');
+            setWarningDialogOpen(true);
             setTimeout(() => {
-                setErrorMessage('');
+                setWarningDialogOpen(false);
             }, 3000);
         } else {
             try {
@@ -97,9 +105,9 @@ const CreateAthlete = ({ open, onClose}) => {
         setCountry('');
         setGender('');
         setYearOfBirth('');
-        setSelectedCompetitionId('')
+        setRealCategory('');
+        setCategoryInCompetition('');
     };
-
     const cleanFieldsAndClose = () => {
         cleanFields();
         setSuccessDialogOpen(false);
@@ -113,7 +121,8 @@ const CreateAthlete = ({ open, onClose}) => {
             gender.trim() === '' ||
             yearOfBirth.trim() === '' ||
             country.trim() === '' ||
-            selectedCompetitionId === ''
+            realCategory.trim() === '' ||
+            categoryInCompetition.trim() == ''
         ) {
             return true; // Form is empty
         }
@@ -121,20 +130,6 @@ const CreateAthlete = ({ open, onClose}) => {
     };
 
     useEffect(() => {
-        const fetchCompetition = async () => {
-            try {
-                const response = await axios.get(endpoints.competitions, {
-                    headers: {
-                        Authorization: `Token ${usuarioSalvo.token}`,
-                    },
-                });
-                setCompetitions(response.data.results);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        fetchCompetition();
         cleanFields();
     }, []);
 
@@ -142,6 +137,15 @@ const CreateAthlete = ({ open, onClose}) => {
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
             <DialogTitle>Create Athlete</DialogTitle>
             <DialogContent>
+
+                <Dialog open={warningDialogOpen} onClose={() => setWarningDialogOpen(false)}>
+                    <DialogContent>
+                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <ReportProblemIcon sx={{ color: 'orange', fontSize: 48, marginBottom: '1%' }} />
+                            All fields above are required!
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
 
                 <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
                     <DialogContent>
@@ -221,28 +225,21 @@ const CreateAthlete = ({ open, onClose}) => {
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={12} sm={12}>
+                    <Grid item xs={12} sm={6}>
                         <TextField
-                            select
-                            label="Competition"
-                            value={selectedCompetitionId}
-                            onChange={handleCompetitionChange}
+                            label="Real category"
+                            value={realCategory}
+                            onChange={handleRealCategory}
                             fullWidth
-                        >
-                            {competitions.map((competition) => (
-                                <MenuItem key={competition.id} value={competition.id}>
-                                    {competition.name.charAt(0).toUpperCase() + competition.name.slice(1).toLowerCase()}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                        />
                     </Grid>
-
-                    <Grid item xs={12} sm={12}>
-                        <div align="right">
-                            {errorMessage && (
-                                <p id="error">{errorMessage}</p>
-                            )}
-                        </div>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            label="Category in competition"
+                            value={categoryInCompetition}
+                            onChange={handleCategoryInCompetition}
+                            fullWidth
+                        />
                     </Grid>
                 </Grid>
                 <Dialog open={successDialogOpen} onClose={cleanFieldsAndClose}>

@@ -41,9 +41,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import CreateOfficial from "./create/CreateOfficial";
 import DoneIcon from '@mui/icons-material/Done';
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import EditOfficial from "./edit/EditOfficial"
-import CreateAthlete from "../athetes/create/CreateAthlete";
-import EditAthlete from "../athetes/edit/EditAthlete";
+import EditOffcial from "./edit/EditOfficial"
 import WarningIcon from "@mui/icons-material/Warning";
 
 const Officials = ({idComp}) => {
@@ -75,7 +73,6 @@ const Officials = ({idComp}) => {
 
         return () => clearTimeout(timer);
     };
-
     const reload = () => {
 
         fetchOfficials();
@@ -111,7 +108,6 @@ const Officials = ({idComp}) => {
             }, 3000);
         }
     };
-
     const handleClickOpenDelete = (officId) => {
         setIdOfficial(officId);
         setOpen(true);
@@ -178,17 +174,18 @@ const Officials = ({idComp}) => {
                 </DialogContent>
             </Dialog>
 
-           {/* <CreateAthlete
+            <CreateOfficial
                 open={openDialog}
                 onClose={handleCloseDialog}
+                idComp={idComp}
             />
 
-            <EditAthlete
+            <EditOffcial
                 open={openEditDialog}
                 onClose={handleCloseEditDialog}
-                idAth={idOfficial}
+                idOffic={idOfficial}
                 idComp={idComp}
-            />*/}
+            />
 
             <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{fontSize: '18px'}}>
                 Officials
@@ -277,8 +274,7 @@ const Officials = ({idComp}) => {
                                                     <Tooltip title="Remove" className="tooltip-gender">
                                                         <IconButton
                                                             onClick={() => handleClickOpenDelete(official.id)}>
-                                                            <DeleteIcon color="error"
-                                                                        style={{cursor: 'pointer'}}/>
+                                                            <DeleteIcon color="error" style={{cursor: 'pointer'}}/>
                                                         </IconButton>
                                                     </Tooltip>
                                                 </TableCell>

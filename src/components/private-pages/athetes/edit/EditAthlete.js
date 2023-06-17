@@ -25,13 +25,22 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
     const [fedId, setFedId] = useState('');
     const [gender, setGender] = useState('');
     const [yearOfBirth, setYearOfBirth] = useState('');
-    const [competitions, setCompetitions] = useState([]);
+    const [realCategory, setRealCategory] = useState([]);
+    const [categoryInCompetition, setCategoryInCompetition] = useState([]);
+
     const [country, setCountry] = useState('');
-    const [selectedCompetitionId, setSelectedCompetitionId] = useState(''); // Estado para armazenar os eventos selecionados
-    const [errorMessage, setErrorMessage] = useState('');
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+    const [warningDialogOpen, setWarningDialogOpen] = useState(false);
+
     countryCodeMatrix.sort();
+
+    const handleRealCategory = (event) => {
+        setRealCategory(event.target.value);
+    };
+    const handleCategoryInCompetition= (event) => {
+        setCategoryInCompetition(event.target.value);
+    };
     const handleFirstNameChange = (event) => {
         setFirstName(event.target.value);
     };
@@ -50,9 +59,6 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
     const handleCountryChange = (event) => {
         setCountry(event.target.value);
     };
-    const handleCompetitionChange = (event) => {
-        setSelectedCompetitionId(event.target.value);
-    };
     const submitEditAthlete = async () => {
 
         const data = {
@@ -63,10 +69,12 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
             country: country.toUpperCase().trim(),
             gender: gender.charAt(0).toUpperCase().trim(),
             year_of_birth: parseInt(yearOfBirth.trim()),
+            real_category: realCategory.toUpperCase(),
+            category_in_competition: categoryInCompetition.toUpperCase()
         };
 
         try {
-            const response = await axios.put(putEndpointAthleteById("athleteBy", selectedCompetitionId, idAth), data, {
+            const response = await axios.put(putEndpointAthleteById("athleteBy", idComp, idAth), data, {
                 headers: {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
@@ -85,11 +93,10 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
         }
     };
     const handleEdit = async () => {
-        //console.log(idCompetition, idAthlete);
         if (isFormEmpty()) {
-            setErrorMessage('All fields above are required!');
+            setWarningDialogOpen(true);
             setTimeout(() => {
-                setErrorMessage('');
+                setWarningDialogOpen(false);
             }, 3000);
         } else {
             try {
@@ -107,7 +114,8 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
             gender.trim() === '' ||
             yearOfBirth.trim() === '' ||
             country.trim() === '' ||
-            selectedCompetitionId === ''
+            realCategory.trim() === '' ||
+            categoryInCompetition.trim() == ''
         ) {
             return true; // Form is empty
         }
@@ -122,6 +130,7 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
                         Authorization: `Token ${usuarioSalvo.token}`,
                     },
                 });
+
                 const athleteData = response.data;
                 setFirstName(athleteData.first_name.charAt(0).toUpperCase() + athleteData.first_name.slice(1).toLowerCase());
                 setLastName(athleteData.last_name.charAt(0).toUpperCase() + athleteData.last_name.slice(1).toLowerCase());
@@ -129,28 +138,16 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
                 setGender(athleteData.gender.charAt(0).toUpperCase().trim());
                 setYearOfBirth(String(athleteData.year_of_birth));
                 setCountry(String(athleteData.country.toLowerCase()));
-                setSelectedCompetitionId(idComp);
+                setRealCategory(athleteData.real_category.toUpperCase());
+                setCategoryInCompetition(athleteData.category_in_competition.toUpperCase());
+
             } catch (error) {
                 console.error('An error occurred while fetching the athlete.');
             }
         };
 
-        const fetchCompetitions = async () => {
-            try {
-                const response = await axios.get(endpoints.competitions, {
-                    headers: {
-                        'Authorization': `Token ${usuarioSalvo.token}`
-                    },
-                });
-                setCompetitions(response.data.results);
-            } catch (error) {
-                console.error('An error occurred while fetching competition:', error);
-            }
-        };
-
         if (open) {
             fetchAthletesData();
-            fetchCompetitions();
         }
     }, [open, idAth, idComp, usuarioSalvo.token]);
 
@@ -158,6 +155,15 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
             <DialogTitle>Edit Athlete</DialogTitle>
             <DialogContent>
+
+                <Dialog open={warningDialogOpen} onClose={() => setWarningDialogOpen(false)}>
+                    <DialogContent>
+                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <ReportProblemIcon sx={{ color: 'orange', fontSize: 48, marginBottom: '1%' }} />
+                            All fields above are required!
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
 
                 <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
                     <DialogContent>
@@ -237,27 +243,21 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={12} sm={12}>
+                    <Grid item xs={12} sm={6}>
                         <TextField
-                            select
-                            label="Competition"
-                            value={selectedCompetitionId}
-                            onChange={handleCompetitionChange}
+                            label="Real category"
+                            value={realCategory}
+                            onChange={handleRealCategory}
                             fullWidth
-                        >
-                            {competitions.map((competition) => (
-                                <MenuItem key={competition.id} value={competition.id}>
-                                    {competition.name.charAt(0).toUpperCase() + competition.name.slice(1).toLowerCase()}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                        />
                     </Grid>
-                    <Grid item xs={12} sm={12}>
-                        <div align="right">
-                            {errorMessage && (
-                                <p id="error">{errorMessage}</p>
-                            )}
-                        </div>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            label="Category in competition"
+                            value={categoryInCompetition}
+                            onChange={handleCategoryInCompetition}
+                            fullWidth
+                        />
                     </Grid>
                 </Grid>
                 <Dialog open={successDialogOpen} onClose={() => setSuccessDialogOpen(false)}>

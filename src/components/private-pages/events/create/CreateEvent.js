@@ -12,9 +12,10 @@ const CreateEvent = ({ open, onClose, idComp }) => {
     const [name, setName] = useState('');
     const [eventClass, setEventClass] = useState('');
     const [round, setRound] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+    const [warningDialogOpen, setWarningDialogOpen] = useState(false);
 
     const handleCodeChange = (event) => {
         setCode(event.target.value);
@@ -64,9 +65,9 @@ const CreateEvent = ({ open, onClose, idComp }) => {
 
     const handleCreate = async () => {
         if (isFormEmpty()) {
-            setErrorMessage('All fields above are required!');
+            setWarningDialogOpen(true);
             setTimeout(() => {
-                setErrorMessage('');
+                setWarningDialogOpen(false);
             }, 3000);
         } else {
             try {
@@ -76,20 +77,17 @@ const CreateEvent = ({ open, onClose, idComp }) => {
             }
         }
     };
-
     const cleanFields = () => {
         setName('');
         setEventClass('');
         setRound('');
         setCode('');
     };
-
     const cleanFieldsAndClose = () => {
         cleanFields();
         setSuccessDialogOpen(false);
         setErrorDialogOpen(false);
     };
-
     const isFormEmpty = () => {
         if (name.trim() === '' || eventClass.trim() === '' || round === '' || code === '') {
             return true; // Form is empty
@@ -105,6 +103,16 @@ const CreateEvent = ({ open, onClose, idComp }) => {
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
             <DialogTitle>Create Event</DialogTitle>
             <DialogContent>
+
+                <Dialog open={warningDialogOpen} onClose={() => setWarningDialogOpen(false)}>
+                    <DialogContent>
+                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <ReportProblemIcon sx={{ color: 'orange', fontSize: 48, marginBottom: '1%' }} />
+                            All fields above are required!
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
+
                 <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
                     <DialogContent>
                         <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -113,6 +121,7 @@ const CreateEvent = ({ open, onClose, idComp }) => {
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>
+
                 <Grid container spacing={2} sx={{ marginTop: '0.0rem' }}>
                     <Grid item xs={12} sm={6}>
                         <TextField
@@ -166,11 +175,6 @@ const CreateEvent = ({ open, onClose, idComp }) => {
                                 </MenuItem>
                             ))}
                         </TextField>
-                    </Grid>
-                    <Grid item xs={12} sm={12}>
-                        <div align="right">
-                            {errorMessage && (<p id="error">{errorMessage}</p>)}
-                        </div>
                     </Grid>
                 </Grid>
                 <Dialog open={successDialogOpen} onClose={cleanFieldsAndClose}>

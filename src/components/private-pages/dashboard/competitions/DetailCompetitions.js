@@ -148,7 +148,7 @@ function DetailCompetitions() {
                                 </Tooltip>
                                 {data && data.beginning_date && moment(data.beginning_date).format('DD/MM/YYYY')}
                                 <Tooltip title="Start Time">
-                                    <WatchLaterOutlinedIcon sx={{marginLeft: 1}}/>
+                                    <WatchLaterOutlinedIcon sx={{marginLeft: 1, marginRight: '0.2em'}}/>
                                 </Tooltip>
                                 {data && data.beginning_date && moment(data.beginning_date).format('HH:mm')}
                             </Typography>
@@ -161,7 +161,7 @@ function DetailCompetitions() {
                                 </Tooltip>
                                 {moment(data.end_date).format('DD/MM/YYYY')}
                                 <Tooltip title="End Time">
-                                    <WatchLaterOutlinedIcon sx={{marginLeft: 1}}/>
+                                    <WatchLaterOutlinedIcon sx={{marginLeft: 1, marginRight: '0.2em'}}/>
                                 </Tooltip>
                                 {moment(data.end_date).format('HH:mm')}
                             </Typography>

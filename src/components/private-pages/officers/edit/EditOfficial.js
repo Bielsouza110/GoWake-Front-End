@@ -25,11 +25,11 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
     const [qualification, setQualification] = useState('');
     const [country, setCountry] = useState('');
     const [region, setRegion] = useState('');
-    const [competitions, setCompetitions] = useState([]);
-    const [selectedCompetitionId, setSelectedCompetitionId] = useState("");
-    const [errorMessage, setErrorMessage] = useState('');
+
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+    const [warningDialogOpen, setWarningDialogOpen] = useState(false);
+
     const regions = [
         'Africa',
         'Asia',
@@ -45,6 +45,7 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
         'Boat Driver'
     ]
     countryCodeMatrix.sort();
+
     const handleFirstNameChange = (event) => {
         setFirstName(event.target.value);
     };
@@ -66,9 +67,6 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
     const handleRegionChange = (event) => {
         setRegion(event.target.value);
     };
-    const handleCompetitionChange = (event) => {
-        setSelectedCompetitionId(event.target.value);
-    };
     const submitEditOfficial = async () => {
 
         const data = {
@@ -82,7 +80,7 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
         };
 
         try {
-            const response = await axios.put(putEndpointOfficialById("officialBy", selectedCompetitionId, idOffic), data, {
+            const response = await axios.put(putEndpointOfficialById("officialBy", idComp, idOffic), data, {
                 headers: {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
@@ -104,9 +102,9 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
     };
     const handleEdit = async () => {
         if (isFormEmpty()) {
-            setErrorMessage('All fields above are required!');
+            setWarningDialogOpen(true);
             setTimeout(() => {
-                setErrorMessage('');
+                setWarningDialogOpen(false);
             }, 3000);
         } else {
             try {
@@ -134,27 +132,13 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
                 setQualification(String(officialData.qualification.toUpperCase()));
                 setCountry(String(officialData.country.toLowerCase()));
                 setRegion(officialData.region);
-                setSelectedCompetitionId(idComp);
             } catch (error) {
                 console.error('An error occurred while fetching athlete data:', error);
             }
         }
 
-        const fetchCompetitions = async () => {
-            try {
-                const response = await axios.get(endpoints.competitions, {
-                    headers: {
-                        'Authorization': `Token ${usuarioSalvo.token}`
-                    },
-                });
-                setCompetitions(response.data.results);
-            } catch (error) {
-                console.error('An error occurred while fetching competition:', error);
-            }
-        };
         if (open) {
             fetchOfficialsData();
-            fetchCompetitions();
         }
     }, [open, idOffic, idComp, usuarioSalvo.token]);
 
@@ -166,8 +150,7 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
             position.trim() === '' ||
             qualification.trim() === '' ||
             country.trim() === '' ||
-            region.trim() === '' ||
-            selectedCompetitionId === ''
+            region.trim() === ''
         ) {
             return true; // Form is empty
         }
@@ -178,6 +161,16 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
             <DialogTitle>Edit Official</DialogTitle>
             <DialogContent>
+
+                <Dialog open={warningDialogOpen} onClose={() => setWarningDialogOpen(false)}>
+                    <DialogContent>
+                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <ReportProblemIcon sx={{ color: 'orange', fontSize: 48, marginBottom: '1%' }} />
+                            All fields above are required!
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
+
                 <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
                     <DialogContent>
                         <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
@@ -252,22 +245,7 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            select
-                            label="Competition"
-                            value={selectedCompetitionId}
-                            onChange={handleCompetitionChange}
-                            fullWidth
-                        >
-                            {competitions.map((competition) => (
-                                <MenuItem key={competition.id} value={competition.id}>
-                                    {competition.name.charAt(0).toUpperCase() + competition.name.slice(1).toLowerCase()}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={12}>
                         <TextField
                             select
                             label="Position"
@@ -282,13 +260,6 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
                             ))}
                         </TextField>
                     </Grid>
-                    <Grid item xs={12} sm={12}>
-                        <div align="right">
-                            {errorMessage && (
-                                <p id="error">{errorMessage}</p>
-                            )}
-                        </div>
-                    </Grid>
                 </Grid>
                 <Dialog open={successDialogOpen} onClose={() => setSuccessDialogOpen(false)}>
                     <DialogContent>
@@ -300,12 +271,7 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
                 </Dialog>
             </DialogContent>
             <DialogActions>
-                <Button
-                    onClick={() => {
-                        onClose();
-                    }}
-                    color="primary"
-                >
+                <Button onClick={() => {onClose();}} color="primary">
                     Cancel
                 </Button>
                 <Button onClick={handleEdit} color="primary">
