@@ -3,13 +3,17 @@ import PropTypes from 'prop-types';
 import './DropFileInput.css';
 import {ImageConfig} from "../config/ImageConfig";
 import uploadImg from '../../../../assets/cloud-upload-regular-240.png'
-
+import { Card, CardContent, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
+import {IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../../dashboard/utils/Utils";
+import Tooltip from "@mui/material/Tooltip";
+import {Delete as DeleteIcon, Edit as EditIcon} from "@mui/icons-material";
 
 
 let juriList = [];//Array global dos jurados
@@ -209,43 +213,93 @@ const DropFileInput = (props) => {
     const displayCompetition = () => {
         if (openDialogIndex !== null) {
             return (
-                <div>
-                    {/*<h5>Competition name</h5>*/}
-                    <table className="competition-table">
-                        <thead>
-                        <tr>
-                            <th>Code</th>
-                            <th>Discipline</th>
-                            <th>Country</th>
-                            <th>Type</th>
-                            <th>Venue</th>
-                            <th>Site code</th>
-                            <th>Group Age</th>
-                            <th>Start date</th>
-                            <th>End date</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>{competitionList[0].code}</td>
-                            <td>{competitionList[0].discipline}</td>
-                            <td>{competitionList[0].orgCountry}</td>
-                            <td>{competitionList[0].tournament_type}</td>
-                            <td>{competitionList[0].site_code}</td>
-                            <td>{competitionList[0].venue}</td>
-                            <td>{competitionList[0].age_groups}</td>
-                            <td>{competitionList[0].startDate}</td>
-                            <td>{competitionList[0].endDate}</td>
-                        </tr>
+                <div className="competition-container">
+                    <h6>Competition name: <span className="value">{competitionList[0].name}</span></h6>
 
-                        </tbody>
-                    </table>
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+
+                                    <TableCell className="competition-table" id="esconde">Code</TableCell>
+                                    <TableCell className="competition-table">Discipline</TableCell>
+                                    <TableCell className="competition-table" id="esconde">Country</TableCell>
+                                    <TableCell className="competition-table" id="esconde">Type</TableCell>
+                                    <TableCell className="competition-table">Venue</TableCell>
+                                    <TableCell className="competition-table">Site code</TableCell>
+                                    <TableCell className="competition-table">Group Age</TableCell>
+                                    <TableCell className="competition-table">Start date</TableCell>
+                                    <TableCell className="competition-table">End date</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                <TableRow>
+
+                                    <TableCell id="esconde">{competitionList[0].code}</TableCell>
+                                    <TableCell>{competitionList[0].discipline}</TableCell>
+                                    <TableCell id="esconde">{competitionList[0].orgCountry}</TableCell>
+                                    <TableCell id="esconde">{competitionList[0].tournament_type}</TableCell>
+                                    <TableCell>{competitionList[0].site_code}</TableCell>
+                                    <TableCell>{competitionList[0].venue}</TableCell>
+                                    <TableCell>{competitionList[0].age_groups}</TableCell>
+                                    <TableCell>{competitionList[0].startDate}</TableCell>
+                                    <TableCell>{competitionList[0].endDate}</TableCell>
+
+                                </TableRow>
+
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+
                 </div>
             )
         }
     }
 
+
     const displayJuri = () => {
+        if (openDialogIndex !== null) {
+            return (
+                <div className="juri-container">
+                    <h5>Juri painel</h5>
+                    <div className="juri-blank-container">
+                        {juriList.map((item, index) => (
+                            <Card className="juri-item" key={index}>
+                                <CardContent>
+                                    <Typography variant="body1" component="div">
+                                        <strong>ID:</strong> {item.id}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Position:</strong> {item.category}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Last Name:</strong> {item.lastName}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>First Name:</strong> {item.firstName}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Qualification:</strong> {item.qualification}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Country:</strong> {item.country}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Region:</strong> {item.region}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        return null; // Retorna null se openDialogIndex for null
+    };
+
+
+    /*const displayJuri = () => {
         if (openDialogIndex !== null) {
             return (
                 <div className="juri-container">
@@ -271,19 +325,46 @@ const DropFileInput = (props) => {
         }
 
         return null; // Retorna null se openDialogIndex for null
-    };
+    };*/
 
 
-    const displayEvent=()=>{
+    const displayEvent = () => {
         if (openDialogIndex !== null) {
             return (
-                <div className="event-container">
-                    <div className="event">
+                <div className="event-container1">
+                    <h6>Event description </h6>
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+
+                                    <TableCell className="event-table">Event</TableCell>
+                                    <TableCell className="event-table">Code</TableCell>
+                                    <TableCell className="event-table">Class event</TableCell>
+                                    <TableCell className="event-table">Rounds</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                <TableRow>
+
+                                    <TableCell>{eventList[0].name}</TableCell>
+                                    <TableCell>{eventList[0].code}</TableCell>
+                                    <TableCell>{eventList[0].classEvent}</TableCell>
+                                    <TableCell>{eventList[0].rounds}</TableCell>
+
+                                </TableRow>
+
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+
+
+                    {/*<div className="event">
                         <p>Event: <span className="value">{eventList[0].name}</span></p>
                         <p>Code: <span className="value">{eventList[0].code}</span></p>
                         <p>Class event: <span className="value">{eventList[0].classEvent}</span></p>
                         <p>Rounds: <span className="value">{eventList[0].rounds}</span></p>
-                    </div>
+                    </div>*/}
                 </div>
 
             )
@@ -294,22 +375,19 @@ const DropFileInput = (props) => {
     const renderDialog = () => {
 
         if (openDialogIndex !== null) {
-            console.log(athletesList[0].id);
+            //console.log(athletesList[0].id);
 
             return (
-                <Dialog open={true} onClose={handleCloseDialog} maxWidth="lg" fullWidth="1200">
+                <Dialog open={true} onClose={handleCloseDialog} maxWidth="lg">
                     {/*maxWidth="md" fullWidth = "800"*/}
                     {/*sx={{width: '100%', maxWidth: '100%'}}*/}
 
                     <DialogTitle>XML Preview</DialogTitle>
                     <DialogContent>
-                        {displayEvent()}
-                        <div>
-                            <p>Competition name: <span
-                                className="value">{competitionList[0].name}</span></p>
 
-                        </div>
+
                         {displayCompetition()}
+                        {displayEvent()}
 
                         {displayJuri()}
 

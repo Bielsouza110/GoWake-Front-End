@@ -115,6 +115,7 @@
     box-shadow: var(--box-shadow);
 }
 
+
 .competition-preview {
     /*display: inline-block;*/
     border-radius: 3%;
@@ -129,31 +130,6 @@
     /*position: absolute;*/
 }
 
-
-.value {
-    color: darkblue;
-}
-
-
-.competition-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.competition-table th,
-.competition-table td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ccc;
-}
-
-.competition-table th {
-    background-color: #f2f2f2;
-}
-
-.competition-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
 
 .event {
     border-radius: 5%;
@@ -174,7 +150,7 @@
     margin-bottom: 50px;
 }
 
-.juri-container{
+.juri-container {
     margin-top: 50px;
     display: inline-block;
     justify-content: center;
@@ -182,7 +158,8 @@
     margin-bottom: 50px;
     /*border: 1px solid black;*/
 }
-.juri-item{
+
+.juri-item {
     /*padding-bottom: 20px;*/
     display: inline-grid;
     border-radius: 5%;
@@ -190,14 +167,34 @@
     border: 1px dashed var(--border-color);
     width: 250px;
     height: 220px;
-    padding: 20px;
+    padding-top: -10px;
     margin: 10px;
+    /*margin: 5px;*/
     /*max-width: 400px;*/
-    background-color: var(--input-bg);
-}
-.juri-blank-container{
-    padding-left: 22px;
-    border: 1px dashed black;
-    background-color: #f2f2f2;;
+    /*background-color: var(--input-bg);*/
+    /*background-color: red;*/
 }
 
+.juri-blank-container {
+    padding-left: 22px;
+    /*border: 1px dashed black;*/
+    /*background-color: #f2f2f2;*/
+
+}
+
+.event-container1 {
+    margin-top: 40px;
+
+}
+
+.competition-container {
+    margin-top: 40px;
+}
+
+.competition-table {
+    font-weight: bold;
+}
+
+.event-table {
+    font-weight: bold;
+}
