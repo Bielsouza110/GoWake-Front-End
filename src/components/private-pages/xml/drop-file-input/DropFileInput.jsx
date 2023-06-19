@@ -14,12 +14,15 @@ import {IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHea
 import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../../dashboard/utils/Utils";
 import Tooltip from "@mui/material/Tooltip";
 import {Delete as DeleteIcon, Edit as EditIcon} from "@mui/icons-material";
+import {Visibility} from "@material-ui/icons";
+import PublishIcon from '@mui/icons-material/Publish';
 
 
 let juriList = [];//Array global dos jurados
 let eventList = [];//Lista global dos eventos --> só pode ter 1 competição por XML, apesar de ser só 1 tive que fazer num array
 let athletesList = []; //Lista global dos atletas
 let competitionList = [];
+let index = 0
 
 const DropFileInput = (props) => {
     const clear = () => {
@@ -27,6 +30,7 @@ const DropFileInput = (props) => {
         eventList = [];
         athletesList = [];
         competitionList = [];
+        index = 0;
     }
 
     const [fileList, setFileList] = useState([]);
@@ -46,12 +50,27 @@ const DropFileInput = (props) => {
         }
     };
 
-    const fileRemove = (file) => {
+    const fileRemove = (file,index) => {
+        if (file != null ){
+            const updatedList = [...fileList];
+            updatedList.splice(fileList.indexOf(file), 1);
+            setFileList(updatedList);
+            props.onFileChange(updatedList);
+        }else{
+            const updatedList = [...fileList];
+            updatedList.splice(index, 1);
+            setFileList(updatedList);
+            props.onFileChange(updatedList);
+        }
+
+    };
+
+    /*const fileRemove2 = (file) => {
         const updatedList = [...fileList];
         updatedList.splice(fileList.indexOf(file), 1);
         setFileList(updatedList);
         props.onFileChange(updatedList);
-    };
+    };*/
 
     const handleOpenDialog = (index) => {
         setOpenDialogIndex(index);
@@ -65,13 +84,8 @@ const DropFileInput = (props) => {
     const handleFileSubmit = (file) => {
         clear();
 
-
-        const index = fileList.indexOf(file);
+        index = fileList.indexOf(file);
         let count = 0;
-        // let juriList = [];//Array dos jurados
-        //let eventList = [];//Lista dos eventos --> só pode ter 1 competição por XML, apesar de ser só 1 tive que fazer num array
-        //let athletesList = []; //Lista dos atletas
-        //let competitionList = [];
 
         if (fileList[index]) {
             const reader = new FileReader();
@@ -113,7 +127,6 @@ const DropFileInput = (props) => {
                         endDate: endDate,
                         age_groups: age_groups
                     })
-                    //console.log(competitionList);
 
                     for (const event of events) {
 
@@ -134,8 +147,6 @@ const DropFileInput = (props) => {
                             break;
                         }
                     }
-                    //console.log(eventList);
-
 
                     for (const official of officials) {
                         const iwwfID = official.querySelector("iwwfid,Iwwfid").textContent;
@@ -157,8 +168,6 @@ const DropFileInput = (props) => {
                             region: region
                         });
                     }
-                    // console.log(juriList);
-
 
                     for (const athlete of athletes) {
                         const fed_id = athlete.querySelector("fed_id,FedId").textContent;
@@ -188,24 +197,13 @@ const DropFileInput = (props) => {
                             category: category,
                             competitionCategory: competitionCategory
                         })
-
                     }
-                    //console.log("primeiro")
                     handleOpenDialog(1);
                 });
 
-
             };
-            //console.log("segundo");
             reader.readAsDataURL(fileList[index]);
         }
-
-
-        athletesList.map((item, index) => {
-            console.log({item});
-        })
-
-        //console.log("terceiro");
 
     };
 
@@ -344,7 +342,7 @@ const DropFileInput = (props) => {
     const displayEvent = () => {
         if (openDialogIndex !== null) {
             return (
-                <div className="event-container1">
+                <div className="event-container">
                     <h6>Event description </h6>
                     <TableContainer component={Paper}>
                         <Table>
@@ -388,8 +386,6 @@ const DropFileInput = (props) => {
     const renderDialog = () => {
 
         if (openDialogIndex !== null) {
-            //console.log(athletesList[0].id);
-
             return (
                 <Dialog open={true} onClose={handleCloseDialog} maxWidth="lg">
                     {/*maxWidth="md" fullWidth = "800"*/}
@@ -407,17 +403,19 @@ const DropFileInput = (props) => {
                         </DialogContentText>
 
                     </DialogContent>
-
                     <DialogActions>
-                        <Button onClick={handleCloseDialog}>Fechar</Button>
+
+                        <DialogActions>
+                            <Button onClick={() => {
+                                fileRemove(null,index);
+                                handleCloseDialog() }}>Submit</Button>
+                        </DialogActions>
+                        <Button onClick={handleCloseDialog}>Close</Button>
                     </DialogActions>
 
                 </Dialog>
-
             );
-
         }
-
         return null;
     };
 
@@ -445,14 +443,29 @@ const DropFileInput = (props) => {
                             <div className="drop-file-preview_item_info">
                                 <p>{item.name}</p>
                             </div>
-                            {/*<button className="drop-file-preview_btn" variant="contained" onClick={() => handleOpenDialog(index)}>
-                                Check
-                            </button>*/}
-                            <button className="drop-file-preview_btn" variant="contained"
-                                    onClick={() => handleFileSubmit(item)}>
-                                Check
-                            </button>
-                            <span className="drop-file-preview_item_del" onClick={() => fileRemove(item)}> x </span>
+
+                            <Tooltip title="Submit" className="tooltip-gender">
+                                <IconButton id="drop-file-item_submit"
+                                            onClick={() => handleFileSubmit(item)}>
+                                    <PublishIcon style={{ color: 'forestgreen', cursor: 'pointer' }} />
+                                </IconButton>
+                            </Tooltip>
+
+                            <Tooltip title="Preview" className="tooltip-gender">
+                                <IconButton id="drop-file-item_preview"
+                                            onClick={() => handleFileSubmit(item)}>
+                                    <Visibility style={{ color: '#4267b2', cursor: 'pointer' }} />
+                                </IconButton>
+                            </Tooltip>
+
+                            <Tooltip title="Remove" className="tooltip-gender">
+                                <IconButton id="drop-file-item_del"
+                                    onClick={() => fileRemove(item)}>
+                                    <DeleteIcon color="error"
+                                                style={{cursor: 'pointer'}}/>
+                                </IconButton>
+                            </Tooltip>
+
                         </div>
                     ))}
                 </div>
