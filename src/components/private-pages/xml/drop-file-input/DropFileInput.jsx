@@ -24,7 +24,10 @@ let athletesList = []; //Lista global dos atletas
 let competitionList = [];
 let index = 0
 
+
 const DropFileInput = (props) => {
+
+
     const clear = () => {
         juriList = [];
         eventList = [];
@@ -50,27 +53,19 @@ const DropFileInput = (props) => {
         }
     };
 
-    const fileRemove = (file,index) => {
-        if (file != null ){
+    const fileRemove = (file, index) => {
+        if (file != null) {
             const updatedList = [...fileList];
             updatedList.splice(fileList.indexOf(file), 1);
             setFileList(updatedList);
             props.onFileChange(updatedList);
-        }else{
+        } else {
             const updatedList = [...fileList];
             updatedList.splice(index, 1);
             setFileList(updatedList);
             props.onFileChange(updatedList);
         }
-
     };
-
-    /*const fileRemove2 = (file) => {
-        const updatedList = [...fileList];
-        updatedList.splice(fileList.indexOf(file), 1);
-        setFileList(updatedList);
-        props.onFileChange(updatedList);
-    };*/
 
     const handleOpenDialog = (index) => {
         setOpenDialogIndex(index);
@@ -207,7 +202,6 @@ const DropFileInput = (props) => {
 
     };
 
-
     const displayCompetition = () => {
         if (openDialogIndex !== null) {
             return (
@@ -253,7 +247,6 @@ const DropFileInput = (props) => {
             )
         }
     }
-
 
     const displayJuri = () => {
         if (openDialogIndex !== null) {
@@ -353,35 +346,26 @@ const DropFileInput = (props) => {
                                     <TableCell className="event-table">Code</TableCell>
                                     <TableCell className="event-table">Class event</TableCell>
                                     <TableCell className="event-table">Rounds</TableCell>
+
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                <TableRow>
 
+                                <TableRow>
                                     <TableCell>{eventList[0].name}</TableCell>
                                     <TableCell>{eventList[0].code}</TableCell>
                                     <TableCell>{eventList[0].classEvent}</TableCell>
                                     <TableCell>{eventList[0].rounds}</TableCell>
-
                                 </TableRow>
 
                             </TableBody>
                         </Table>
                     </TableContainer>
 
-
-                    {/*<div className="event">
-                        <p>Event: <span className="value">{eventList[0].name}</span></p>
-                        <p>Code: <span className="value">{eventList[0].code}</span></p>
-                        <p>Class event: <span className="value">{eventList[0].classEvent}</span></p>
-                        <p>Rounds: <span className="value">{eventList[0].rounds}</span></p>
-                    </div>*/}
                 </div>
-
             )
         }
     }
-
 
     const renderDialog = () => {
 
@@ -407,8 +391,9 @@ const DropFileInput = (props) => {
 
                         <DialogActions>
                             <Button onClick={() => {
-                                fileRemove(null,index);
-                                handleCloseDialog() }}>Submit</Button>
+                                fileRemove(null, index);
+                                handleCloseDialog()
+                            }}>Submit</Button>
                         </DialogActions>
                         <Button onClick={handleCloseDialog}>Close</Button>
                     </DialogActions>
@@ -427,18 +412,21 @@ const DropFileInput = (props) => {
                 onDragEnter={onDragEnter}
                 onDragLeave={onDragLeave}
                 onDrop={onDrop}
+
             >
-                <div className="drop-file-input_label">
+                <div className="drop-file-input_label" >
                     <img src={uploadImg} alt=""/>
                     <p>Drag & Drop your files here!</p>
                 </div>
-                <input type="file" value="" onChange={onFileDrop}/>
+                <input type="file" value="" accept=".xml" onChange={onFileDrop}/>
             </div>
             {fileList.length > 0 ? (
                 <div className="drop-file-preview">
                     <p className="drop-file-preview_title">Ready to upload</p>
                     {fileList.map((item, index) => (
+
                         <div key={index} className="drop-file-preview_item">
+
                             <img src={ImageConfig[item.type.split('/')[1] || ImageConfig['default']]} alt=""/>
                             <div className="drop-file-preview_item_info">
                                 <p>{item.name}</p>
@@ -447,20 +435,20 @@ const DropFileInput = (props) => {
                             <Tooltip title="Submit" className="tooltip-gender">
                                 <IconButton id="drop-file-item_submit"
                                             onClick={() => handleFileSubmit(item)}>
-                                    <PublishIcon style={{ color: 'forestgreen', cursor: 'pointer' }} />
+                                    <PublishIcon style={{color: 'forestgreen', cursor: 'pointer'}}/>
                                 </IconButton>
                             </Tooltip>
 
                             <Tooltip title="Preview" className="tooltip-gender">
                                 <IconButton id="drop-file-item_preview"
                                             onClick={() => handleFileSubmit(item)}>
-                                    <Visibility style={{ color: '#4267b2', cursor: 'pointer' }} />
+                                    <Visibility style={{color: '#4267b2', cursor: 'pointer'}}/>
                                 </IconButton>
                             </Tooltip>
 
                             <Tooltip title="Remove" className="tooltip-gender">
                                 <IconButton id="drop-file-item_del"
-                                    onClick={() => fileRemove(item)}>
+                                            onClick={() => fileRemove(item)}>
                                     <DeleteIcon color="error"
                                                 style={{cursor: 'pointer'}}/>
                                 </IconButton>

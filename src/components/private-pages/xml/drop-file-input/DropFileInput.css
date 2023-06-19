@@ -67,9 +67,9 @@
 }
 
 .drop-file-preview_item img {
-    width: 50px;
+    width: 45px;
     margin-right: 20px;
-    height: 50px;
+    height: 45px;
 }
 
 .drop-file-preview_item_info {
@@ -124,19 +124,6 @@
     margin-top: -20px;
 
 }
-
-.event {
-    border-radius: 5%;
-    color: black;
-    border: 1px dashed var(--border-color);
-    width: fit-content;
-    height: 180px;
-    padding: 20px;
-    max-width: 400px;
-    background-color: var(--input-bg);
-
-}
-
 
 .juri-container {
     margin-top: 50px;
