@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './DropFileInput.css';
 import {ImageConfig} from "../config/ImageConfig";
 import uploadImg from '../../../../assets/cloud-upload-regular-240.png'
-import { Card, CardContent, Typography } from '@mui/material';
+import {Card, CardContent, Typography} from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -273,10 +273,10 @@ const DropFileInput = (props) => {
                                         <strong>Position:</strong> {item.category}
                                     </Typography>
                                     <Typography variant="body1" component="div">
-                                        <strong>Last Name:</strong> {item.lastName}
+                                        <strong>First Name:</strong> {item.firstName}
                                     </Typography>
                                     <Typography variant="body1" component="div">
-                                        <strong>First Name:</strong> {item.firstName}
+                                        <strong>Last Name:</strong> {item.lastName}
                                     </Typography>
                                     <Typography variant="body1" component="div">
                                         <strong>Qualification:</strong> {item.qualification}
@@ -298,35 +298,48 @@ const DropFileInput = (props) => {
         return null; // Retorna null se openDialogIndex for null
     };
 
-
-    /*const displayJuri = () => {
+    const displayAthletes = () => {
         if (openDialogIndex !== null) {
             return (
-                <div className="juri-container">
-                    <h5>Juri painel</h5>
-                    <div className="juri-blank-container">
-
-                        {juriList.map((item, index) => (
-                            <div className="juri-item" key={index}>
-                                <span>ID: <span className="value">{item.id}</span></span>
-                                <span>Position: <span className="value">{item.category}</span></span>
-                                <span>Last Name: <span className="value">{item.lastName}</span></span>
-                                <span>First Name: <span className="value">{item.firstName}</span></span>
-                                <span>Qualification: <span className="value">{item.qualification}</span></span>
-                                <span>Country: <span className="value">{item.country}</span></span>
-                                <span>Region: <span className="value">{item.region}</span></span>
-                            </div>
+                <div>
+                    <h5>Athletes painel</h5>
+                    <div className="athletes-blank-container">
+                        {athletesList.map((item, index) => (
+                            <Card className="athletes-item" key={index}>
+                                <CardContent>
+                                    <Typography variant="body1" component="div">
+                                        <strong>ID:</strong> {item.id}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>First name:</strong> {item.firstName}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Last Name:</strong> {item.lastName}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Country:</strong> {item.country}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Gender:</strong> {item.gender}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Birth year:</strong> {item.year}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Real category:</strong> {item.category}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Competition category:</strong> {item.competitionCategory}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
                         ))}
-
                     </div>
-
                 </div>
-            );
+            )
         }
-
-        return null; // Retorna null se openDialogIndex for null
-    };*/
-
+        return null;
+    }
 
     const displayEvent = () => {
         if (openDialogIndex !== null) {
@@ -385,44 +398,17 @@ const DropFileInput = (props) => {
                     <DialogTitle>XML Preview</DialogTitle>
                     <DialogContent>
 
-
                         {displayCompetition()}
                         {displayEvent()}
-
                         {displayJuri()}
-
-                        {/*juriList.map((item, index) => (
-                            <div className="juri-item" key={index}>
-                                <p>ID: <span className="value">{item.id}</span></p>
-                                <p>Position: <span className="value">{item.position}</span></p>
-                                <p>Last Name: <span className="value">{item.lastName}</span></p>
-                                <p>First Name: <span className="value">{item.firstName}</span></p>
-                                <p>Qualification: <span className="value">{item.qualification}</span></p>
-                                <p>Country: <span className="value">{item.country}</span></p>
-                                <p>Region: <span className="value">{item.region}</span></p>
-                            </div>
-                        ))*/}
+                        {displayAthletes()}
 
                         <DialogContentText>
-
                         </DialogContentText>
-
-                        <DialogContentText>
-
-
-                        </DialogContentText>
-
-                        {/*athletesList.map((item, index) => (
-                            <div key={index}>
-                                <p>{"Aqui " + item.id}</p>
-                            </div>
-                        ))*/}
-
 
                     </DialogContent>
 
                     <DialogActions>
-
                         <Button onClick={handleCloseDialog}>Fechar</Button>
                     </DialogActions>
 
