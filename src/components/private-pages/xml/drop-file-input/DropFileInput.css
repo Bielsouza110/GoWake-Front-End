@@ -67,9 +67,9 @@
 }
 
 .drop-file-preview_item img {
-    width: 50px;
+    width: 45px;
     margin-right: 20px;
-    height: 50px;
+    height: 45px;
 }
 
 .drop-file-preview_item_info {
@@ -78,43 +78,39 @@
     justify-content: space-between;
 }
 
-.drop-file-preview_item_del {
-    background-color: var(--box-bg);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+
+.drop-file-preview_item  #drop-file-item_del{
+
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
-    right: 10px;
-    /*top: 50%;*/
+    right: 15px;
     margin-top: 5px;
-    transform: translate(-50%);
-    box-shadow: var(--box-shadow);
-    cursor: pointer;
-    opacity: 1;
-    transition: opacity 0.3s ease;
+
 }
 
-.drop-file-preview_item:hover .drop-file-preview_item_del {
-    opacity: 1;
-}
+.drop-file-preview_item  #drop-file-item_preview{
 
-.drop-file-preview_item .drop-file-preview_btn {
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
-    border-radius: 10%;
-    right: 100px;
+    right: 60px;
     margin-top: 5px;
-    width: 70px;
-    height: 40px;
-    /*background-color: red;*/
-    box-shadow: var(--box-shadow);
+
 }
 
+.drop-file-preview_item  #drop-file-item_submit{
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 105px;
+    margin-top: 5px;
+
+}
 
 .competition-preview {
     /*display: inline-block;*/
@@ -126,28 +122,7 @@
     justify-content: center;
     width: fit-content;
     margin-top: -20px;
-    /*height: 40px;*/
-    /*position: absolute;*/
-}
 
-
-.event {
-    border-radius: 5%;
-    color: black;
-    border: 1px dashed var(--border-color);
-    width: fit-content;
-    height: 180px;
-    padding: 20px;
-    max-width: 400px;
-    background-color: var(--input-bg);
-
-}
-
-.event-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 50px;
 }
 
 .juri-container {
@@ -169,22 +144,16 @@
     height: 220px;
     padding-top: -10px;
     margin: 10px;
-    /*margin: 5px;*/
-    /*max-width: 400px;*/
-    /*background-color: var(--input-bg);*/
-    /*background-color: red;*/
+
 }
 
 .juri-blank-container {
     padding-left: 22px;
-    /*border: 1px dashed black;*/
-    /*background-color: #f2f2f2;*/
 
 }
 
-.event-container1 {
+.event-container {
     margin-top: 40px;
-
 }
 
 .competition-container {
@@ -198,3 +167,36 @@
 .event-table {
     font-weight: bold;
 }
+
+.athletes-container {
+    margin-top: 50px;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+    /*border: 1px solid black;*/
+}
+
+.athletes-item {
+    /*padding-bottom: 20px;*/
+    display: inline-grid;
+    border-radius: 5%;
+    color: black;
+    border: 1px dashed var(--border-color);
+    width: 250px;
+    height: 220px;
+    padding-top: -10px;
+    margin: 10px;
+    /*margin: 5px;*/
+    /*max-width: 400px;*/
+    /*background-color: var(--input-bg);*/
+    /*background-color: red;*/
+}
+
+.athletes-blank-container {
+    padding-left: 22px;
+    /*border: 1px dashed black;*/
+    /*background-color: #f2f2f2;*/
+
+}
+

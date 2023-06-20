@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './DropFileInput.css';
 import {ImageConfig} from "../config/ImageConfig";
 import uploadImg from '../../../../assets/cloud-upload-regular-240.png'
-import { Card, CardContent, Typography } from '@mui/material';
+import {Card, CardContent, Typography} from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -14,24 +14,34 @@ import {IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHea
 import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../../dashboard/utils/Utils";
 import Tooltip from "@mui/material/Tooltip";
 import {Delete as DeleteIcon, Edit as EditIcon} from "@mui/icons-material";
+import {Visibility} from "@material-ui/icons";
+import PublishIcon from '@mui/icons-material/Publish';
+import axios from "axios";
+import {getEndpointCreateAthlete, postXML} from "../../../../api/Urls";
 
 
 let juriList = [];//Array global dos jurados
 let eventList = [];//Lista global dos eventos --> só pode ter 1 competição por XML, apesar de ser só 1 tive que fazer num array
 let athletesList = []; //Lista global dos atletas
 let competitionList = [];
+let index = 0
+
 
 const DropFileInput = (props) => {
+    const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
+
     const clear = () => {
         juriList = [];
         eventList = [];
         athletesList = [];
         competitionList = [];
+        index = 0;
     }
 
     const [fileList, setFileList] = useState([]);
     const wrapperRef = useRef(null);
     const [openDialogIndex, setOpenDialogIndex] = useState(null);
+    const [openInvalidXMLInput, setOpenInvalidXMLInput] = useState(null);
 
     const onDragEnter = () => wrapperRef.current.classList.add('dragover');
     const onDragLeave = () => wrapperRef.current.classList.remove('dragover');
@@ -39,18 +49,34 @@ const DropFileInput = (props) => {
 
     const onFileDrop = (e) => {
         const newFile = e.target.files[0];
+
         if (newFile) {
-            const updatedList = [...fileList, newFile];
-            setFileList(updatedList);
-            props.onFileChange(updatedList);
+            if (newFile.name.endsWith('.xml') || newFile.name.endsWith('.XML')) {
+                handleOpenDialogXMLInput(null);
+                const updatedList = [...fileList, newFile];
+                setFileList(updatedList);
+                props.onFileChange(updatedList);
+            } else {
+                handleOpenDialogXMLInput(1);
+            }
         }
     };
 
-    const fileRemove = (file) => {
-        const updatedList = [...fileList];
-        updatedList.splice(fileList.indexOf(file), 1);
-        setFileList(updatedList);
-        props.onFileChange(updatedList);
+    const fileRemove = (file, index) => {
+
+        if (file != null) {
+
+            const updatedList = [...fileList];
+            updatedList.splice(fileList.indexOf(file), 1);
+            setFileList(updatedList);
+            props.onFileChange(updatedList);
+
+        } else {
+            const updatedList = [...fileList];
+            updatedList.splice(index, 1);
+            setFileList(updatedList);
+            props.onFileChange(updatedList);
+        }
     };
 
     const handleOpenDialog = (index) => {
@@ -61,17 +87,99 @@ const DropFileInput = (props) => {
         setOpenDialogIndex(null);
     };
 
+    const handleOpenDialogXMLInput = (index) => {
+        setOpenInvalidXMLInput(index);
+    };
+
+    const handleCloseDialogXMLInput = () => {
+        setOpenInvalidXMLInput(null);
+    };
+
+
+    const submitXML = async () => {
+
+        const data = {
+            code: '22ESP010',
+            discipline: 'Wakeboard Boat',
+            name: 'CAMPEONATO SEIXAL WAKEBOARD',
+            organizing_country: 'PT',
+            tournament_type: 'NatCH',
+            venue: 'SEIXAL',
+            site_code: 'PTSEIXAL',
+            age_groups: 'IWWF',
+            beginning_date: '2023-02-19T15:02:57Z',
+            end_date: '2023-02-21T15:02:59Z',
+            athletes: [
+                {
+                    events: [],
+                    fed_id: 'ESP9813111',
+                    first_name: 'Miguel',
+                    last_name: 'Gomes',
+                    country: 'PT',
+                    gender: 'M',
+                    year_of_birth: 1995,
+                },
+            ],
+            events: [
+                {
+                    rounds: 5,
+                    event_class: '5 STAR',
+                    name: 'Wakeskate seixal',
+                    code: '801',
+                },
+            ],
+            athlete_events: [
+                {
+                    division: '',
+                    entry_type: 'IP',
+                    participation: true,
+                    real_category: 'U100',
+                    category_in_competition: 'U100',
+                    code: '802',
+                },
+                {
+                    division: '',
+                    entry_type: 'IP',
+                    participation: true,
+                    real_category: 'U110',
+                    category_in_competition: 'U110',
+                    code: '801',
+                },
+            ],
+            officials: [
+                {
+                    iwwfid: 'M00200',
+                    position: 'Judge',
+                    first_name: 'Miguel',
+                    last_name: 'Milhazes',
+                    qualification: 'WBJ1',
+                    country: 'POR',
+                    region: 'Europe',
+                },
+            ],
+        };
+
+
+        try {
+            const response = await axios.post(postXML("submitXML"), data, {
+                headers: {
+                    Authorization: `Token ${usuarioSalvo.token}`,
+                },
+            });
+            console.log("deu certo ");
+
+        } catch (error) {
+            console.log("deu erro");
+            console.error(error.request.response);
+        }
+    };
+
 
     const handleFileSubmit = (file) => {
         clear();
 
-
-        const index = fileList.indexOf(file);
+        index = fileList.indexOf(file);
         let count = 0;
-        // let juriList = [];//Array dos jurados
-        //let eventList = [];//Lista dos eventos --> só pode ter 1 competição por XML, apesar de ser só 1 tive que fazer num array
-        //let athletesList = []; //Lista dos atletas
-        //let competitionList = [];
 
         if (fileList[index]) {
             const reader = new FileReader();
@@ -90,16 +198,16 @@ const DropFileInput = (props) => {
                     const athletes = xmlDocument.querySelectorAll("athletes");
 
 
-                    const discipline = xmlDocument.querySelector("discipline, Discipline").textContent;
-                    const code = xmlDocument.querySelector("code,Code").textContent;
-                    const name = xmlDocument.querySelector("name,Name").textContent;
-                    const orgCountry = xmlDocument.querySelector("organizing_country,OrganizingCountry").textContent;
-                    const tournament_type = xmlDocument.querySelector("tournament_type,TournamentType").textContent;
-                    const venue = xmlDocument.querySelector("venue,Venue").textContent;
-                    const site_code = xmlDocument.querySelector("site_code,SiteCode").textContent;
-                    const startDate = xmlDocument.querySelector("beginning_date,BeginningDate").textContent;
-                    const endDate = xmlDocument.querySelector("end_date,EndDate").textContent;
-                    const age_groups = xmlDocument.querySelector("age_groups,AgeGroup").textContent;
+                    const discipline = xmlDocument.querySelector("discipline, Discipline,DISCIPLINE").textContent;
+                    const code = xmlDocument.querySelector("code,Code,CODE").textContent;
+                    const name = xmlDocument.querySelector("name,Name,NAME").textContent;
+                    const orgCountry = xmlDocument.querySelector("organizing_country,OrganizingCountry,ORGANIZINGCOUNTRY,Organizing_Country").textContent;
+                    const tournament_type = xmlDocument.querySelector("tournament_type,TournamentType,TOURNNAMENTTYPE,Tournament_type").textContent;
+                    const venue = xmlDocument.querySelector("venue,Venue,VENUE").textContent;
+                    const site_code = xmlDocument.querySelector("site_code,SiteCode,SITECODE,Site_Code").textContent;
+                    const startDate = xmlDocument.querySelector("beginning_date,BeginningDate,BEGINNINGDATE,Beginning_Date").textContent;
+                    const endDate = xmlDocument.querySelector("end_date,EndDate,ENDDATE,End_Date").textContent;
+                    const age_groups = xmlDocument.querySelector("age_groups,AgeGroup,AGEGROUP,Age_Groups").textContent;
 
                     competitionList.push({
                         discipline: discipline,
@@ -113,15 +221,14 @@ const DropFileInput = (props) => {
                         endDate: endDate,
                         age_groups: age_groups
                     })
-                    //console.log(competitionList);
 
                     for (const event of events) {
 
                         if (count === 0) {
-                            const code_Event = event.querySelector("code,Code").textContent;
-                            const rounds = event.querySelector("rounds,Rounds").textContent;
-                            const classEvent = event.querySelector("event_class,Event_Class").textContent;
-                            const name = event.querySelector("name,Name").textContent;
+                            const code_Event = event.querySelector("code,Code,CODE").textContent;
+                            const rounds = event.querySelector("rounds,Rounds,ROUNDS").textContent;
+                            const classEvent = event.querySelector("event_class,Event_Class,EVENT_CLASS").textContent;
+                            const name = event.querySelector("name,Name,NAME").textContent;
 
                             eventList.push({
                                 code: code_Event,
@@ -134,18 +241,16 @@ const DropFileInput = (props) => {
                             break;
                         }
                     }
-                    //console.log(eventList);
-
 
                     for (const official of officials) {
-                        const iwwfID = official.querySelector("iwwfid,Iwwfid").textContent;
-                        const position = official.querySelector("position,Position").textContent;
-                        const lastName = official.querySelector("last_name,LastName").textContent;
-                        const firstName = official.querySelector("first_name,FirstName").textContent;
-                        const qualification = official.querySelector("qualification,Qualification");
+                        const iwwfID = official.querySelector("iwwfid,Iwwfid,IWWFID").textContent;
+                        const position = official.querySelector("position,Position,POSITION").textContent;
+                        const lastName = official.querySelector("last_name,LastName,LASTNAME,Last_Name").textContent;
+                        const firstName = official.querySelector("first_name,FirstName,FIRSTNAME,First_Name").textContent;
+                        const qualification = official.querySelector("qualification,Qualification,QUALIFICATION");
                         const qualificationValue = qualification ? qualification.textContent : '';
-                        const country = official.querySelector("country,Country").textContent;
-                        const region = official.querySelector("region,Region").textContent;
+                        const country = official.querySelector("country,Country,COUNTRY").textContent;
+                        const region = official.querySelector("region,Region,REGION").textContent;
 
                         juriList.push({
                             id: iwwfID,
@@ -157,22 +262,20 @@ const DropFileInput = (props) => {
                             region: region
                         });
                     }
-                    // console.log(juriList);
-
 
                     for (const athlete of athletes) {
-                        const fed_id = athlete.querySelector("fed_id,FedId").textContent;
-                        const lastName = athlete.querySelector("last_name,LastName").textContent;
-                        const firstName = athlete.querySelector("first_name,FirstName").textContent;
-                        const country = athlete.querySelector("country,Country").textContent;
-                        const gender = athlete.querySelector("gender,Gender").textContent;
-                        const birthYear = athlete.querySelector("year_of_birth,YearOfBirth").textContent;
-                        const code = athlete.querySelector("code,Code").textContent;
-                        const division = athlete.querySelector("division,Division").textContent;
-                        const entry_type = athlete.querySelector("entry_type,EntryType").textContent;
-                        const participation = athlete.querySelector("participation,Participation").textContent;
-                        const category = athlete.querySelector("real_category,RealCategory").textContent;
-                        const competitionCategory = athlete.querySelector("category_in_competition,CategoryInCompetition").textContent;
+                        const fed_id = athlete.querySelector("fed_id,FedId,FEDID,Fed_Id").textContent;
+                        const lastName = athlete.querySelector("last_name,LastName,LASTNAME,Last_Name").textContent;
+                        const firstName = athlete.querySelector("first_name,FirstName,FIRSTNAME,First_Name").textContent;
+                        const country = athlete.querySelector("country,Country,COUNTRY").textContent;
+                        const gender = athlete.querySelector("gender,Gender,GENDER").textContent;
+                        const birthYear = athlete.querySelector("year_of_birth,YearOfBirth,YEAROFBIRTH").textContent;
+                        const code = athlete.querySelector("code,Code,CODE").textContent;
+                        const division = athlete.querySelector("division,Division,DIVISION").textContent;
+                        const entry_type = athlete.querySelector("entry_type,EntryType,ENTRYTYPE").textContent;
+                        const participation = athlete.querySelector("participation,Participation,PARTICIPATION").textContent;
+                        const category = athlete.querySelector("real_category,RealCategory,REALCATEGORY,Real_Category").textContent;
+                        const competitionCategory = athlete.querySelector("category_in_competition,CategoryInCompetition,CATEGORYINCOMPETITION,Category_In_Competition").textContent;
 
                         athletesList.push({
                             id: fed_id,
@@ -188,27 +291,17 @@ const DropFileInput = (props) => {
                             category: category,
                             competitionCategory: competitionCategory
                         })
-
                     }
-                    //console.log("primeiro")
                     handleOpenDialog(1);
+                }).catch(error => {
+                    console.error("XML inválido");
                 });
 
-
             };
-            //console.log("segundo");
             reader.readAsDataURL(fileList[index]);
         }
 
-
-        athletesList.map((item, index) => {
-            console.log({item});
-        })
-
-        //console.log("terceiro");
-
     };
-
 
     const displayCompetition = () => {
         if (openDialogIndex !== null) {
@@ -254,8 +347,8 @@ const DropFileInput = (props) => {
                 </div>
             )
         }
+        return null;
     }
-
 
     const displayJuri = () => {
         if (openDialogIndex !== null) {
@@ -273,10 +366,10 @@ const DropFileInput = (props) => {
                                         <strong>Position:</strong> {item.category}
                                     </Typography>
                                     <Typography variant="body1" component="div">
-                                        <strong>Last Name:</strong> {item.lastName}
+                                        <strong>First Name:</strong> {item.firstName}
                                     </Typography>
                                     <Typography variant="body1" component="div">
-                                        <strong>First Name:</strong> {item.firstName}
+                                        <strong>Last Name:</strong> {item.lastName}
                                     </Typography>
                                     <Typography variant="body1" component="div">
                                         <strong>Qualification:</strong> {item.qualification}
@@ -298,84 +391,95 @@ const DropFileInput = (props) => {
         return null; // Retorna null se openDialogIndex for null
     };
 
-
-    /*const displayJuri = () => {
+    const displayAthletes = () => {
         if (openDialogIndex !== null) {
             return (
-                <div className="juri-container">
-                    <h5>Juri painel</h5>
-                    <div className="juri-blank-container">
-
-                        {juriList.map((item, index) => (
-                            <div className="juri-item" key={index}>
-                                <span>ID: <span className="value">{item.id}</span></span>
-                                <span>Position: <span className="value">{item.category}</span></span>
-                                <span>Last Name: <span className="value">{item.lastName}</span></span>
-                                <span>First Name: <span className="value">{item.firstName}</span></span>
-                                <span>Qualification: <span className="value">{item.qualification}</span></span>
-                                <span>Country: <span className="value">{item.country}</span></span>
-                                <span>Region: <span className="value">{item.region}</span></span>
-                            </div>
+                <div>
+                    <h5>Athletes painel</h5>
+                    <div className="athletes-blank-container">
+                        {athletesList.map((item, index) => (
+                            <Card className="athletes-item" key={index}>
+                                <CardContent>
+                                    <Typography variant="body1" component="div">
+                                        <strong>ID:</strong> {item.id}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>First name:</strong> {item.firstName}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Last Name:</strong> {item.lastName}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Country:</strong> {item.country}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Gender:</strong> {item.gender}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Birth year:</strong> {item.year}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Real category:</strong> {item.category}
+                                    </Typography>
+                                    <Typography variant="body1" component="div">
+                                        <strong>Competition category:</strong> {item.competitionCategory}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
                         ))}
-
                     </div>
-
                 </div>
-            );
+            )
         }
-
-        return null; // Retorna null se openDialogIndex for null
-    };*/
-
+        return null;
+    }
 
     const displayEvent = () => {
         if (openDialogIndex !== null) {
             return (
-                <div className="event-container1">
-                    <h6>Event description </h6>
-                    <TableContainer component={Paper}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
+                <>
+                    {eventList.length > 0 && (
+                        <div className="event-container">
+                            <h6>Event description </h6>
+                            <TableContainer component={Paper}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
 
-                                    <TableCell className="event-table">Event</TableCell>
-                                    <TableCell className="event-table">Code</TableCell>
-                                    <TableCell className="event-table">Class event</TableCell>
-                                    <TableCell className="event-table">Rounds</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                <TableRow>
+                                            <TableCell className="event-table">Event</TableCell>
+                                            <TableCell className="event-table">Code</TableCell>
+                                            <TableCell className="event-table">Class event</TableCell>
+                                            <TableCell className="event-table">Rounds</TableCell>
 
-                                    <TableCell>{eventList[0].name}</TableCell>
-                                    <TableCell>{eventList[0].code}</TableCell>
-                                    <TableCell>{eventList[0].classEvent}</TableCell>
-                                    <TableCell>{eventList[0].rounds}</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
 
-                                </TableRow>
+                                        <TableRow>
+                                            <TableCell>{eventList[0].name}</TableCell>
+                                            <TableCell>{eventList[0].code}</TableCell>
+                                            <TableCell>{eventList[0].classEvent}</TableCell>
+                                            <TableCell>{eventList[0].rounds}</TableCell>
+                                        </TableRow>
 
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
 
+                        </div>
+                    )}
+                </>
 
-                    {/*<div className="event">
-                        <p>Event: <span className="value">{eventList[0].name}</span></p>
-                        <p>Code: <span className="value">{eventList[0].code}</span></p>
-                        <p>Class event: <span className="value">{eventList[0].classEvent}</span></p>
-                        <p>Rounds: <span className="value">{eventList[0].rounds}</span></p>
-                    </div>*/}
-                </div>
 
             )
         }
+        return null;
     }
-
 
     const renderDialog = () => {
 
+
         if (openDialogIndex !== null) {
-            //console.log(athletesList[0].id);
 
             return (
                 <Dialog open={true} onClose={handleCloseDialog} maxWidth="lg">
@@ -385,55 +489,61 @@ const DropFileInput = (props) => {
                     <DialogTitle>XML Preview</DialogTitle>
                     <DialogContent>
 
-
                         {displayCompetition()}
                         {displayEvent()}
-
                         {displayJuri()}
-
-                        {/*juriList.map((item, index) => (
-                            <div className="juri-item" key={index}>
-                                <p>ID: <span className="value">{item.id}</span></p>
-                                <p>Position: <span className="value">{item.position}</span></p>
-                                <p>Last Name: <span className="value">{item.lastName}</span></p>
-                                <p>First Name: <span className="value">{item.firstName}</span></p>
-                                <p>Qualification: <span className="value">{item.qualification}</span></p>
-                                <p>Country: <span className="value">{item.country}</span></p>
-                                <p>Region: <span className="value">{item.region}</span></p>
-                            </div>
-                        ))*/}
+                        {displayAthletes()}
 
                         <DialogContentText>
-
                         </DialogContentText>
-
-                        <DialogContentText>
-
-
-                        </DialogContentText>
-
-                        {/*athletesList.map((item, index) => (
-                            <div key={index}>
-                                <p>{"Aqui " + item.id}</p>
-                            </div>
-                        ))*/}
-
 
                     </DialogContent>
-
                     <DialogActions>
 
-                        <Button onClick={handleCloseDialog}>Fechar</Button>
+                        <DialogActions>
+                            <Button onClick={() => {
+                                fileRemove(null, index);
+                                handleCloseDialog()
+                            }}>Submit</Button>
+                        </DialogActions>
+                        <Button onClick={handleCloseDialog}>Close</Button>
                     </DialogActions>
 
                 </Dialog>
-
             );
-
         }
-
         return null;
     };
+
+    const popJoel = () => {
+
+        if (openInvalidXMLInput !== null) {
+
+            return (
+                <Dialog open={true} onClose={handleCloseDialogXMLInput} maxWidth="lg">
+                    {/*maxWidth="md" fullWidth = "800"*/}
+                    {/*sx={{width: '100%', maxWidth: '100%'}}*/}
+
+                    <DialogTitle>XML Invalid</DialogTitle>
+                    <DialogContent>
+
+
+                        <DialogContentText>
+                        </DialogContentText>
+
+                    </DialogContent>
+                    <DialogActions>
+
+
+                        <Button onClick={handleCloseDialogXMLInput}>Close</Button>
+                    </DialogActions>
+
+                </Dialog>
+            );
+        }
+        return null;
+
+    }
 
     return (
         <>
@@ -443,34 +553,57 @@ const DropFileInput = (props) => {
                 onDragEnter={onDragEnter}
                 onDragLeave={onDragLeave}
                 onDrop={onDrop}
+
             >
                 <div className="drop-file-input_label">
                     <img src={uploadImg} alt=""/>
                     <p>Drag & Drop your files here!</p>
                 </div>
-                <input type="file" value="" onChange={onFileDrop}/>
+                <input type="file" value="" accept=".xml" onChange={onFileDrop}/>
             </div>
             {fileList.length > 0 ? (
                 <div className="drop-file-preview">
                     <p className="drop-file-preview_title">Ready to upload</p>
                     {fileList.map((item, index) => (
+
                         <div key={index} className="drop-file-preview_item">
+
                             <img src={ImageConfig[item.type.split('/')[1] || ImageConfig['default']]} alt=""/>
                             <div className="drop-file-preview_item_info">
                                 <p>{item.name}</p>
                             </div>
-                            {/*<button className="drop-file-preview_btn" variant="contained" onClick={() => handleOpenDialog(index)}>
-                                Check
-                            </button>*/}
-                            <button className="drop-file-preview_btn" variant="contained"
-                                    onClick={() => handleFileSubmit(item)}>
-                                Check
-                            </button>
-                            <span className="drop-file-preview_item_del" onClick={() => fileRemove(item)}> x </span>
+
+                            <Tooltip title="Submit" className="tooltip-gender">
+                                <IconButton
+                                    id="drop-file-item_submit"
+                                    onClick={() => {
+                                        submitXML();
+                                        fileRemove(null, index);
+                                    }}
+                                >
+                                    <PublishIcon style={{color: 'forestgreen', cursor: 'pointer'}}/>
+                                </IconButton>
+                            </Tooltip>
+
+                            <Tooltip title="Preview" className="tooltip-gender">
+                                <IconButton id="drop-file-item_preview" onClick={() => handleFileSubmit(item)}>
+                                    <Visibility style={{color: '#4267b2', cursor: 'pointer'}}/>
+                                </IconButton>
+                            </Tooltip>
+
+                            <Tooltip title="Remove" className="tooltip-gender">
+                                <IconButton id="drop-file-item_del"
+                                            onClick={() => fileRemove(item)}>
+                                    <DeleteIcon color="error"
+                                                style={{cursor: 'pointer'}}/>
+                                </IconButton>
+                            </Tooltip>
+
                         </div>
                     ))}
                 </div>
             ) : null}
+            {popJoel()}
             {renderDialog()}
         </>
     );
