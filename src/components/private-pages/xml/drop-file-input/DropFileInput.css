@@ -199,4 +199,38 @@
     /*background-color: #f2f2f2;*/
 
 }
+.error-dialog {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.error-dialog-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f44336;
+}
+
+.error-dialog-icon {
+    margin-right: 10px;
+    color: #f44336;
+}
+
+.error-dialog-content {
+    margin-bottom: 20px;
+}
+
+.error-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.error-dialog-button {
+    font-weight: bold;
+}
+
+
+
+
 
