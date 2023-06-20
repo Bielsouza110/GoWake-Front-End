@@ -18,14 +18,13 @@ import {Visibility} from "@material-ui/icons";
 import PublishIcon from '@mui/icons-material/Publish';
 import axios from "axios";
 import {getEndpointCreateAthlete, postXML} from "../../../../api/Urls";
-
+import {Error as ErrorIcon} from '@material-ui/icons';
 
 let juriList = [];//Array global dos jurados
 let eventList = [];//Lista global dos eventos --> só pode ter 1 competição por XML, apesar de ser só 1 tive que fazer num array
 let athletesList = []; //Lista global dos atletas
 let competitionList = [];
-let index = 0
-
+let index = 0;
 
 const DropFileInput = (props) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
@@ -41,7 +40,8 @@ const DropFileInput = (props) => {
     const [fileList, setFileList] = useState([]);
     const wrapperRef = useRef(null);
     const [openDialogIndex, setOpenDialogIndex] = useState(null);
-    const [openInvalidXMLInput, setOpenInvalidXMLInput] = useState(null);
+    const [openInvalidXMLInput, setOpenInvalidXMLInput] = useState(null);//Variável que guarda se ficheiro selecionado é válido
+    const [openInvalidXMLFields, setOpenInvalidXMLFields] = useState(null);//Variável que vai verificar os campos
 
     const onDragEnter = () => wrapperRef.current.classList.add('dragover');
     const onDragLeave = () => wrapperRef.current.classList.remove('dragover');
@@ -93,6 +93,14 @@ const DropFileInput = (props) => {
 
     const handleCloseDialogXMLInput = () => {
         setOpenInvalidXMLInput(null);
+    };
+
+    const handleOpenDialogXMLFields = (index) => {
+        setOpenInvalidXMLFields(index);
+    };
+
+    const handleCloseDialogXMLFields = () => {
+        setOpenInvalidXMLFields(null);
     };
 
 
@@ -191,106 +199,197 @@ const DropFileInput = (props) => {
 
                     return response.text();
                 }).then(xmlString => {
+
                     const xmlDocument = new DOMParser().parseFromString(xmlString, "text/xml");
                     //const competitions = xmlDocument.querySelectorAll("");//ver mais tarde sobre o inicio do XML
                     const events = xmlDocument.querySelectorAll("events");
+                    const eventsValue = events ? events.textContent : '';
+
                     const officials = xmlDocument.querySelectorAll("officials");
+                    const officialsValue = officials ? officials.textContent : '';
+
                     const athletes = xmlDocument.querySelectorAll("athletes");
+                    const athletesValue = athletes ? athletes.textContent : '';
 
+                    try {
+                        const discipline = xmlDocument.querySelector("discipline, Discipline,DISCIPLINE").textContent;
+                        const disciplineValue = discipline ? discipline.textContent : '';
 
-                    const discipline = xmlDocument.querySelector("discipline, Discipline,DISCIPLINE").textContent;
-                    const code = xmlDocument.querySelector("code,Code,CODE").textContent;
-                    const name = xmlDocument.querySelector("name,Name,NAME").textContent;
-                    const orgCountry = xmlDocument.querySelector("organizing_country,OrganizingCountry,ORGANIZINGCOUNTRY,Organizing_Country").textContent;
-                    const tournament_type = xmlDocument.querySelector("tournament_type,TournamentType,TOURNNAMENTTYPE,Tournament_type").textContent;
-                    const venue = xmlDocument.querySelector("venue,Venue,VENUE").textContent;
-                    const site_code = xmlDocument.querySelector("site_code,SiteCode,SITECODE,Site_Code").textContent;
-                    const startDate = xmlDocument.querySelector("beginning_date,BeginningDate,BEGINNINGDATE,Beginning_Date").textContent;
-                    const endDate = xmlDocument.querySelector("end_date,EndDate,ENDDATE,End_Date").textContent;
-                    const age_groups = xmlDocument.querySelector("age_groups,AgeGroup,AGEGROUP,Age_Groups").textContent;
+                        const code = xmlDocument.querySelector("code,Code,CODE").textContent;
+                        const codeValue = code ? code.textContent : '';
 
-                    competitionList.push({
-                        discipline: discipline,
-                        code: code,
-                        name: name,
-                        orgCountry: orgCountry,
-                        tournament_type: tournament_type,
-                        venue: venue,
-                        site_code: site_code,
-                        startDate: startDate,
-                        endDate: endDate,
-                        age_groups: age_groups
-                    })
+                        const name = xmlDocument.querySelector("name,Name,NAME").textContent;
+                        const nameValue = name ? name.textContent : '';
+
+                        const orgCountry = xmlDocument.querySelector("organizing_country,OrganizingCountry,ORGANIZINGCOUNTRY,Organizing_Country").textContent;
+                        const orgCountryValue = orgCountry ? orgCountry.textContent : '';
+
+                        const tournament_type = xmlDocument.querySelector("tournament_type,TournamentType,TOURNNAMENTTYPE,Tournament_type").textContent;
+                        const tournament_typeValue = tournament_type ? tournament_type.textContent : '';
+
+                        const venue = xmlDocument.querySelector("venue,Venue,VENUE").textContent;
+                        const venueValue = venue ? venue.textContent : '';
+
+                        const site_code = xmlDocument.querySelector("site_code,SiteCode,SITECODE,Site_Code").textContent;
+                        const site_codeValue = site_code ? site_code.textContent : '';
+
+                        const startDate = xmlDocument.querySelector("beginning_date,BeginningDate,BEGINNINGDATE,Beginning_Date").textContent;
+                        const startDateValue = startDate ? startDate.textContent : '';
+
+                        const endDate = xmlDocument.querySelector("end_date,EndDate,ENDDATE,End_Date").textContent;
+                        const endDateValue = endDate ? endDate.textContent : '';
+
+                        const age_groups = xmlDocument.querySelector("age_groups,AgeGroup,AGEGROUP,Age_Groups").textContent;
+                        const age_groupsValue = age_groups ? age_groups.textContent : '';
+
+                        competitionList.push({
+                            discipline: discipline,
+                            code: code,
+                            name: name,
+                            orgCountry: orgCountry,
+                            tournament_type: tournament_type,
+                            venue: venue,
+                            site_code: site_code,
+                            startDate: startDate,
+                            endDate: endDate,
+                            age_groups: age_groups
+                        });
+                    } catch (error) {
+                        console.error('Ocorreu um erro ao processar as informações principais:', error);
+                    }
+
 
                     for (const event of events) {
+                        try {
+                            if (count === 0) {
+                                const code_Event = event.querySelector("code,Code,CODE").textContent;
+                                const code_EventValue = code_Event ? code_Event.textContent : '';
 
-                        if (count === 0) {
-                            const code_Event = event.querySelector("code,Code,CODE").textContent;
-                            const rounds = event.querySelector("rounds,Rounds,ROUNDS").textContent;
-                            const classEvent = event.querySelector("event_class,Event_Class,EVENT_CLASS").textContent;
-                            const name = event.querySelector("name,Name,NAME").textContent;
+                                const rounds = event.querySelector("rounds,Rounds,ROUNDS").textContent;
+                                const roundsValue = rounds ? rounds.textContent : '';
 
-                            eventList.push({
-                                code: code_Event,
-                                rounds: rounds,
-                                classEvent: classEvent,
-                                name: name
-                            });
-                            count++;
-                        } else {
-                            break;
+                                const classEvent = event.querySelector("event_class,Event_Class,EVENT_CLASS").textContent;
+                                const classEventValue = classEvent ? classEvent.textContent : '';
+
+                                const name = event.querySelector("name,Name,NAME").textContent;
+                                const nameValue = name ? name.textContent : '';
+                                console.log(name);
+                                console.log(nameValue);
+
+                                eventList.push({
+                                    code: code_Event,
+                                    rounds: rounds,
+                                    classEvent: classEvent,
+                                    name: nameValue
+                                });
+                                count++;
+                            } else {
+                                break;
+                            }
+                        } catch (error) {
+                            console.error('Ocorreu um erro ao processar os eventos:', error);
                         }
                     }
 
-                    for (const official of officials) {
-                        const iwwfID = official.querySelector("iwwfid,Iwwfid,IWWFID").textContent;
-                        const position = official.querySelector("position,Position,POSITION").textContent;
-                        const lastName = official.querySelector("last_name,LastName,LASTNAME,Last_Name").textContent;
-                        const firstName = official.querySelector("first_name,FirstName,FIRSTNAME,First_Name").textContent;
-                        const qualification = official.querySelector("qualification,Qualification,QUALIFICATION");
-                        const qualificationValue = qualification ? qualification.textContent : '';
-                        const country = official.querySelector("country,Country,COUNTRY").textContent;
-                        const region = official.querySelector("region,Region,REGION").textContent;
 
-                        juriList.push({
-                            id: iwwfID,
-                            category: position,
-                            lastName: lastName,
-                            firstName: firstName,
-                            qualification: qualificationValue,
-                            country: country,
-                            region: region
-                        });
+                    for (const official of officials) {
+                        try {
+                            const iwwfID = official.querySelector("iwwfid,Iwwfid,IWWFID").textContent;
+                            const iwwfIDValue = iwwfID ? iwwfID.textContent : '';
+
+                            const position = official.querySelector("position,Position,POSITION").textContent;
+                            const positionValue = position ? position.textContent : '';
+
+                            const lastName = official.querySelector("last_name,LastName,LASTNAME,Last_Name").textContent;
+                            const lastNameValue = lastName ? lastName.textContent : '';
+
+                            const firstName = official.querySelector("first_name,FirstName,FIRSTNAME,First_Name").textContent;
+                            const firstNameValue = firstName ? firstName.textContent : '';
+
+                            const qualification = official.querySelector("qualification,Qualification,QUALIFICATION");
+                            const qualificationValue = qualification ? qualification.textContent : '';
+
+                            const country = official.querySelector("country,Country,COUNTRY").textContent;
+                            const countryValue = country ? country.textContent : '';
+
+                            const region = official.querySelector("region,Region,REGION").textContent;
+                            const regionValue = region ? region.textContent : '';
+
+                            juriList.push({
+                                id: iwwfID,
+                                category: position,
+                                lastName: lastName,
+                                firstName: firstName,
+                                qualification: qualificationValue,
+                                country: country,
+                                region: region
+                            });
+                        } catch (error) {
+                            console.error('Ocorreu um erro ao processar os oficiais:', error);
+                        }
                     }
 
-                    for (const athlete of athletes) {
-                        const fed_id = athlete.querySelector("fed_id,FedId,FEDID,Fed_Id").textContent;
-                        const lastName = athlete.querySelector("last_name,LastName,LASTNAME,Last_Name").textContent;
-                        const firstName = athlete.querySelector("first_name,FirstName,FIRSTNAME,First_Name").textContent;
-                        const country = athlete.querySelector("country,Country,COUNTRY").textContent;
-                        const gender = athlete.querySelector("gender,Gender,GENDER").textContent;
-                        const birthYear = athlete.querySelector("year_of_birth,YearOfBirth,YEAROFBIRTH").textContent;
-                        const code = athlete.querySelector("code,Code,CODE").textContent;
-                        const division = athlete.querySelector("division,Division,DIVISION").textContent;
-                        const entry_type = athlete.querySelector("entry_type,EntryType,ENTRYTYPE").textContent;
-                        const participation = athlete.querySelector("participation,Participation,PARTICIPATION").textContent;
-                        const category = athlete.querySelector("real_category,RealCategory,REALCATEGORY,Real_Category").textContent;
-                        const competitionCategory = athlete.querySelector("category_in_competition,CategoryInCompetition,CATEGORYINCOMPETITION,Category_In_Competition").textContent;
 
-                        athletesList.push({
-                            id: fed_id,
-                            lastName: lastName,
-                            firstName: firstName,
-                            country: country,
-                            gender: gender,
-                            year: birthYear,
-                            code: code,
-                            division: division,
-                            entry_type: entry_type,
-                            participation: participation,
-                            category: category,
-                            competitionCategory: competitionCategory
-                        })
+                    for (const athlete of athletes) {
+                        try {
+                            const fed_id = athlete.querySelector("fed_id,FedId,FEDID,Fed_Id").textContent;
+                            const fed_idValue = fed_id ? fed_id.textContent : '';
+
+                            const lastName = athlete.querySelector("last_name,LastName,LASTNAME,Last_Name").textContent;
+                            const lastNameValue = lastName ? lastName.textContent : '';
+
+                            const firstName = athlete.querySelector("first_name,FirstName,FIRSTNAME,First_Name").textContent;
+                            const firstNameValue = firstName ? firstName.textContent : '';
+
+                            const country = athlete.querySelector("country,Country,COUNTRY").textContent;
+                            const countryValue = country ? country.textContent : '';
+
+                            const gender = athlete.querySelector("gender,Gender,GENDER").textContent;
+                            const genderValue = gender ? gender.textContent : '';
+
+                            const birthYear = athlete.querySelector("year_of_birth,YearOfBirth,YEAROFBIRTH").textContent;
+                            const birthYearValue = birthYear ? birthYear.textContent : '';
+
+                            const code = athlete.querySelector("code,Code,CODE").textContent;
+                            const codeValue = code ? code.textContent : '';
+
+                            const division = athlete.querySelector("division,Division,DIVISION").textContent;
+                            const divisionValue = division ? division.textContent : '';
+
+                            const entry_type = athlete.querySelector("entry_type,EntryType,ENTRYTYPE").textContent;
+                            const entry_typeValue = entry_type ? entry_type.textContent : '';
+
+                            const participation = athlete.querySelector("participation,Participation,PARTICIPATION").textContent;
+                            const participationValue = participation ? participation.textContent : '';
+
+                            const category = athlete.querySelector("real_category,RealCategory,REALCATEGORY,Real_Category").textContent;
+                            const categoryValue = category ? category.textContent : '';
+
+                            const competitionCategory = athlete.querySelector("category_in_competition,CategoryInCompetition,CATEGORYINCOMPETITION,Category_In_Competition").textContent;
+                            const competitionCategoryValue = competitionCategory ? competitionCategory.textContent : '';
+
+                            athletesList.push({
+                                id: fed_id,
+                                lastName: lastName,
+                                firstName: firstName,
+                                country: country,
+                                gender: gender,
+                                year: birthYear,
+                                code: code,
+                                division: division,
+                                entry_type: entry_type,
+                                participation: participation,
+                                category: category,
+                                competitionCategory: competitionCategory
+                            });
+                        } catch (error) {
+                            console.error('Ocorreu um erro ao processar os atletas:', error);
+                        }
+                    }
+                    if (eventList.length === 0 || athletesList.length === 0 || juriList.length === 0 || competitionList.length === 0) {
+                        handleOpenDialogXMLFields(1);
+                    } else {
+                        handleOpenDialogXMLFields(null);
                     }
                     handleOpenDialog(1);
                 }).catch(error => {
@@ -304,7 +403,7 @@ const DropFileInput = (props) => {
     };
 
     const displayCompetition = () => {
-        if (openDialogIndex !== null) {
+        if (openDialogIndex !== null && openInvalidXMLFields===null) {
             return (
                 <div className="competition-container">
                     <h6>Competition name: <span className="value">{competitionList[0].name}</span></h6>
@@ -351,7 +450,7 @@ const DropFileInput = (props) => {
     }
 
     const displayJuri = () => {
-        if (openDialogIndex !== null) {
+        if (openDialogIndex !== null && openInvalidXMLFields===null) {
             return (
                 <div className="juri-container">
                     <h5>Juri painel</h5>
@@ -392,7 +491,7 @@ const DropFileInput = (props) => {
     };
 
     const displayAthletes = () => {
-        if (openDialogIndex !== null) {
+        if (openDialogIndex !== null && openInvalidXMLFields===null) {
             return (
                 <div>
                     <h5>Athletes painel</h5>
@@ -435,39 +534,39 @@ const DropFileInput = (props) => {
     }
 
     const displayEvent = () => {
-        if (openDialogIndex !== null) {
+        if (openDialogIndex !== null && openInvalidXMLFields===null) {
             return (
                 <>
-                    {eventList.length > 0 && (
-                        <div className="event-container">
-                            <h6>Event description </h6>
-                            <TableContainer component={Paper}>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
 
-                                            <TableCell className="event-table">Event</TableCell>
-                                            <TableCell className="event-table">Code</TableCell>
-                                            <TableCell className="event-table">Class event</TableCell>
-                                            <TableCell className="event-table">Rounds</TableCell>
+                    <div className="event-container">
+                        <h6>Event description </h6>
+                        <TableContainer component={Paper}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
 
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
+                                        <TableCell className="event-table">Event</TableCell>
+                                        <TableCell className="event-table">Code</TableCell>
+                                        <TableCell className="event-table">Class event</TableCell>
+                                        <TableCell className="event-table">Rounds</TableCell>
 
-                                        <TableRow>
-                                            <TableCell>{eventList[0].name}</TableCell>
-                                            <TableCell>{eventList[0].code}</TableCell>
-                                            <TableCell>{eventList[0].classEvent}</TableCell>
-                                            <TableCell>{eventList[0].rounds}</TableCell>
-                                        </TableRow>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
 
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+                                    <TableRow>
+                                        <TableCell>{eventList[0].name}</TableCell>
+                                        <TableCell>{eventList[0].code}</TableCell>
+                                        <TableCell>{eventList[0].classEvent}</TableCell>
+                                        <TableCell>{eventList[0].rounds}</TableCell>
+                                    </TableRow>
 
-                        </div>
-                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+
+                    </div>
+
                 </>
 
 
@@ -479,7 +578,7 @@ const DropFileInput = (props) => {
     const renderDialog = () => {
 
 
-        if (openDialogIndex !== null) {
+        if (openDialogIndex !== null && openInvalidXMLFields===null) {
 
             return (
                 <Dialog open={true} onClose={handleCloseDialog} maxWidth="lg">
@@ -515,34 +614,46 @@ const DropFileInput = (props) => {
         return null;
     };
 
-    const popJoel = () => {
-
+    const showInvalidDialogXMLInput = () => {
         if (openInvalidXMLInput !== null) {
-
             return (
-                <Dialog open={true} onClose={handleCloseDialogXMLInput} maxWidth="lg">
-                    {/*maxWidth="md" fullWidth = "800"*/}
-                    {/*sx={{width: '100%', maxWidth: '100%'}}*/}
-
-                    <DialogTitle>XML Invalid</DialogTitle>
-                    <DialogContent>
-
-
-                        <DialogContentText>
-                        </DialogContentText>
-
-                    </DialogContent>
-                    <DialogActions>
-
-
-                        <Button onClick={handleCloseDialogXMLInput}>Close</Button>
+                <Dialog open={true} onClose={handleCloseDialogXMLInput} className="error-dialog">
+                    <DialogTitle className="error-dialog-title">
+                        <ErrorIcon className="error-dialog-icon"/>
+                        Error
+                    </DialogTitle>
+                    <DialogContent className="error-dialog-content">The selected file is invalid. Please choose a valid
+                        XML file.</DialogContent>
+                    <DialogActions className="error-dialog-actions">
+                        <Button onClick={handleCloseDialogXMLInput} color="primary" className="error-dialog-button">
+                            Close
+                        </Button>
                     </DialogActions>
-
                 </Dialog>
             );
         }
         return null;
+    };
 
+    const showInvalidDialogXMLFields = () => {
+        if (openInvalidXMLFields !== null) {
+            return (
+                <Dialog open={true} onClose={handleCloseDialogXMLInput} className="error-dialog">
+                    <DialogTitle className="error-dialog-title">
+                        <ErrorIcon className="error-dialog-icon"/>
+                        Error
+                    </DialogTitle>
+                    <DialogContent className="error-dialog-content">Wrong structure or the competition is not
+                        wakeboarding.</DialogContent>
+                    <DialogActions className="error-dialog-actions">
+                        <Button onClick={handleCloseDialogXMLInput} color="primary" className="error-dialog-button">
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            );
+        }
+        return null;
     }
 
     return (
@@ -572,18 +683,21 @@ const DropFileInput = (props) => {
                             <div className="drop-file-preview_item_info">
                                 <p>{item.name}</p>
                             </div>
+                            {openInvalidXMLFields===null &&(
+                                <Tooltip title="Submit" className="tooltip-gender">
+                                    <IconButton
+                                        id="drop-file-item_submit"
+                                        onClick={() => {
+                                            submitXML();
+                                            fileRemove(null, index);
+                                        }}
+                                    >
+                                        <PublishIcon style={{color: 'forestgreen', cursor: 'pointer'}}/>
+                                    </IconButton>
+                                </Tooltip>
 
-                            <Tooltip title="Submit" className="tooltip-gender">
-                                <IconButton
-                                    id="drop-file-item_submit"
-                                    onClick={() => {
-                                        submitXML();
-                                        fileRemove(null, index);
-                                    }}
-                                >
-                                    <PublishIcon style={{color: 'forestgreen', cursor: 'pointer'}}/>
-                                </IconButton>
-                            </Tooltip>
+                            )}
+
 
                             <Tooltip title="Preview" className="tooltip-gender">
                                 <IconButton id="drop-file-item_preview" onClick={() => handleFileSubmit(item)}>
@@ -603,7 +717,8 @@ const DropFileInput = (props) => {
                     ))}
                 </div>
             ) : null}
-            {popJoel()}
+            {showInvalidDialogXMLInput()}
+            {showInvalidDialogXMLFields()}
             {renderDialog()}
         </>
     );
