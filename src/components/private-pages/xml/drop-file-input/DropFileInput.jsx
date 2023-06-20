@@ -638,7 +638,7 @@ const DropFileInput = (props) => {
     const showInvalidDialogXMLFields = () => {
         if (openInvalidXMLFields !== null) {
             return (
-                <Dialog open={true} onClose={handleCloseDialogXMLInput} className="error-dialog">
+                <Dialog open={true} onClose={handleCloseDialogXMLFields} className="error-dialog">
                     <DialogTitle className="error-dialog-title">
                         <ErrorIcon className="error-dialog-icon"/>
                         Error
@@ -646,7 +646,7 @@ const DropFileInput = (props) => {
                     <DialogContent className="error-dialog-content">Wrong structure or the competition is not
                         wakeboarding.</DialogContent>
                     <DialogActions className="error-dialog-actions">
-                        <Button onClick={handleCloseDialogXMLInput} color="primary" className="error-dialog-button">
+                        <Button onClick={handleCloseDialogXMLFields} color="primary" className="error-dialog-button">
                             Close
                         </Button>
                     </DialogActions>
