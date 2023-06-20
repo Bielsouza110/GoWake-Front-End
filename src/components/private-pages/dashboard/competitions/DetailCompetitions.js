@@ -9,6 +9,7 @@ import {MDBContainer} from "mdb-react-ui-kit";
 import Typography from "@mui/material/Typography";
 import {getEndpointCompetitionById} from "../../../../api/Urls";
 import {
+    Divider,
     Grid,
     Paper,
     Table,
@@ -33,14 +34,20 @@ import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Tooltip from "@mui/material/Tooltip";
+import AddIcon from "@mui/icons-material/Add";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
+import FestivalIcon from "@mui/icons-material/Festival";
 
 function DetailCompetitions() {
+
+    const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
+
     const [data, setData] = useState(null);
     const {id} = useParams();
     const [showSpinner, setShowSpinner] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
-
-    const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
+    const isMobile = useMediaQuery('(max-width: 600px)');
 
     useEffect(() => {
 
@@ -62,7 +69,6 @@ function DetailCompetitions() {
     }, []);
 
     const [activeButton, setActiveButton] = useState(1); // Definindo o Item 1 como ativo inicialmente
-
     const handleButtonHover = (index) => {
         setActiveButton(index);
     };
@@ -84,6 +90,9 @@ function DetailCompetitions() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const generateHeat = () => {
+        console.log("Generate heat")
+    }
 
     return (
         <div className="sdd">
@@ -92,26 +101,47 @@ function DetailCompetitions() {
                 <Container id="marginDrawerHeader">
                     <DrawerHeader/>
                     <MDBContainer className="p-1 my-2">
-                        <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{
-                            fontSize: '20px'
-                        }}>
 
-                            <IconButton
-                                color="inherit"
-                                aria-label="open drawer"
-                                onClick={handleClick}
-                                edge="start"
-                                sx={{
-                                    marginRight: 0.5,
-                                }}
-                            >
-                                <Tooltip title="Menu">
-                                    <MenuIcon/>
-                                </Tooltip>
-                            </IconButton>
+                        {isMobile ? (
+                            <div>
+                                <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{ fontSize: '20px' }}>
+                                    <IconButton color="inherit" aria-label="open drawer" onClick={handleClick} edge="start" sx={{ marginRight: 0.5 }}>
+                                        <Tooltip title="Menu"><MenuIcon /></Tooltip>
+                                    </IconButton>
+                                    Competition details
+                                </Typography>
 
-                            Competition details
-                        </Typography>
+                                <Grid item xs={12} sm={12}>
+                                    <Button
+                                        variant="contained"
+                                        startIcon={<PublishedWithChangesIcon/>}
+                                        onClick={generateHeat}
+                                        style={{textTransform: 'none', backgroundColor: 'green', marginBottom: '6vh'}}
+                                        sx={{width: '100%', maxWidth: '100%'}}
+                                    >
+                                        <span style={{ color: 'inherit' }}>Generate heat</span>
+                                    </Button>
+                                </Grid>
+                            </div>
+                        ) : (
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{ fontSize: '20px' }}>
+                                    <IconButton color="inherit" aria-label="open drawer" onClick={handleClick} edge="start" sx={{ marginRight: 0.5 }}>
+                                        <Tooltip title="Menu"><MenuIcon /></Tooltip>
+                                    </IconButton>
+                                    Competition details
+                                </Typography>
+
+                                <Button
+                                    variant="contained"
+                                    startIcon={<PublishedWithChangesIcon />}
+                                    onClick={generateHeat}
+                                    style={{ textTransform: 'none', backgroundColor: 'green', marginLeft: 'auto' }}
+                                >
+                                    <span style={{ color: 'inherit' }}>Generate heat</span>
+                                </Button>
+                            </div>
+                        )}
 
                         <div>
                             <Menu
@@ -134,12 +164,19 @@ function DetailCompetitions() {
                             </Menu>
                         </div>
 
+                        <div id="esconde"><Divider style={{backgroundColor: 'black', marginBottom: '3vh'}}/></div>
+
                         {data && (
-                            <Typography id="margin3" variant="h6" fontWeight="bold" style={{fontSize: '16px'}}>
-                                <Tooltip
-                                    title={data.organizing_country}>{getCountryFlag(data.organizing_country)}</Tooltip> {data.name.charAt(0).toUpperCase() + data.name.slice(1).toLowerCase()}
-                            </Typography>
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                <Typography id="margin3" variant="h6" fontWeight="bold" style={{fontSize: '16px'}}>
+                                    <Tooltip
+                                        title="Competition name">
+                                        <FestivalIcon sx={{marginRight: '0.2em'}}/>
+                                    </Tooltip> {data.name.charAt(0).toUpperCase() + data.name.slice(1).toLowerCase()}
+                                </Typography>
+                            </div>
                         )}
+
 
                         {data && (
                             <Typography id="margin3" variant="h6" fontWeight="bold" style={{fontSize: '16px'}}>

@@ -5,18 +5,7 @@ import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    TextField,
-    Grid,
-    Button, IconButton
-} from '@mui/material';
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Grid, Button, IconButton} from '@mui/material';
 import {Spinner} from "react-bootstrap";
 import Typography from '@mui/material/Typography';
 import DrawerHeader from "../../../navs/DrawerHeader";
@@ -27,6 +16,7 @@ import WarningIcon from "@mui/icons-material/Warning";
 import AddIcon from "@mui/icons-material/Add";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import {Delete as DeleteIcon, Edit as EditIcon} from "@mui/icons-material";
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 const Dashboard = () => {
 
@@ -75,6 +65,9 @@ const Dashboard = () => {
     const handleClickOpenDelete = () => {
         console.log("Delete competition")
     }
+    const exportXML = () => {
+        console.log("exportXML")
+    }
 
     return (
         <div className="sdd">
@@ -95,28 +88,25 @@ const Dashboard = () => {
                             to see more details.
                         </Typography>
 
-                        {data.length === 0 && showSpinner &&
-                            (
+                        {data.length === 0 && showSpinner && (
                                 <div align="center">
                                     <Spinner id="load" animation="border" variant="secondary" size="3rem"/>
                                     <p id="load2">Loading...</p>
                                 </div>
-                            )
-                        }
+                        )}
 
                         {data.length === 0 && !showSpinner && (
                             <div align="center">
                                 <WarningIcon style={{color: 'red', marginTop: '3vh'}}/>
                                 <p id="error2">There are no competitions at the moment!</p>
                             </div>
-                        )
-                        }
+                        )}
 
                         {data.length !== 0 && (
                             <div>
                                 <div>
                                     <TextField
-                                        label="Search by competition name"
+                                        label="Search by venue"
                                         variant="outlined"
                                         value={searchTerm}
                                         onChange={handleSearchTermChange}
@@ -128,6 +118,16 @@ const Dashboard = () => {
                                         <Grid item xs={12} sm={12}>
                                             <Button
                                                 variant="contained"
+                                                startIcon={<FileDownloadOutlinedIcon/>}
+                                                onClick={exportXML}
+                                                style={{textTransform: 'none', backgroundColor: 'green', marginBottom: '3vh'}}
+                                                sx={{width: '100%', maxWidth: '100%'}}
+                                            >
+                                                <span style={{ color: 'inherit' }}>Export XML</span>
+                                            </Button>
+
+                                            <Button
+                                                variant="contained"
                                                 startIcon={<AddIcon/>}
                                                 onClick={handleOpenDialog}
                                                 style={{textTransform: 'none', color: 'success', marginBottom: '3vh'}}
@@ -137,14 +137,16 @@ const Dashboard = () => {
                                             </Button>
                                         </Grid>
                                     ) : (
-                                        <Grid item xs={12} sm={12} sx={{display: 'flex', justifyContent: 'flex-end'}}>
-                                            <Button variant="contained" startIcon={<AddIcon/>}
-                                                    onClick={handleOpenDialog}
-                                                    style={{
-                                                        textTransform: 'none',
-                                                        color: 'success',
-                                                        marginBottom: '1vh'
-                                                    }}>
+                                        <Grid item xs={12} sm={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                            <Button
+                                                variant="contained"
+                                                startIcon={<FileDownloadOutlinedIcon />}
+                                                onClick={exportXML}
+                                                style={{textTransform: 'none', backgroundColor: 'green', marginBottom: '1vh',}}
+                                            >
+                                                <span style={{ color: 'inherit' }}>Export XML</span>
+                                            </Button>
+                                            <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenDialog} style={{ textTransform: 'none', color: 'success', marginBottom: '1vh', marginLeft: '2vh' }}>
                                                 Create competition
                                             </Button>
                                         </Grid>
@@ -154,7 +156,7 @@ const Dashboard = () => {
                                         <Table>
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell>Country</TableCell>
+                                                    <TableCell id="esconde">Country</TableCell>
                                                     <TableCell>Venue</TableCell>
                                                     <TableCell id="esconde">Name</TableCell>
                                                     <TableCell id="esconde">Discipline</TableCell>
@@ -167,7 +169,7 @@ const Dashboard = () => {
                                                               onClick={() => handleDetalhesClick(item.id)}
                                                               onMouseEnter={handleMouseEnter}
                                                               onMouseLeave={handleMouseLeave}>
-                                                        <TableCell>
+                                                        <TableCell id="esconde">
                                                             <Tooltip title={item.organizing_country.toUpperCase()}>
                                                                 {getCountryFlag(item.organizing_country)}
                                                             </Tooltip>

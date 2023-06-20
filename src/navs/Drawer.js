@@ -31,8 +31,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
 import PeopleIcon from '@mui/icons-material/People';
-import EventIcon from '@mui/icons-material/Event';
 import FestivalIcon from '@mui/icons-material/Festival';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -105,7 +105,7 @@ function MiniDrawer (){
     const [anchorElProfile, setAnchorElProfile] = React.useState(null);
     const [userDetails, setUserDetails] = React.useState({
         name: usuarioSalvo.username.charAt(0).toUpperCase() + usuarioSalvo.username.slice(1).toLowerCase().trim(),
-        role: usuarioSalvo.role.charAt(0).toUpperCase() + usuarioSalvo.role.slice(1).toLowerCase().trim()
+        role: usuarioSalvo.role === "none" ? "guest" : usuarioSalvo.role.charAt(0).toUpperCase() + usuarioSalvo.role.slice(1).toLowerCase().trim()
     });
 
     const itemsList = [
@@ -115,18 +115,13 @@ function MiniDrawer (){
             link: "/login/dashboard"
         },
         {
-            text: 'Officers',
-            icon: <PeopleIcon/>,
-            link: "/login/officers"
-        },
-        {
             text: 'Competitions',
             icon: <FestivalIcon/>,
             link: "/login/competitions"
         },
         {
             text: 'Upload XML',
-            icon: <PublishIcon/>,
+            icon: <UploadFileIcon/>,
             link: "/login/uploadxml"
         },
         {
@@ -273,7 +268,7 @@ function MiniDrawer (){
                             </Tooltip>
                             <ListItemText primary={item.text} />
                         </ListItem>
-                            {index === 3 && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>}
+                            {index === 2 && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>}
                         </div>
                     ))}
                 </List>

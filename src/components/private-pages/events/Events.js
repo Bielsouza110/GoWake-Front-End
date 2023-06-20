@@ -37,6 +37,8 @@ import WarningIcon from "@mui/icons-material/Warning";
 import {handleMouseEnter, handleMouseLeave} from "../dashboard/utils/Utils";
 import Tooltip from "@mui/material/Tooltip";
 import {Delete as DeleteIcon, Edit as EditIcon} from "@mui/icons-material";
+import MenuIcon from "@mui/icons-material/Menu";
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 
 const Events = ({idComp}) => {
 
@@ -180,32 +182,42 @@ const Events = ({idComp}) => {
                 idComp={idComp}
             />
 
-            <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{fontSize: '18px'}}>
-                Events
-            </Typography>
-
-            <div><Divider style={{ backgroundColor: 'black', marginBottom: '3vh' }} /></div>
-
             {isMobile ? (
-                <Grid item xs={12} sm={12}>
+                <div>
+                    <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{fontSize: '18px'}}>
+                        Events
+                    </Typography>
+
+                    <Grid item xs={12} sm={12}>
+                        <Button
+                            variant="contained"
+                            startIcon={<AddIcon/>}
+                            onClick={handleOpenDialog}
+                            style={{textTransform: 'none', color: 'success', marginBottom: '3vh'}}
+                            sx={{width: '100%', maxWidth: '100%'}}
+                        >
+                            <span style={{ color: 'inherit' }}>Create event</span>
+                        </Button>
+                    </Grid>
+                </div>
+            ) : (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{fontSize: '18px'}}>
+                        Events
+                    </Typography>
+
                     <Button
                         variant="contained"
-                        startIcon={<AddIcon/>}
+                        startIcon={<AddIcon />}
                         onClick={handleOpenDialog}
-                        style={{textTransform: 'none', color: 'success', marginBottom: '3vh'}}
-                        sx={{width: '100%', maxWidth: '100%'}}
+                        style={{ textTransform: 'none', color: 'success', marginLeft: 'auto' }}
                     >
-                        Create event
+                        <span style={{ color: 'inherit' }}>Create event</span>
                     </Button>
-                </Grid>
-            ) : (
-                <Grid item xs={12} sm={12} sx={{display: 'flex', justifyContent: 'flex-end'}}>
-                    <Button variant="contained" startIcon={<AddIcon/>} onClick={handleOpenDialog}
-                            style={{textTransform: 'none', color: 'success', marginBottom: '1vh'}}>
-                        Create event
-                    </Button>
-                </Grid>
+                </div>
             )}
+
+            <div id="esconde"><Divider style={{ backgroundColor: 'black', marginBottom: '5vh', marginTop: '1.3vh' }} /></div>
 
             {data && (
                 <Grid container spacing={4}>
