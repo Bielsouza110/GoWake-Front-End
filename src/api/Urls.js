@@ -8,6 +8,7 @@ export const endpoints = {
     athleteBy: `${API_ROOT}/api/competition`,
     officialBy: `${API_ROOT}/api/competition`,
     eventBy: `${API_ROOT}/api/competition`,
+    submitXML:`${API_ROOT}/api/create-all/`,
 };
 
 export const getEndpointCompetitionById = (endpoint, id) => {
@@ -61,3 +62,6 @@ export const getEndpointEventById = (endpoint, idCompetition, idEvent) => {
 export const putEndpointEventById = (endpoint, idCompetition, idEvent) => {
     return `${endpoints[endpoint]}/${idCompetition}/event/${idEvent}/`;
 };
+export const postXML =(endpoint) =>{
+    return `${endpoints[endpoint]}`
+}
