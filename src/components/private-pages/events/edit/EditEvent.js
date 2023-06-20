@@ -171,11 +171,11 @@ const EditEvent = ({open, onClose, idEvent, idComp}) => {
                             onChange={handleEventClassChange}
                             fullWidth
                         >
-                            <MenuItem value="5 Star">5 Star</MenuItem>
-                            <MenuItem value="4 Star">4 Star</MenuItem>
-                            <MenuItem value="3 Star">3 Star</MenuItem>
-                            <MenuItem value="2 Star">2 Star</MenuItem>
-                            <MenuItem value="1 Star">1 Star</MenuItem>
+                            <MenuItem value="5 Star">5 star</MenuItem>
+                            <MenuItem value="4 Star">4 star</MenuItem>
+                            <MenuItem value="3 Star">3 star</MenuItem>
+                            <MenuItem value="2 Star">2 star</MenuItem>
+                            <MenuItem value="1 Star">1 star</MenuItem>
                         </TextField>
                     </Grid>
                     <Grid item xs={12} sm={6}>
