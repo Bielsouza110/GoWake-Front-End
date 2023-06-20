@@ -259,21 +259,19 @@ const Athletes = ({idComp}) => {
                                                     )}
                                                 </TableCell>
                                                 <TableCell id="esconde">
-                                                    {athlete.category_in_competition.toUpperCase()}
+                                                    {athlete.category_in_competition ? athlete.category_in_competition.toUpperCase() : 'Undefined'}
                                                 </TableCell>
                                                 <TableCell>
                                                     <Tooltip title="Edit" className="tooltip-gender">
                                                         <IconButton
                                                             onClick={() => handleOpenEditDialog(idComp, athlete.id)}>
-                                                            <EditIcon color="gray"
-                                                                      style={{cursor: 'pointer'}}/>
+                                                            <EditIcon color="gray" style={{cursor: 'pointer'}}/>
                                                         </IconButton>
                                                     </Tooltip>
                                                     <Tooltip title="Remove" className="tooltip-gender">
                                                         <IconButton
                                                             onClick={() => handleClickOpenDelete(idComp, athlete.id)}>
-                                                            <DeleteIcon color="error"
-                                                                        style={{cursor: 'pointer'}}/>
+                                                            <DeleteIcon color="error" style={{cursor: 'pointer'}}/>
                                                         </IconButton>
                                                     </Tooltip>
                                                 </TableCell>
