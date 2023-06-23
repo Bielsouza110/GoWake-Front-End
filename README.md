@@ -27,6 +27,8 @@ Este projeto é um aplicativo web desenvolvido em React. Para instalá-lo, siga 
 1. `npm install --legacy-peer-deps`
 5. `npm start`
 
+npm install @mui/material @emotion/react @emotion/styled --legacy-peer-deps
+
 # Funcionalidades
 
 | Pages           | In progress | Done |

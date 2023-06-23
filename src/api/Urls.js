@@ -3,8 +3,9 @@ export const endpoints = {
     login: `${API_ROOT}/account/login/`,
     createAccount: `${API_ROOT}/account/register/`,
     competitions: `${API_ROOT}/api/competitions/`,
+    competitionCreate: `${API_ROOT}/api/competition-create/`,
     competitionsBy: `${API_ROOT}/api/competitions`,
-  /*  athlete: `${API_ROOT}/api/competition/`,*/
+    /* athlete: `${API_ROOT}/api/competition/`,*/
     athleteBy: `${API_ROOT}/api/competition`,
     officialBy: `${API_ROOT}/api/competition`,
     eventBy: `${API_ROOT}/api/competition`,
@@ -65,3 +66,12 @@ export const putEndpointEventById = (endpoint, idCompetition, idEvent) => {
 export const postXML =(endpoint) =>{
     return `${endpoints[endpoint]}`
 }
+
+export const getEndpointCreateCompetition = (endpoint) => {
+    return `${endpoints[endpoint]}`;
+};
+
+export const getEndpointDeleteCompetition = (endpoint, idCompetition) => {
+    return `${endpoints[endpoint]}/api/competitions/${idCompetition}/`;
+};
+

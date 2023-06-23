@@ -9,7 +9,12 @@ import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
 import {Spinner} from "react-bootstrap";
 import Typography from '@mui/material/Typography';
 import DrawerHeader from "../../../navs/DrawerHeader";
-import {endpoints} from "../../../api/Urls";
+import {
+    endpoints,
+    getEndpointCompetitionById,
+    getEndpointDeleteCompetition,
+    getEndpointDeleteEventById
+} from "../../../api/Urls";
 import {getCountryFlag, handleMouseEnter, handleMouseLeave} from "./utils/Utils";
 import Tooltip from "@mui/material/Tooltip";
 import WarningIcon from "@mui/icons-material/Warning";
@@ -17,6 +22,16 @@ import AddIcon from "@mui/icons-material/Add";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import {Delete as DeleteIcon, Edit as EditIcon} from "@mui/icons-material";
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import CreateEvent from "../events/create/CreateEvent";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import DoneIcon from "@mui/icons-material/Done";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import EditEvent from "../events/edit/EditEvent";
+import CreateCompetition from "./create/CreateCompetition";
 
 const Dashboard = () => {
 
@@ -25,13 +40,21 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const [showSpinner, setShowSpinner] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [idCompetition, setIdCompetition] = useState('');
     const [data, setData] = useState([]);
     const isMobile = useMediaQuery('(max-width: 600px)');
-    const filteredData = data.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase())
-        || item.venue.toLowerCase().includes(searchTerm.toLowerCase()));
+    const filteredData = data.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.venue.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    useEffect(() => {
-        axios.get(endpoints.competitions, {
+    const [open, setOpen] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [openEditDialog, setOpenEditDialog] = useState(false);
+    const [successDialogOpenDelete, setSuccessDialogOpenDeleteDelete] = useState(false);
+    const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+    const fetchCompetition = async () => {
+
+        const timer = setTimeout(() => {setShowSpinner(false);}, 3000); // Tempo limite de 3 segundos
+
+        await axios.get(endpoints.competitions, {
             headers: {
                 'Authorization': `Token ${usuarioSalvo.token}`
             }
@@ -44,27 +67,81 @@ const Dashboard = () => {
             console.error(error);
         });
 
-        const timer = setTimeout(() => {
-            setShowSpinner(false);
-        }, 3000); // Tempo limite de 3 segundos
-
         return () => clearTimeout(timer);
+    }
+
+    const reload = () => {
+        fetchCompetition();
+
+        const timer = setTimeout(() => {setShowSpinner(false);}, 3000);
+        return () => clearTimeout(timer);
+    }
+
+    useEffect(() => {
+        reload();
     }, []);
-    const handleDetalhesClick = (id) => {
-        navigate(`/login/dashboard/${id}`);
-    };
+
     const handleSearchTermChange = (event) => {
         setSearchTerm(event.target.value);
     };
+
+    const handleCloseSuccessDialogDelete = () => {
+        setSuccessDialogOpenDeleteDelete(false);
+    };
+    const handleEventDelete = async (idComp) => {
+
+        try {
+            const response = await axios.delete(getEndpointDeleteCompetition("competitions", idComp), {
+                headers: {
+                    'Authorization': `Token ${usuarioSalvo.token}`
+                }
+            });
+
+            reload();
+            setSuccessDialogOpenDeleteDelete(true);
+            setTimeout(() => {
+                setSuccessDialogOpenDeleteDelete(false);
+            }, 3000);
+
+        } catch (error) {
+            console.error('An error occurred while fetching the competitions.');
+            setErrorDialogOpen(true);
+            setTimeout(() => {
+                setErrorDialogOpen(false);
+            }, 3000);
+        }
+    };
+    const handleClickOpenDelete = (compId) => {
+        setIdCompetition(compId);
+        setOpen(true);
+    };
+    const handleDelete = (idComp) => {
+        handleEventDelete(idComp)
+        handleClose();
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
     const handleOpenDialog = () => {
-        console.log("create competition")
-    }
-    const handleOpenEditDialog = () => {
-        console.log("Edit competition")
-    }
-    const handleClickOpenDelete = () => {
-        console.log("Delete competition")
-    }
+        setOpenDialog(true);
+    };
+    const handleCloseDialog = () => {
+        fetchCompetition();
+        setOpenDialog(false);
+    };
+    const handleOpenEditDialog = (competitionId) => {
+        setIdCompetition(competitionId);
+        setOpenEditDialog(true);
+    };
+    const handleCloseEditDialog = () => {
+        reload();
+        setOpenEditDialog(false);
+    };
+
+    const handleDetalhesClick = (id) => {
+        navigate(`/login/dashboard/${id}`);
+    };
+
     const exportXML = () => {
         console.log("exportXML")
     }
@@ -77,15 +154,59 @@ const Dashboard = () => {
                     <DrawerHeader/>
                     <MDBContainer className="p-1 my-2">
 
-                        <Typography variant="h6" fontWeight="bold" className="my-3 pb-2" style={{
-                            fontSize: '20px'
-                        }}>
+                        <Dialog open={open} onClose={handleClose}>
+                            <DialogTitle>Confirmation</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Are you sure you want to delete this competition?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose}>Cancel</Button>
+                                <Button onClick={() => handleDelete(idCompetition)} color="error">
+                                    Delete
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+
+                        <Dialog open={successDialogOpenDelete} onClose={handleCloseSuccessDialogDelete}>
+                            <DialogContent>
+                                <DialogContentText
+                                    sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                    <DoneIcon sx={{color: 'green', fontSize: 48, marginBottom: '1%'}}/>
+                                    Competition deleted successfully!
+                                </DialogContentText>
+                            </DialogContent>
+                        </Dialog>
+
+                        <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
+                            <DialogContent>
+                                <DialogContentText
+                                    sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                    <ReportProblemIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
+                                    Error: Failed to delete the competition. Please try again.
+                                </DialogContentText>
+                            </DialogContent>
+                        </Dialog>
+
+                        <CreateCompetition
+                            open={openDialog}
+                            onClose={handleCloseDialog}
+                        />
+
+                    {/*    <EditEvent
+                            open={openEditDialog}
+                            onClose={handleCloseEditDialog}
+                            idEvent={idEvent}
+                            idComp={idComp}
+                        />*/}
+
+                        <Typography variant="h6" fontWeight="bold" className="my-3 pb-2" style={{fontSize: '20px'}}>
                             Welcome, <span id="nameUser">{usuarioSalvo.username}!</span>
                         </Typography>
 
                         <Typography id="margin2">
-                            Here you can see all the competitions that are currently available. Click on the competition
-                            to see more details.
+                            Here you can see all the competitions that are currently available. Click on the competition to see more details.
                         </Typography>
 
                         {data.length === 0 && showSpinner && (
@@ -183,12 +304,12 @@ const Dashboard = () => {
                                                         </TableCell>
                                                         <TableCell style={{padding: -30}}>
                                                             <Tooltip title="Edit" className="tooltip-gender">
-                                                                <IconButton onClick={(event) => {event.stopPropagation();handleOpenEditDialog();}}>
+                                                                <IconButton onClick={(event) => {event.stopPropagation(); handleOpenEditDialog();}}>
                                                                     <EditIcon color="gray" style={{cursor: 'pointer'}}/>
                                                                 </IconButton>
                                                             </Tooltip>
                                                             <Tooltip title="Remove" className="tooltip-gender">
-                                                                <IconButton onClick={(event) => {event.stopPropagation();handleClickOpenDelete();}}>
+                                                                <IconButton onClick={(event) => {event.stopPropagation(); handleClickOpenDelete(item.id);}}>
                                                                     <DeleteIcon color="error" style={{cursor: 'pointer'}}/>
                                                                 </IconButton>
                                                             </Tooltip>
