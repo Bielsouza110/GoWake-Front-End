@@ -1,24 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    TextField,
-    MenuItem,
-    Grid,
-    DialogContentText
-} from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import {countryCodeMatrix, getYearOptions} from "../../athetes/ultils/Utils";
+import {Button, Grid, MenuItem, TextField} from "@mui/material";
+import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
-import {endpoints, getEndpointCreateCompetition} from "../../../../api/Urls";
-import DoneIcon from '@mui/icons-material/Done';
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-import {countryCodeMatrix} from "../../athetes/ultils/Utils";
+import {getEndpointCompetitionById, putEndpointCompetitionById} from "../../../../api/Urls";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import Typography from "@mui/material/Typography";
-import { format } from 'date-fns';
 
-const CreateCompetition = ({open, onClose}) => {
+const EditCompetition = ({open, onClose, idComp}) => {
 
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
     countryCodeMatrix.sort();
@@ -91,7 +85,7 @@ const CreateCompetition = ({open, onClose}) => {
         setOrganizingCountry(event.target.value);
     };
 
-    const submitCreateCompetiton = async () => {
+    const submitEditCompetition = async () => {
 
         const data = {
             code: code,
@@ -107,61 +101,37 @@ const CreateCompetition = ({open, onClose}) => {
         };
 
         try {
-            const response = await axios.post(getEndpointCreateCompetition("competitionCreate"), data, {
+            const response = await axios.put(putEndpointCompetitionById("competitionsBy", idComp), data, {
                 headers: {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
             });
-
             setSuccessDialogOpen(true);
             setTimeout(() => {
-                cleanFieldsAndClose();
-                cleanFields();
+                setSuccessDialogOpen(false);
                 onClose();
             }, 3000);
         } catch (error) {
-            console.error(error.request.response);
+            //console.error(error.request.response);
             setErrorDialogOpen(true);
             setTimeout(() => {
                 setErrorDialogOpen(false);
             }, 3000);
         }
     };
-
-    const handleCreate = async () => {
+    const handleEdit = async () => {
         if (isFormEmpty()) {
             setWarningDialogOpen(true);
             setTimeout(() => {
                 setWarningDialogOpen(false);
             }, 3000);
         } else {
-            await submitCreateCompetiton();
+            try {
+                await submitEditCompetition();
+            } catch (error) {
+                console.error('An error occurred while making the request.');
+            }
         }
-    };
-    const cleanFields = () => {
-        setCode('');
-        setName('');
-        setVenue('');
-        setOrganizingCountry('');
-
-        /*----Data start----*/
-        setYearStart('');
-        setMonthStart('');
-        setDayStart('');
-        setHourStart('');
-        setMinuteStart('');
-
-        /*----Data end----*/
-        setYearEnd('');
-        setMonthEnd('');
-        setDayEnd('');
-        setHourEnd('');
-        setMinuteEnd('');
-    };
-    const cleanFieldsAndClose = () => {
-        cleanFields();
-        setSuccessDialogOpen(false);
-        setErrorDialogOpen(false);
     };
     const isFormEmpty = () => {
         if (
@@ -186,18 +156,80 @@ const CreateCompetition = ({open, onClose}) => {
     };
 
     useEffect(() => {
-        cleanFields();
-    }, []);
+        const fetchCompetitionData = async () => {
+            try {
+                const response = await axios.get(getEndpointCompetitionById("competitionsBy", idComp), {
+                    headers: {
+                        Authorization: `Token ${usuarioSalvo.token}`,
+                    },
+                });
+
+                const competitionData = response.data;
+
+                const startDate = new Date(competitionData.beginning_date);
+                const endDate = new Date(competitionData.end_date);
+
+                setYearStart(startDate.getFullYear());
+                setMonthStart(startDate.getMonth() + 1);
+                setDayStart(startDate.getDate());
+                setHourStart(startDate.getHours());
+                setMinuteStart(startDate.getMinutes());
+
+                setYearEnd(endDate.getFullYear());
+                setMonthEnd(endDate.getMonth() + 1);
+                setDayEnd(endDate.getDate());
+                setHourEnd(endDate.getHours());
+                setMinuteEnd(endDate.getMinutes());
+
+              /*
+                const dateStartComp = String(competitionData.beginning_date.toUpperCase());
+
+                const [dateStartBeg, timeStartBeg] = dateStartComp.split('T');
+                const [yearStartBeg, monthStartBeg, dayStartBeg] = dateStartBeg.split('-');
+                const [hourStartBeg, minuteStartBeg] = timeStartBeg.split(/:|Z/);
+
+                const dateEndComp = String(competitionData.end_date.toUpperCase());
+
+                const [dateEndBeg, timeEndBeg] = dateEndComp.split('T');
+                const [yearEndtBeg, monthEndBeg, dayEndBeg] = dateEndBeg.split('-');
+                const [hourEndBeg, minuteEndBeg] = timeEndBeg.split(/:|Z/);
+*/
+                setCode(competitionData.code.toUpperCase());
+                setName(competitionData.name.charAt(0).toUpperCase() + competitionData.name.slice(1).toLowerCase());
+                setVenue(competitionData.venue.charAt(0).toUpperCase() + competitionData.venue.slice(1).toLowerCase());
+                setOrganizingCountry(String(competitionData.organizing_country.toLowerCase()));
+
+               /* setYearStart(yearStartBeg);
+                setMonthStart(monthStartBeg);
+                setDayStart(dayStartBeg);
+                setHourStart(hourStartBeg);
+                setMinuteStart(minuteStartBeg);
+
+                setYearEnd(yearEndtBeg);
+                setMonthEnd(monthEndBeg);
+                setDayEnd(dayEndBeg);
+                setHourEnd(hourEndBeg);
+                setMinuteEnd(minuteEndBeg);*/
+
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        if (open) {
+            fetchCompetitionData();
+        }
+    }, [open, idComp, usuarioSalvo.token]);
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
-            <DialogTitle>Create competition</DialogTitle>
+            <DialogTitle>Edit Competition</DialogTitle>
             <DialogContent>
 
                 <Dialog open={warningDialogOpen} onClose={() => setWarningDialogOpen(false)}>
                     <DialogContent>
-                        <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                            <ReportProblemIcon sx={{color: 'orange', fontSize: 48, marginBottom: '1%'}}/>
+                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <ReportProblemIcon sx={{ color: 'orange', fontSize: 48, marginBottom: '1%' }} />
                             All fields above are required!
                         </DialogContentText>
                     </DialogContent>
@@ -205,9 +237,9 @@ const CreateCompetition = ({open, onClose}) => {
 
                 <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
                     <DialogContent>
-                        <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                            <ReportProblemIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
-                            Error: Failed to create competition. Please try again.
+                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <ReportProblemIcon sx={{ color: 'red', fontSize: 48, marginBottom: '1%' }} />
+                            Error: Failed to edit competition. Please try again.
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>
@@ -441,11 +473,11 @@ const CreateCompetition = ({open, onClose}) => {
                     {/*----------------------------------*/}
 
                 </Grid>
-                <Dialog open={successDialogOpen} onClose={cleanFieldsAndClose}>
+                <Dialog open={successDialogOpen} onClose={() => setSuccessDialogOpen(false)}>
                     <DialogContent>
                         <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                             <DoneIcon sx={{color: 'green', fontSize: 48, marginBottom: '1%'}}/>
-                            Competition created successfully!
+                            Competition successfully edited!
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>
@@ -453,19 +485,18 @@ const CreateCompetition = ({open, onClose}) => {
             <DialogActions>
                 <Button
                     onClick={() => {
-                        cleanFieldsAndClose();
                         onClose();
                     }}
                     color="primary"
                 >
                     Cancel
                 </Button>
-                <Button onClick={handleCreate} color="primary">
-                    Create
+                <Button onClick={handleEdit} color="primary">
+                    Edit
                 </Button>
             </DialogActions>
         </Dialog>
     );
 };
 
-export default CreateCompetition;
+export default EditCompetition;

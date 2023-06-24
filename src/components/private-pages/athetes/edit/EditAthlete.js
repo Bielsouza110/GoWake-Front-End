@@ -38,7 +38,7 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
     const handleRealCategory = (event) => {
         setRealCategory(event.target.value);
     };
-    const handleCategoryInCompetition= (event) => {
+    const handleCategoryInCompetition = (event) => {
         setCategoryInCompetition(event.target.value);
     };
     const handleFirstNameChange = (event) => {
@@ -69,8 +69,8 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
             country: country.toUpperCase().trim(),
             gender: gender.charAt(0).toUpperCase().trim(),
             year_of_birth: parseInt(yearOfBirth.trim()),
-            real_category: realCategory.toUpperCase(),
-            category_in_competition: categoryInCompetition.toUpperCase()
+            real_category: realCategory.charAt(0).toUpperCase() + realCategory.slice(1).toLowerCase().trim(),
+            category_in_competition: categoryInCompetition.charAt(0).toUpperCase() + categoryInCompetition.slice(1).toLowerCase().trim()
         };
 
         try {
@@ -138,8 +138,8 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
                 setGender(athleteData.gender.charAt(0).toUpperCase().trim());
                 setYearOfBirth(String(athleteData.year_of_birth));
                 setCountry(String(athleteData.country.toLowerCase()));
-                setRealCategory(athleteData.real_category.toUpperCase());
-                setCategoryInCompetition(athleteData.category_in_competition.toUpperCase());
+                setRealCategory(athleteData.real_category.charAt(0).toUpperCase() + athleteData.real_category.slice(1).toLowerCase().trim());
+                setCategoryInCompetition(athleteData.category_in_competition.charAt(0).toUpperCase() + athleteData.category_in_competition.slice(1).toLowerCase().trim());
 
             } catch (error) {
                 console.error('An error occurred while fetching the athlete.');
@@ -158,8 +158,8 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
 
                 <Dialog open={warningDialogOpen} onClose={() => setWarningDialogOpen(false)}>
                     <DialogContent>
-                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <ReportProblemIcon sx={{ color: 'orange', fontSize: 48, marginBottom: '1%' }} />
+                        <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                            <ReportProblemIcon sx={{color: 'orange', fontSize: 48, marginBottom: '1%'}}/>
                             All fields above are required!
                         </DialogContentText>
                     </DialogContent>
@@ -167,8 +167,8 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
 
                 <Dialog open={errorDialogOpen} onClose={() => setErrorDialogOpen(false)}>
                     <DialogContent>
-                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <ReportProblemIcon sx={{ color: 'red', fontSize: 48, marginBottom: '1%' }} />
+                        <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                            <ReportProblemIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
                             Error: Failed to edit athlete. Please try again.
                         </DialogContentText>
                     </DialogContent>

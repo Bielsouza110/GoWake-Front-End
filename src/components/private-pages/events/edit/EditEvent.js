@@ -40,9 +40,9 @@ const EditEvent = ({open, onClose, idEvent, idComp}) => {
     const submitEditEvent = async () => {
 
         const data = {
-            code: code,
+            code: code.toUpperCase(),
             rounds: round,
-            event_class: eventClass,
+            event_class: eventClass.charAt(0).toUpperCase() + eventClass.slice(1).toLowerCase().trim(),
             name: name.charAt(0).toUpperCase() + name.slice(1).toLowerCase().trim(),
         };
 
@@ -101,11 +101,10 @@ const EditEvent = ({open, onClose, idEvent, idComp}) => {
                 });
 
                 const eventData = response.data;
-                setCode(eventData.code);
+                setCode(eventData.code.toUpperCase());
                 setName(eventData.name.charAt(0).toUpperCase() + eventData.name.slice(1).toLowerCase());
-                setEventClass(eventData.event_class);
+                setEventClass(eventData.event_class.charAt(0).toUpperCase() +" "+ eventData.event_class.slice(1).toLowerCase().trim());
                 setRound(eventData.rounds);
-
             } catch (error) {
                 console.error('An error occurred while fetching the Event.');
             }
@@ -140,6 +139,15 @@ const EditEvent = ({open, onClose, idEvent, idComp}) => {
                 </Dialog>
 
                 <Grid container spacing={2} sx={{marginTop: '0.0rem'}}>
+
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            label="Code"
+                            value={code}
+                            onChange={handleCodeChange}
+                            fullWidth
+                        />
+                    </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
                             label="Event name"
@@ -150,33 +158,11 @@ const EditEvent = ({open, onClose, idEvent, idComp}) => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            select
-                            label="Code"
-                            value={code}
-                            onChange={handleCodeChange}
-                            fullWidth
-                        >
-                            {Array.from({length: 61}, (_, index) => (
-                                <MenuItem key={index} value={index + 100}>
-                                    {index + 100}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            select
                             label="Event class"
                             value={eventClass}
                             onChange={handleEventClassChange}
                             fullWidth
-                        >
-                            <MenuItem value="5 Star">5 star</MenuItem>
-                            <MenuItem value="4 Star">4 star</MenuItem>
-                            <MenuItem value="3 Star">3 star</MenuItem>
-                            <MenuItem value="2 Star">2 star</MenuItem>
-                            <MenuItem value="1 Star">1 star</MenuItem>
-                        </TextField>
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
@@ -187,8 +173,8 @@ const EditEvent = ({open, onClose, idEvent, idComp}) => {
                             fullWidth
                         >
                             {Array.from({length: 100}, (_, index) => (
-                                <MenuItem key={index} value={index + 1}>
-                                    {index + 1}
+                                <MenuItem key={index} value={index}>
+                                    {index}
                                 </MenuItem>
                             ))}
                         </TextField>

@@ -20,24 +20,21 @@ const CreateEvent = ({ open, onClose, idComp }) => {
     const handleCodeChange = (event) => {
         setCode(event.target.value);
     };
-
     const handleNameChange = (event) => {
         setName(event.target.value);
     };
-
     const handleEventClassChange = (event) => {
         setEventClass(event.target.value);
     };
-
     const handleRoundChange = (event) => {
         setRound(event.target.value);
     };
 
     const submitCreateEvent = async () => {
         const data = {
-            code: code,
+            code: code.toUpperCase(),
             rounds: round,
-            event_class: eventClass,
+            event_class: eventClass.charAt(0).toUpperCase() + eventClass.slice(1).toLowerCase().trim(),
             name: name.charAt(0).toUpperCase() + name.slice(1).toLowerCase().trim(),
         };
 
@@ -123,6 +120,15 @@ const CreateEvent = ({ open, onClose, idComp }) => {
                 </Dialog>
 
                 <Grid container spacing={2} sx={{ marginTop: '0.0rem' }}>
+
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            label="Code"
+                            value={code}
+                            onChange={handleCodeChange}
+                            fullWidth
+                        />
+                    </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
                             label="Event name"
@@ -133,33 +139,11 @@ const CreateEvent = ({ open, onClose, idComp }) => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            select
-                            label="Code"
-                            value={code}
-                            onChange={handleCodeChange}
-                            fullWidth
-                        >
-                            {Array.from({ length: 61 }, (_, index) => (
-                                <MenuItem key={index} value={index + 100}>
-                                    {index + 100}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            select
                             label="Event class"
                             value={eventClass}
                             onChange={handleEventClassChange}
                             fullWidth
-                        >
-                            <MenuItem value="5 Star">5 star</MenuItem>
-                            <MenuItem value="4 Star">4 star</MenuItem>
-                            <MenuItem value="3 Star">3 star</MenuItem>
-                            <MenuItem value="2 Star">2 star</MenuItem>
-                            <MenuItem value="1 Star">1 star</MenuItem>
-                        </TextField>
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField

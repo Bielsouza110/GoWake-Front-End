@@ -39,8 +39,9 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
         'South America'
     ]
     const positions = [
+        'Chief calculator',
         'Calculator',
-        'Chief Judge',
+        'Chief judge',
         'Judge',
         'Boat Driver'
     ]
@@ -71,7 +72,7 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
 
         const data = {
             iwwfid: iwwfId.toUpperCase().trim(),
-            position: position.trim(),
+            position: position.charAt(0).toUpperCase() + position.slice(1).toLowerCase().trim(),
             first_name: firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase().trim(),
             last_name: lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase().trim(),
             qualification: qualification.toUpperCase().trim(),
@@ -126,7 +127,7 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
                 });
                 const officialData = response.data;
                 setIwwfId(officialData.iwwfid.toUpperCase());
-                setPosition(officialData.position);
+                setPosition(officialData.position.charAt(0).toUpperCase() + officialData.position.slice(1).toLowerCase().trim());
                 setFirstName(officialData.first_name.charAt(0).toUpperCase() + officialData.first_name.slice(1).toLowerCase().trim());
                 setLastName(officialData.last_name.charAt(0).toUpperCase() + officialData.last_name.slice(1).toLowerCase().trim());
                 setQualification(String(officialData.qualification.toUpperCase()));

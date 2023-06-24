@@ -45,6 +45,7 @@ const Athletes = ({idComp}) => {
     const [successDialogOpenDelete, setSuccessDialogOpenDeleteDelete] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
     const [data, setData] = useState(null)
+
     const fetchAtletes = async () => {
         const timer = setTimeout(() => {setShowSpinner(false);}, 3000); // Tempo limite de 3 segundos
 
@@ -246,8 +247,9 @@ const Athletes = ({idComp}) => {
                                                       onMouseLeave={handleMouseLeave}>
                                                 <TableCell id="esconde">{athlete.fed_id}</TableCell>
                                                 <TableCell>
-                                                    {athlete.first_name.charAt(0).toUpperCase() + athlete.first_name.slice(1).toLowerCase()}{" "}
-                                                    {athlete.last_name.charAt(0).toUpperCase() + athlete.last_name.slice(1).toLowerCase()}
+                                                    {window.innerWidth <= 768 ?
+                                                        athlete.first_name.charAt(0).toUpperCase() + athlete.first_name.slice(1).toLowerCase() :
+                                                        `${athlete.first_name.charAt(0).toUpperCase() + athlete.first_name.slice(1).toLowerCase()} ${athlete.last_name.charAt(0).toUpperCase() + athlete.last_name.slice(1).toLowerCase()}`}
                                                 </TableCell>
                                                 <TableCell id="esconde">
                                                     <Tooltip title={athlete.country.toUpperCase()}>
@@ -269,7 +271,7 @@ const Athletes = ({idComp}) => {
                                                     )}
                                                 </TableCell>
                                                 <TableCell id="esconde">
-                                                    {athlete.category_in_competition ? athlete.category_in_competition.toUpperCase() : 'Undefined'}
+                                                    {athlete.category_in_competition ? athlete.category_in_competition.charAt(0).toUpperCase() + athlete.category_in_competition.slice(1).toLowerCase().trim() : 'Undefined'}
                                                 </TableCell>
                                                 <TableCell>
                                                     <Tooltip title="Edit" className="tooltip-gender">

@@ -30,8 +30,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import DoneIcon from "@mui/icons-material/Done";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import EditEvent from "../events/edit/EditEvent";
 import CreateCompetition from "./create/CreateCompetition";
+import EditCompetition from "./edit/EditCompetition";
 
 const Dashboard = () => {
 
@@ -40,7 +40,8 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const [showSpinner, setShowSpinner] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [idCompetition, setIdCompetition] = useState('');
+
+    const [idComp, setIdComp] = useState('');
     const [data, setData] = useState([]);
     const isMobile = useMediaQuery('(max-width: 600px)');
     const filteredData = data.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.venue.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -69,7 +70,6 @@ const Dashboard = () => {
 
         return () => clearTimeout(timer);
     }
-
     const reload = () => {
         fetchCompetition();
 
@@ -84,14 +84,13 @@ const Dashboard = () => {
     const handleSearchTermChange = (event) => {
         setSearchTerm(event.target.value);
     };
-
     const handleCloseSuccessDialogDelete = () => {
         setSuccessDialogOpenDeleteDelete(false);
     };
     const handleEventDelete = async (idComp) => {
 
         try {
-            const response = await axios.delete(getEndpointDeleteCompetition("competitions", idComp), {
+            const response = await axios.delete(getEndpointDeleteCompetition("competitionsBy", idComp), {
                 headers: {
                     'Authorization': `Token ${usuarioSalvo.token}`
                 }
@@ -112,7 +111,7 @@ const Dashboard = () => {
         }
     };
     const handleClickOpenDelete = (compId) => {
-        setIdCompetition(compId);
+        setIdComp(compId);
         setOpen(true);
     };
     const handleDelete = (idComp) => {
@@ -130,21 +129,79 @@ const Dashboard = () => {
         setOpenDialog(false);
     };
     const handleOpenEditDialog = (competitionId) => {
-        setIdCompetition(competitionId);
+        setIdComp(competitionId);
         setOpenEditDialog(true);
     };
     const handleCloseEditDialog = () => {
         reload();
         setOpenEditDialog(false);
     };
-
     const handleDetalhesClick = (id) => {
         navigate(`/login/dashboard/${id}`);
     };
+    function downloadXML(content, fileName) {
+        const element = document.createElement('a');
+        const file = new Blob([content], { type: 'text/xml' });
+        element.href = URL.createObjectURL(file);
+        element.download = fileName;
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
 
     const exportXML = () => {
-        console.log("exportXML")
-    }
+        const xmlData = '<?xml version="1.0" encoding="UTF-8"?><root></root>'; // Initial XML data
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlData, 'text/xml');
+
+        // Add competitions to XML
+        data.forEach((competition) => {
+            const competitionNode = xmlDoc.createElement('competition');
+            competitionNode.setAttribute('id', competition.id);
+
+            // Add events to competition
+            competition.events.forEach((event) => {
+                const eventNode = xmlDoc.createElement('event');
+                eventNode.setAttribute('id', event.id);
+                eventNode.setAttribute('name', event.name);
+                eventNode.setAttribute('rounds', event.rounds);
+                eventNode.setAttribute('event_class', event.event_class);
+                eventNode.setAttribute('code', event.code);
+                competitionNode.appendChild(eventNode);
+            });
+
+            // Add officials to competition
+            competition.officials.forEach((official) => {
+                const officialNode = xmlDoc.createElement('official');
+                officialNode.setAttribute('id', official.id);
+                officialNode.setAttribute('first_name', official.first_name);
+                officialNode.setAttribute('last_name', official.last_name);
+                officialNode.setAttribute('position', official.position);
+                officialNode.setAttribute('qualification', official.qualification);
+                competitionNode.appendChild(officialNode);
+            });
+
+            // Add athletes to competition
+            competition.athletes.forEach((athlete) => {
+                const athleteNode = xmlDoc.createElement('athlete');
+                athleteNode.setAttribute('id', athlete.id);
+                athleteNode.setAttribute('first_name', athlete.first_name);
+                athleteNode.setAttribute('last_name', athlete.last_name);
+                athleteNode.setAttribute('country', athlete.country);
+                athleteNode.setAttribute('gender', athlete.gender);
+                competitionNode.appendChild(athleteNode);
+            });
+
+            xmlDoc.getElementsByTagName('root')[0].appendChild(competitionNode);
+        });
+
+        const serializer = new XMLSerializer();
+        const exportedXML = serializer.serializeToString(xmlDoc);
+
+        // Download the XML file
+        downloadXML(exportedXML, 'competitions.xml');
+    };
+
 
     return (
         <div className="sdd">
@@ -163,7 +220,7 @@ const Dashboard = () => {
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose}>Cancel</Button>
-                                <Button onClick={() => handleDelete(idCompetition)} color="error">
+                                <Button onClick={() => handleDelete(idComp)} color="error">
                                     Delete
                                 </Button>
                             </DialogActions>
@@ -194,12 +251,11 @@ const Dashboard = () => {
                             onClose={handleCloseDialog}
                         />
 
-                    {/*    <EditEvent
+                        <EditCompetition
                             open={openEditDialog}
                             onClose={handleCloseEditDialog}
-                            idEvent={idEvent}
                             idComp={idComp}
-                        />*/}
+                        />
 
                         <Typography variant="h6" fontWeight="bold" className="my-3 pb-2" style={{fontSize: '20px'}}>
                             Welcome, <span id="nameUser">{usuarioSalvo.username}!</span>
@@ -304,7 +360,7 @@ const Dashboard = () => {
                                                         </TableCell>
                                                         <TableCell style={{padding: -30}}>
                                                             <Tooltip title="Edit" className="tooltip-gender">
-                                                                <IconButton onClick={(event) => {event.stopPropagation(); handleOpenEditDialog();}}>
+                                                                <IconButton onClick={(event) => {event.stopPropagation(); handleOpenEditDialog(item.id);}}>
                                                                     <EditIcon color="gray" style={{cursor: 'pointer'}}/>
                                                                 </IconButton>
                                                             </Tooltip>

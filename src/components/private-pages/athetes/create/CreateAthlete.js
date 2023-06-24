@@ -59,8 +59,8 @@ const CreateAthlete = ({ open, onClose, idComp}) => {
             country: country.toUpperCase().trim(),
             gender: gender.trim(),
             year_of_birth: parseInt(yearOfBirth.trim()),
-            real_category: realCategory.toUpperCase(),
-            category_in_competition: categoryInCompetition.toUpperCase()
+            real_category: realCategory.charAt(0).toUpperCase() + realCategory.slice(1).toLowerCase().trim(),
+            category_in_competition: categoryInCompetition.charAt(0).toUpperCase() + categoryInCompetition.slice(1).toLowerCase().trim()
         };
 
         try {

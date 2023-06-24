@@ -72,6 +72,9 @@ export const getEndpointCreateCompetition = (endpoint) => {
 };
 
 export const getEndpointDeleteCompetition = (endpoint, idCompetition) => {
-    return `${endpoints[endpoint]}/api/competitions/${idCompetition}/`;
+    return `${endpoints[endpoint]}/${idCompetition}/`;
 };
 
+export const putEndpointCompetitionById = (endpoint, idCompetition) => {
+    return `${endpoints[endpoint]}/${idCompetition}/`;
+};

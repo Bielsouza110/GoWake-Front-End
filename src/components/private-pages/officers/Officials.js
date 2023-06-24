@@ -262,10 +262,11 @@ const Officials = ({idComp}) => {
                                                       onMouseEnter={handleMouseEnter}
                                                       onMouseLeave={handleMouseLeave}>
                                                 <TableCell id="esconde">{official.iwwfid}</TableCell>
-                                                <TableCell>{official.first_name.charAt(0).toUpperCase() + official.first_name.slice(1).toLowerCase()
-                                                    + " " + official.last_name.charAt(0).toUpperCase() + official.last_name.slice(1).toLowerCase()}
+                                                <TableCell>
+                                                    {window.innerWidth <= 768 ?
+                                                        official.first_name.charAt(0).toUpperCase() + official.first_name.slice(1).toLowerCase() :
+                                                        `${official.first_name.charAt(0).toUpperCase() + official.first_name.slice(1).toLowerCase()} ${official.last_name.charAt(0).toUpperCase() + official.last_name.slice(1).toLowerCase()}`}
                                                 </TableCell>
-
                                                 <TableCell id="esconde">
                                                     <Tooltip title={official.country.toUpperCase()}>
                                                         {getCountryFlag(official.country)}

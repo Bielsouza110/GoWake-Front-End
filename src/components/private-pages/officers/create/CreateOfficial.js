@@ -30,8 +30,9 @@ const CreateOfficial = ({ open, onClose, idComp}) => {
         'South America'
     ]
     const positions = [
+        'Chief calculator',
         'Calculator',
-        'Chief Judge',
+        'Chief judge',
         'Judge',
         'Boat Driver'
     ]
@@ -62,7 +63,7 @@ const CreateOfficial = ({ open, onClose, idComp}) => {
 
         const data = {
             iwwfid: iwwfId.toUpperCase().trim(),
-            position: position.trim(),
+            position: position.charAt(0).toUpperCase() + position.slice(1).toLowerCase().trim(),
             first_name: firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase(),
             last_name: lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase(),
             qualification: qualification.toUpperCase().trim(),
