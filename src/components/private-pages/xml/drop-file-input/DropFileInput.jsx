@@ -25,6 +25,7 @@ let eventList = [];//Lista global dos eventos --> só pode ter 1 competição po
 let athletesList = []; //Lista global dos atletas
 let competitionList = [];
 let index = 0;
+//let mostra = true;
 
 const DropFileInput = (props) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
@@ -42,7 +43,7 @@ const DropFileInput = (props) => {
     const [openDialogIndex, setOpenDialogIndex] = useState(null);
     const [openInvalidXMLInput, setOpenInvalidXMLInput] = useState(null);//Variável que guarda se ficheiro selecionado é válido
     const [openInvalidXMLFields, setOpenInvalidXMLFields] = useState(null);//Variável que vai verificar os campos
-
+    const [showDialog, setDialog] = useState(true);
     const onDragEnter = () => wrapperRef.current.classList.add('dragover');
     const onDragLeave = () => wrapperRef.current.classList.remove('dragover');
     const onDrop = () => wrapperRef.current.classList.add('dragover');
@@ -92,6 +93,7 @@ const DropFileInput = (props) => {
     };
 
     const handleCloseDialogXMLInput = () => {
+        console.log("Deveria ser o segundo-meio");
         setOpenInvalidXMLInput(null);
     };
 
@@ -194,9 +196,7 @@ const DropFileInput = (props) => {
             reader.onload = () => {
                 const fileUrl = reader.result;
                 /*console.log(fileUrl);*/
-
                 fetch(fileUrl).then(response => {
-
                     return response.text();
                 }).then(xmlString => {
 
@@ -271,10 +271,12 @@ const DropFileInput = (props) => {
                                 const classEvent = event.querySelector("event_class,Event_Class,EVENT_CLASS").textContent;
                                 const classEventValue = classEvent ? classEvent.textContent : '';
 
-                                const name = event.querySelector("name,Name,NAME").textContent;
+                                const name = event.querySelector("name,Name,NAME");
                                 const nameValue = name ? name.textContent : '';
-                                console.log(name);
-                                console.log(nameValue);
+
+                                if (nameValue.toLowerCase()!=="wakeboard"){
+                                    break;
+                                }
 
                                 eventList.push({
                                     code: code_Event,
@@ -282,6 +284,7 @@ const DropFileInput = (props) => {
                                     classEvent: classEvent,
                                     name: nameValue
                                 });
+
                                 count++;
                             } else {
                                 break;
@@ -387,8 +390,11 @@ const DropFileInput = (props) => {
                         }
                     }
                     if (eventList.length === 0 || athletesList.length === 0 || juriList.length === 0 || competitionList.length === 0) {
+
                         handleOpenDialogXMLFields(1);
+                        {setDialog(false)}
                     } else {
+                        {setDialog(true)}
                         handleOpenDialogXMLFields(null);
                     }
                     handleOpenDialog(1);
@@ -534,6 +540,7 @@ const DropFileInput = (props) => {
     }
 
     const displayEvent = () => {
+
         if (openDialogIndex !== null && openInvalidXMLFields===null) {
             return (
                 <>
@@ -576,9 +583,7 @@ const DropFileInput = (props) => {
     }
 
     const renderDialog = () => {
-
-
-        if (openDialogIndex !== null && openInvalidXMLFields===null) {
+        if (openDialogIndex !== null && openInvalidXMLFields===null && showDialog === true  ) {
 
             return (
                 <Dialog open={true} onClose={handleCloseDialog} maxWidth="lg">
@@ -630,6 +635,7 @@ const DropFileInput = (props) => {
                         </Button>
                     </DialogActions>
                 </Dialog>
+
             );
         }
         return null;
@@ -651,6 +657,7 @@ const DropFileInput = (props) => {
                         </Button>
                     </DialogActions>
                 </Dialog>
+
             );
         }
         return null;
@@ -717,6 +724,7 @@ const DropFileInput = (props) => {
                     ))}
                 </div>
             ) : null}
+
             {showInvalidDialogXMLInput()}
             {showInvalidDialogXMLFields()}
             {renderDialog()}
