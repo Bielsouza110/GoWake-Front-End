@@ -1,4 +1,4 @@
-import React, { useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import './DropFileInput.css';
 import {ImageConfig} from "../config/ImageConfig";
@@ -27,7 +27,7 @@ let eventList2 = [];//Lista global dos eventos --> só pode ter 1 competição p
 let athletesList2 = []; //Lista global dos atletas
 let competitionList2 = [];
 let index = 0;
-let countSubmit =0;
+let countSubmit = 0;
 const DropFileInput = (props) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
@@ -108,80 +108,88 @@ const DropFileInput = (props) => {
         setOpenInvalidXMLFields(null);
     };
 
-    const submitXML = async (competitionList,eventList,athletesList,juriList) => {
+    const submitXML = async (competitionList, eventList, athletesList, juriList) => {
 
-            const data = {
-                code: competitionList[0].code,
-                discipline: competitionList[0].discipline,
-                name: competitionList[0].name,
-                organizing_country: competitionList[0].orgCountry,
-                tournament_type: competitionList[0].tournament_type,
-                venue: competitionList[0].venue,
-                site_code: competitionList[0].site_code,
-                age_groups: competitionList[0].age_groups,
-                beginning_date: competitionList[0].startDate,
-                end_date: competitionList[0].endDate,
-                athletes: athletesList.map((athlete) => ({
-                    events: [],
-                    fed_id: athlete.id,
-                    first_name: athlete.firstName,
-                    last_name: athlete.lastName,
-                    country: athlete.country,
-                    gender: athlete.gender,
-                    year_of_birth: athlete.year,
-                })),
-                events: eventList.map((event) => ({
-                    rounds: event.rounds,
-                    event_class: event.classEvent,
-                    name: event.name,
-                    code: event.code,
-                })),
-                athlete_events: athletesList.map((athlete) => ({
-                    division: athlete.division,
-                    entry_type: athlete.entry_type,
-                    participation: athlete.participation,
-                    real_category: athlete.category,
-                    category_in_competition: athlete.competitionCategory,
-                    code: athlete.code,
-                })),
-                officials: juriList.map((juri) => ({
-                    iwwfid: juri.id,
-                    position: juri.category,
-                    first_name: juri.firstName,
-                    last_name: juri.lastName,
-                    qualification: juri.qualification,
-                    country: juri.country,
-                    region: juri.region,
-                })),
-            };
+        const data = {
+            code: competitionList[0].code,
+            discipline: competitionList[0].discipline,
+            name: competitionList[0].name,
+            organizing_country: competitionList[0].orgCountry,
+            tournament_type: competitionList[0].tournament_type,
+            venue: competitionList[0].venue,
+            site_code: competitionList[0].site_code,
+            age_groups: competitionList[0].age_groups,
+            beginning_date: competitionList[0].startDate,
+            end_date: competitionList[0].endDate,
+            athletes: athletesList.map((athlete) => ({
+                events: [],
+                fed_id: athlete.id,
+                first_name: athlete.firstName,
+                last_name: athlete.lastName,
+                country: athlete.country,
+                gender: athlete.gender,
+                year_of_birth: athlete.year,
+                division: athlete.division,
+                entry_type: athlete.entry_type,
+                participation: athlete.participation,
+                real_category: athlete.category,
+                category_in_competition: athlete.competitionCategory,
+                code: athlete.code,
+            })),
+            events: eventList.map((event) => ({
+                rounds: event.rounds,
+                event_class: event.classEvent,
+                name: event.name,
+                code: event.code,
+            })),
+            athlete_events: athletesList.map((athlete) => ({
+                division: athlete.division,
+                entry_type: athlete.entry_type,
+                participation: athlete.participation,
+                real_category: athlete.category,
+                category_in_competition: athlete.competitionCategory,
+                code: athlete.code,
+            })),
+            officials: juriList.map((juri) => ({
+                iwwfid: juri.id,
+                position: juri.category,
+                first_name: juri.firstName,
+                last_name: juri.lastName,
+                qualification: juri.qualification,
+                country: juri.country,
+                region: juri.region,
+            })),
+        };
 
-            try {
-                const response = await axios.post(postXML("submitXML"), data, {
-                    headers: {
-                        Authorization: `Token ${usuarioSalvo.token}`,
-                    },
-                });
-                setOpen(true);
-                setTimeout(() => {
-                    setOpen(false);
-                }, 2000);
+        try {
+            const response = await axios.post(postXML("submitXML"), data, {
+                headers: {
+                    Authorization: `Token ${usuarioSalvo.token}`,
+                },
+            });
+            setOpen(true);
+            setTimeout(() => {
+                setOpen(false);
+            }, 2000);
 
-            } catch (error) {
-                setShowError(true);
-                setTimeout(() => {
-                    setShowError(false);
-                }, 2000);
-                console.error(error.request.response);
-            }
+        } catch (error) {
+            setShowError(true);
+            setTimeout(() => {
+                setShowError(false);
+            }, 2000);
+            console.error(error.request.response);
+
+        }
+
     };
 
-    const submitedSucessfully=()=>{
-        return(
+    const submitedSucessfully = () => {
+        return (
             <div>
                 <Dialog open={open}>
                     <DialogContent>
-                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <DoneIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }} />
+                        <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                            <DoneIcon sx={{color: 'green', fontSize: 48, marginBottom: '1%'}}/>
                             File successfully submitted!
                         </DialogContentText>
                     </DialogContent>
@@ -190,13 +198,13 @@ const DropFileInput = (props) => {
         )
     }
 
-    const failSubmession=()=>{
-        return(
+    const failSubmession = () => {
+        return (
             <div>
                 <Dialog open={showError}>
                     <DialogContent>
-                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <ErrorOutlineIcon sx={{ color: 'red', fontSize: 48, marginBottom: '1%' }} />
+                        <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                            <ErrorOutlineIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
                             Submission failed!
                         </DialogContentText>
                     </DialogContent>
@@ -628,7 +636,7 @@ const DropFileInput = (props) => {
     const show_XMl_info = () => {
         countSubmit++;
         //for some reason this function is called twice, so I did this in order to submit file just once
-        if (popUpInfo===2 && countSubmit===2 && openInvalidXMLFields===null){
+        if (popUpInfo === 2 && countSubmit === 2 && openInvalidXMLFields === null) {
             submitXML(competitionList, eventList, athletesList, juriList)
             fileRemove(null, index);
         }
@@ -657,7 +665,7 @@ const DropFileInput = (props) => {
 
                         <DialogActions>
                             <Button onClick={() => {
-                                submitXML(competitionList,eventList,athletesList,juriList).then(closeDialog);
+                                submitXML(competitionList, eventList, athletesList, juriList).then(closeDialog);
                                 fileRemove(null, index);
                                 //closeDialog()
                             }}>Submit</Button>
