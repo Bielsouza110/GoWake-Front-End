@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import './DropFileInput.css';
 import {ImageConfig} from "../config/ImageConfig";
@@ -19,14 +19,15 @@ import PublishIcon from '@mui/icons-material/Publish';
 import axios from "axios";
 import {getEndpointCreateAthlete, postXML} from "../../../../api/Urls";
 import {Error as ErrorIcon} from '@material-ui/icons';
+import DoneIcon from "@mui/icons-material/Done";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 let juriList2 = [];//Array global dos jurados
 let eventList2 = [];//Lista global dos eventos --> só pode ter 1 competição por XML, apesar de ser só 1 tive que fazer num array
 let athletesList2 = []; //Lista global dos atletas
 let competitionList2 = [];
 let index = 0;
-let contadorSubmit =0;
-//let availableToSubmit = false;
+let countSubmit =0;
 const DropFileInput = (props) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
@@ -36,7 +37,7 @@ const DropFileInput = (props) => {
         athletesList2 = [];
         competitionList2 = [];
         index = 0;
-        contadorSubmit = 0;
+        countSubmit = 0;
     }
 
     const [fileList, setFileList] = useState([]);
@@ -52,9 +53,10 @@ const DropFileInput = (props) => {
     const [eventList, setEventList] = useState([]);
     const [athletesList, setAthletesList] = useState([]);
     const [juriList, setJuriList] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [showError, setShowError] = useState(false);
     const onFileDrop = (e) => {
         const newFile = e.target.files[0];
-
         if (newFile) {
             if (newFile.name.endsWith('.xml') || newFile.name.endsWith('.XML')) {
                 openDialogXMLInput(null);
@@ -107,13 +109,7 @@ const DropFileInput = (props) => {
     };
 
     const submitXML = async (competitionList,eventList,athletesList,juriList) => {
-        console.log(competitionList[0].code)
-        console.log(competitionList)
 
-        const oi = 2;
-
-
-        if (oi === 5) {
             const data = {
                 code: competitionList[0].code,
                 discipline: competitionList[0].discipline,
@@ -159,22 +155,55 @@ const DropFileInput = (props) => {
                 })),
             };
 
-
             try {
                 const response = await axios.post(postXML("submitXML"), data, {
                     headers: {
                         Authorization: `Token ${usuarioSalvo.token}`,
                     },
                 });
-                console.log("deu certo ");
+                setOpen(true);
+                setTimeout(() => {
+                    setOpen(false);
+                }, 2000);
 
             } catch (error) {
-                console.log("deu erro");
+                setShowError(true);
+                setTimeout(() => {
+                    setShowError(false);
+                }, 2000);
                 console.error(error.request.response);
             }
-        }
     };
 
+    const submitedSucessfully=()=>{
+        return(
+            <div>
+                <Dialog open={open}>
+                    <DialogContent>
+                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <DoneIcon sx={{ color: 'green', fontSize: 48, marginBottom: '1%' }} />
+                            File successfully submitted!
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
+            </div>
+        )
+    }
+
+    const failSubmession=()=>{
+        return(
+            <div>
+                <Dialog open={showError}>
+                    <DialogContent>
+                        <DialogContentText sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <ErrorOutlineIcon sx={{ color: 'red', fontSize: 48, marginBottom: '1%' }} />
+                            Submission failed!
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
+            </div>
+        )
+    }
 
     const handleFileSubmit = async (file, lockPopUp) => {
         return new Promise((resolve, reject) => {
@@ -597,10 +626,11 @@ const DropFileInput = (props) => {
     }
 
     const show_XMl_info = () => {
-        contadorSubmit++;
+        countSubmit++;
         //for some reason this function is called twice, so I did this in order to submit file just once
-        if (popUpInfo===2 && contadorSubmit===2){
-            submitXML(competitionList,eventList,athletesList,juriList)
+        if (popUpInfo===2 && countSubmit===2 && openInvalidXMLFields===null){
+            submitXML(competitionList, eventList, athletesList, juriList)
+            fileRemove(null, index);
         }
 
         if (popUpInfo === 1 && openInvalidXMLFields === null && showDialog === true) {
@@ -627,9 +657,9 @@ const DropFileInput = (props) => {
 
                         <DialogActions>
                             <Button onClick={() => {
-                                submitXML(competitionList,eventList,athletesList,juriList);
+                                submitXML(competitionList,eventList,athletesList,juriList).then(closeDialog);
                                 fileRemove(null, index);
-                                closeDialog()
+                                //closeDialog()
                             }}>Submit</Button>
                         </DialogActions>
                         <Button onClick={closeDialog}>Close</Button>
@@ -640,7 +670,6 @@ const DropFileInput = (props) => {
         }
         return null;
     };
-
     const verifyFileInput = () => {
 
         if (openInvalidXMLInput !== null) {
@@ -672,8 +701,7 @@ const DropFileInput = (props) => {
                         <ErrorIcon className="error-dialog-icon"/>
                         Error
                     </DialogTitle>
-                    <DialogContent className="error-dialog-content">Wrong structure or the competition is not
-                        wakeboarding.</DialogContent>
+                    <DialogContent className="error-dialog-content">Selected file structure is invalid.</DialogContent>
                     <DialogActions className="error-dialog-actions">
                         <Button onClick={closeDialogXMLFields} color="primary" className="error-dialog-button">
                             Close
@@ -716,12 +744,13 @@ const DropFileInput = (props) => {
                                 <p>{item.name}</p>
                             </div>
 
+
                             <Tooltip title="Submit" className="tooltip-gender">
                                 <IconButton
                                     id="drop-file-item_submit"
                                     onClick={async () => {
                                         await handleFileSubmit(item, true);
-                                        fileRemove(null,index);
+                                        //fileRemove(null,index);
                                     }}
                                 >
                                     <PublishIcon style={{color: 'forestgreen', cursor: 'pointer'}}/>
@@ -751,6 +780,8 @@ const DropFileInput = (props) => {
             {verifyFileInput()}
             {verifyFileFields()}
             {show_XMl_info()}
+            {submitedSucessfully()}
+            {failSubmession()}
         </>
     );
 };
