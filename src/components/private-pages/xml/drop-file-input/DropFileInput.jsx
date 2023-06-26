@@ -25,8 +25,7 @@ let eventList = [];//Lista global dos eventos --> só pode ter 1 competição po
 let athletesList = []; //Lista global dos atletas
 let competitionList = [];
 let index = 0;
-//let mostra = true;
-
+//let availableToSubmit = false;
 const DropFileInput = (props) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
@@ -36,14 +35,16 @@ const DropFileInput = (props) => {
         athletesList = [];
         competitionList = [];
         index = 0;
+        //availableToSubmit = false;
     }
 
     const [fileList, setFileList] = useState([]);
     const wrapperRef = useRef(null);
-    const [openDialogIndex, setOpenDialogIndex] = useState(null);
+    const [popUpInfo, setPopUpInfo] = useState(null);
     const [openInvalidXMLInput, setOpenInvalidXMLInput] = useState(null);//Variável que guarda se ficheiro selecionado é válido
     const [openInvalidXMLFields, setOpenInvalidXMLFields] = useState(null);//Variável que vai verificar os campos
     const [showDialog, setDialog] = useState(true);
+//const [availableToSubmit,setAvailableToSubmit]=useState(null);
     const onDragEnter = () => wrapperRef.current.classList.add('dragover');
     const onDragLeave = () => wrapperRef.current.classList.remove('dragover');
     const onDrop = () => wrapperRef.current.classList.add('dragover');
@@ -53,20 +54,18 @@ const DropFileInput = (props) => {
 
         if (newFile) {
             if (newFile.name.endsWith('.xml') || newFile.name.endsWith('.XML')) {
-                handleOpenDialogXMLInput(null);
+                openDialogXMLInput(null);
                 const updatedList = [...fileList, newFile];
                 setFileList(updatedList);
                 props.onFileChange(updatedList);
             } else {
-                handleOpenDialogXMLInput(1);
+                openDialogXMLInput(1);
             }
         }
-    };
+    }
 
     const fileRemove = (file, index) => {
-
         if (file != null) {
-
             const updatedList = [...fileList];
             updatedList.splice(fileList.indexOf(file), 1);
             setFileList(updatedList);
@@ -80,179 +79,187 @@ const DropFileInput = (props) => {
         }
     };
 
-    const handleOpenDialog = (index) => {
-        setOpenDialogIndex(index);
+    const openDialog = (index) => {
+        setPopUpInfo(index);
     };
 
-    const handleCloseDialog = () => {
-        setOpenDialogIndex(null);
+    const closeDialog = () => {
+        setPopUpInfo(null);
     };
 
-    const handleOpenDialogXMLInput = (index) => {
+    const openDialogXMLInput = (index) => {
         setOpenInvalidXMLInput(index);
     };
 
-    const handleCloseDialogXMLInput = () => {
-        console.log("Deveria ser o segundo-meio");
+    const closeDialogXMLInput = () => {
         setOpenInvalidXMLInput(null);
     };
 
-    const handleOpenDialogXMLFields = (index) => {
+    const openDialogXMLFields = (index) => {
         setOpenInvalidXMLFields(index);
     };
 
-    const handleCloseDialogXMLFields = () => {
+    const closeDialogXMLFields = () => {
         setOpenInvalidXMLFields(null);
     };
 
-
     const submitXML = async () => {
-
-        const data = {
-            code: '22ESP010',
-            discipline: 'Wakeboard Boat',
-            name: 'CAMPEONATO SEIXAL WAKEBOARD',
-            organizing_country: 'PT',
-            tournament_type: 'NatCH',
-            venue: 'SEIXAL',
-            site_code: 'PTSEIXAL',
-            age_groups: 'IWWF',
-            beginning_date: '2023-02-19T15:02:57Z',
-            end_date: '2023-02-21T15:02:59Z',
-            athletes: [
-                {
-                    events: [],
-                    fed_id: 'ESP9813111',
-                    first_name: 'Miguel',
-                    last_name: 'Gomes',
-                    country: 'PT',
-                    gender: 'M',
-                    year_of_birth: 1995,
-                },
-            ],
-            events: [
-                {
-                    rounds: 5,
-                    event_class: '5 STAR',
-                    name: 'Wakeskate seixal',
-                    code: '801',
-                },
-            ],
-            athlete_events: [
-                {
-                    division: '',
-                    entry_type: 'IP',
-                    participation: true,
-                    real_category: 'U100',
-                    category_in_competition: 'U100',
-                    code: '802',
-                },
-                {
-                    division: '',
-                    entry_type: 'IP',
-                    participation: true,
-                    real_category: 'U110',
-                    category_in_competition: 'U110',
-                    code: '801',
-                },
-            ],
-            officials: [
-                {
-                    iwwfid: 'M00200',
-                    position: 'Judge',
-                    first_name: 'Miguel',
-                    last_name: 'Milhazes',
-                    qualification: 'WBJ1',
-                    country: 'POR',
-                    region: 'Europe',
-                },
-            ],
-        };
-
-
-        try {
-            const response = await axios.post(postXML("submitXML"), data, {
-                headers: {
-                    Authorization: `Token ${usuarioSalvo.token}`,
-                },
-            });
-            console.log("deu certo ");
-
-        } catch (error) {
-            console.log("deu erro");
-            console.error(error.request.response);
+        console.log("kgggggggg   "+competitionList.length);
+        const oi = 2;
+        //console.log(availableToSubmit);
+        if (popUpInfo!==null){
+            console.log(competitionList.length);
         }
+
+        if (oi === 5) {
+            const data = {
+                code: '22ESP010',
+                discipline: 'Wakeboard Boat',
+                name: 'CAMPEONATO SEIXAL WAKEBOARD',
+                organizing_country: 'PT',
+                tournament_type: 'NatCH',
+                venue: 'SEIXAL',
+                site_code: 'PTSEIXAL',
+                age_groups: 'IWWF',
+                beginning_date: '2023-02-19T15:02:57Z',
+                end_date: '2023-02-21T15:02:59Z',
+                athletes: [
+                    {
+                        events: [],
+                        fed_id: 'ESP9813111',
+                        first_name: 'Miguel',
+                        last_name: 'Gomes',
+                        country: 'PT',
+                        gender: 'M',
+                        year_of_birth: 1995,
+                    },
+                ],
+                events: [
+                    {
+                        rounds: 5,
+                        event_class: '5 STAR',
+                        name: 'Wakeskate seixal',
+                        code: '801',
+                    },
+                ],
+                athlete_events: [
+                    {
+                        division: '',
+                        entry_type: 'IP',
+                        participation: true,
+                        real_category: 'U100',
+                        category_in_competition: 'U100',
+                        code: '802',
+                    },
+                    {
+                        division: '',
+                        entry_type: 'IP',
+                        participation: true,
+                        real_category: 'U110',
+                        category_in_competition: 'U110',
+                        code: '801',
+                    },
+                ],
+                officials: [
+                    {
+                        iwwfid: 'M00200',
+                        position: 'Judge',
+                        first_name: 'Miguel',
+                        last_name: 'Milhazes',
+                        qualification: 'WBJ1',
+                        country: 'POR',
+                        region: 'Europe',
+                    },
+                ],
+            };
+
+
+            try {
+                const response = await axios.post(postXML("submitXML"), data, {
+                    headers: {
+                        Authorization: `Token ${usuarioSalvo.token}`,
+                    },
+                });
+                console.log("deu certo ");
+
+            } catch (error) {
+                console.log("deu erro");
+                console.error(error.request.response);
+            }
+
+
+        }
+
     };
 
 
-    const handleFileSubmit = (file) => {
+    const handleFileSubmit = async (file) => {
         clear();
-
         index = fileList.indexOf(file);
+        //console.log("boas");
         let count = 0;
-
         if (fileList[index]) {
+
             const reader = new FileReader();
             reader.onload = () => {
                 const fileUrl = reader.result;
                 /*console.log(fileUrl);*/
-                fetch(fileUrl).then(response => {
-                    return response.text();
-                }).then(xmlString => {
+                fetch(fileUrl).then((response) => response.text()).then(xmlString => {
 
                     const xmlDocument = new DOMParser().parseFromString(xmlString, "text/xml");
                     //const competitions = xmlDocument.querySelectorAll("");//ver mais tarde sobre o inicio do XML
                     const events = xmlDocument.querySelectorAll("events");
-                    const eventsValue = events ? events.textContent : '';
+                    // const eventsValue = events ? events.textContent : '';
 
                     const officials = xmlDocument.querySelectorAll("officials");
-                    const officialsValue = officials ? officials.textContent : '';
+                    //const officialsValue = officials ? officials.textContent : '';
 
                     const athletes = xmlDocument.querySelectorAll("athletes");
-                    const athletesValue = athletes ? athletes.textContent : '';
+                    //const athletesValue = athletes ? athletes.textContent : '';
 
                     try {
-                        const discipline = xmlDocument.querySelector("discipline, Discipline,DISCIPLINE").textContent;
+                        const discipline = xmlDocument.querySelector("discipline, Discipline,DISCIPLINE");
                         const disciplineValue = discipline ? discipline.textContent : '';
 
-                        const code = xmlDocument.querySelector("code,Code,CODE").textContent;
+                        const code = xmlDocument.querySelector("code,Code,CODE");
                         const codeValue = code ? code.textContent : '';
 
-                        const name = xmlDocument.querySelector("name,Name,NAME").textContent;
+                        const name = xmlDocument.querySelector("name,Name,NAME");
                         const nameValue = name ? name.textContent : '';
 
-                        const orgCountry = xmlDocument.querySelector("organizing_country,OrganizingCountry,ORGANIZINGCOUNTRY,Organizing_Country").textContent;
+                        const orgCountry = xmlDocument.querySelector("organizing_country,OrganizingCountry,ORGANIZINGCOUNTRY,Organizing_Country");
                         const orgCountryValue = orgCountry ? orgCountry.textContent : '';
 
-                        const tournament_type = xmlDocument.querySelector("tournament_type,TournamentType,TOURNNAMENTTYPE,Tournament_type").textContent;
+                        const tournament_type = xmlDocument.querySelector("tournament_type,TournamentType,TOURNNAMENTTYPE,Tournament_type");
                         const tournament_typeValue = tournament_type ? tournament_type.textContent : '';
 
-                        const venue = xmlDocument.querySelector("venue,Venue,VENUE").textContent;
+                        const venue = xmlDocument.querySelector("venue,Venue,VENUE");
                         const venueValue = venue ? venue.textContent : '';
 
-                        const site_code = xmlDocument.querySelector("site_code,SiteCode,SITECODE,Site_Code").textContent;
+                        const site_code = xmlDocument.querySelector("site_code,SiteCode,SITECODE,Site_Code");
                         const site_codeValue = site_code ? site_code.textContent : '';
 
-                        const startDate = xmlDocument.querySelector("beginning_date,BeginningDate,BEGINNINGDATE,Beginning_Date").textContent;
+                        const startDate = xmlDocument.querySelector("beginning_date,BeginningDate,BEGINNINGDATE,Beginning_Date");
                         const startDateValue = startDate ? startDate.textContent : '';
 
-                        const endDate = xmlDocument.querySelector("end_date,EndDate,ENDDATE,End_Date").textContent;
+                        const endDate = xmlDocument.querySelector("end_date,EndDate,ENDDATE,End_Date");
                         const endDateValue = endDate ? endDate.textContent : '';
 
-                        const age_groups = xmlDocument.querySelector("age_groups,AgeGroup,AGEGROUP,Age_Groups").textContent;
+                        const age_groups = xmlDocument.querySelector("age_groups,AgeGroup,AGEGROUP,Age_Groups");
                         const age_groupsValue = age_groups ? age_groups.textContent : '';
 
                         competitionList.push({
-                            discipline: discipline,
-                            code: code,
-                            name: name,
-                            orgCountry: orgCountry,
-                            tournament_type: tournament_type,
-                            venue: venue,
-                            site_code: site_code,
-                            startDate: startDate,
-                            endDate: endDate,
-                            age_groups: age_groups
+                            discipline: disciplineValue,
+                            code: codeValue,
+                            name: nameValue,
+                            orgCountry: orgCountryValue,
+                            tournament_type: tournament_typeValue,
+                            venue: venueValue,
+                            site_code: site_codeValue,
+                            startDate: startDateValue,
+                            endDate: endDateValue,
+                            age_groups: age_groupsValue,
+                            availableToSubmit:false
                         });
                     } catch (error) {
                         console.error('Ocorreu um erro ao processar as informações principais:', error);
@@ -262,26 +269,26 @@ const DropFileInput = (props) => {
                     for (const event of events) {
                         try {
                             if (count === 0) {
-                                const code_Event = event.querySelector("code,Code,CODE").textContent;
+                                const code_Event = event.querySelector("code,Code,CODE");
                                 const code_EventValue = code_Event ? code_Event.textContent : '';
 
-                                const rounds = event.querySelector("rounds,Rounds,ROUNDS").textContent;
+                                const rounds = event.querySelector("rounds,Rounds,ROUNDS");
                                 const roundsValue = rounds ? rounds.textContent : '';
 
-                                const classEvent = event.querySelector("event_class,Event_Class,EVENT_CLASS").textContent;
+                                const classEvent = event.querySelector("event_class,Event_Class,EVENT_CLASS");
                                 const classEventValue = classEvent ? classEvent.textContent : '';
 
                                 const name = event.querySelector("name,Name,NAME");
                                 const nameValue = name ? name.textContent : '';
 
-                                if (nameValue.toLowerCase()!=="wakeboard"){
+                                if (nameValue.toLowerCase() !== "wakeboard") {
                                     break;
                                 }
 
                                 eventList.push({
-                                    code: code_Event,
-                                    rounds: rounds,
-                                    classEvent: classEvent,
+                                    code: code_EventValue,
+                                    rounds: roundsValue,
+                                    classEvent: classEventValue,
                                     name: nameValue
                                 });
 
@@ -297,35 +304,35 @@ const DropFileInput = (props) => {
 
                     for (const official of officials) {
                         try {
-                            const iwwfID = official.querySelector("iwwfid,Iwwfid,IWWFID").textContent;
+                            const iwwfID = official.querySelector("iwwfid,Iwwfid,IWWFID");
                             const iwwfIDValue = iwwfID ? iwwfID.textContent : '';
 
-                            const position = official.querySelector("position,Position,POSITION").textContent;
+                            const position = official.querySelector("position,Position,POSITION");
                             const positionValue = position ? position.textContent : '';
 
-                            const lastName = official.querySelector("last_name,LastName,LASTNAME,Last_Name").textContent;
+                            const lastName = official.querySelector("last_name,LastName,LASTNAME,Last_Name");
                             const lastNameValue = lastName ? lastName.textContent : '';
 
-                            const firstName = official.querySelector("first_name,FirstName,FIRSTNAME,First_Name").textContent;
+                            const firstName = official.querySelector("first_name,FirstName,FIRSTNAME,First_Name");
                             const firstNameValue = firstName ? firstName.textContent : '';
 
                             const qualification = official.querySelector("qualification,Qualification,QUALIFICATION");
                             const qualificationValue = qualification ? qualification.textContent : '';
 
-                            const country = official.querySelector("country,Country,COUNTRY").textContent;
+                            const country = official.querySelector("country,Country,COUNTRY");
                             const countryValue = country ? country.textContent : '';
 
-                            const region = official.querySelector("region,Region,REGION").textContent;
+                            const region = official.querySelector("region,Region,REGION");
                             const regionValue = region ? region.textContent : '';
 
                             juriList.push({
-                                id: iwwfID,
-                                category: position,
-                                lastName: lastName,
-                                firstName: firstName,
+                                id: iwwfIDValue,
+                                category: positionValue,
+                                lastName: lastNameValue,
+                                firstName: firstNameValue,
                                 qualification: qualificationValue,
-                                country: country,
-                                region: region
+                                country: countryValue,
+                                region: regionValue
                             });
                         } catch (error) {
                             console.error('Ocorreu um erro ao processar os oficiais:', error);
@@ -335,81 +342,85 @@ const DropFileInput = (props) => {
 
                     for (const athlete of athletes) {
                         try {
-                            const fed_id = athlete.querySelector("fed_id,FedId,FEDID,Fed_Id").textContent;
+                            const fed_id = athlete.querySelector("fed_id,FedId,FEDID,Fed_Id");
                             const fed_idValue = fed_id ? fed_id.textContent : '';
 
-                            const lastName = athlete.querySelector("last_name,LastName,LASTNAME,Last_Name").textContent;
+                            const lastName = athlete.querySelector("last_name,LastName,LASTNAME,Last_Name");
                             const lastNameValue = lastName ? lastName.textContent : '';
 
-                            const firstName = athlete.querySelector("first_name,FirstName,FIRSTNAME,First_Name").textContent;
+                            const firstName = athlete.querySelector("first_name,FirstName,FIRSTNAME,First_Name");
                             const firstNameValue = firstName ? firstName.textContent : '';
 
-                            const country = athlete.querySelector("country,Country,COUNTRY").textContent;
+                            const country = athlete.querySelector("country,Country,COUNTRY");
                             const countryValue = country ? country.textContent : '';
 
-                            const gender = athlete.querySelector("gender,Gender,GENDER").textContent;
+                            const gender = athlete.querySelector("gender,Gender,GENDER");
                             const genderValue = gender ? gender.textContent : '';
 
-                            const birthYear = athlete.querySelector("year_of_birth,YearOfBirth,YEAROFBIRTH").textContent;
+                            const birthYear = athlete.querySelector("year_of_birth,YearOfBirth,YEAROFBIRTH");
                             const birthYearValue = birthYear ? birthYear.textContent : '';
 
-                            const code = athlete.querySelector("code,Code,CODE").textContent;
+                            const code = athlete.querySelector("code,Code,CODE");
                             const codeValue = code ? code.textContent : '';
 
-                            const division = athlete.querySelector("division,Division,DIVISION").textContent;
+                            const division = athlete.querySelector("division,Division,DIVISION");
                             const divisionValue = division ? division.textContent : '';
 
-                            const entry_type = athlete.querySelector("entry_type,EntryType,ENTRYTYPE").textContent;
+                            const entry_type = athlete.querySelector("entry_type,EntryType,ENTRYTYPE");
                             const entry_typeValue = entry_type ? entry_type.textContent : '';
 
-                            const participation = athlete.querySelector("participation,Participation,PARTICIPATION").textContent;
+                            const participation = athlete.querySelector("participation,Participation,PARTICIPATION");
                             const participationValue = participation ? participation.textContent : '';
 
-                            const category = athlete.querySelector("real_category,RealCategory,REALCATEGORY,Real_Category").textContent;
+                            const category = athlete.querySelector("real_category,RealCategory,REALCATEGORY,Real_Category");
                             const categoryValue = category ? category.textContent : '';
 
-                            const competitionCategory = athlete.querySelector("category_in_competition,CategoryInCompetition,CATEGORYINCOMPETITION,Category_In_Competition").textContent;
+                            const competitionCategory = athlete.querySelector("category_in_competition,CategoryInCompetition,CATEGORYINCOMPETITION,Category_In_Competition");
                             const competitionCategoryValue = competitionCategory ? competitionCategory.textContent : '';
 
                             athletesList.push({
-                                id: fed_id,
-                                lastName: lastName,
-                                firstName: firstName,
-                                country: country,
-                                gender: gender,
-                                year: birthYear,
-                                code: code,
-                                division: division,
-                                entry_type: entry_type,
-                                participation: participation,
-                                category: category,
-                                competitionCategory: competitionCategory
+                                id: fed_idValue,
+                                lastName: lastNameValue,
+                                firstName: firstNameValue,
+                                country: countryValue,
+                                gender: genderValue,
+                                year: birthYearValue,
+                                code: codeValue,
+                                division: divisionValue,
+                                entry_type: entry_typeValue,
+                                participation: participationValue,
+                                category: categoryValue,
+                                competitionCategory: competitionCategoryValue
                             });
                         } catch (error) {
                             console.error('Ocorreu um erro ao processar os atletas:', error);
                         }
                     }
                     if (eventList.length === 0 || athletesList.length === 0 || juriList.length === 0 || competitionList.length === 0) {
-
-                        handleOpenDialogXMLFields(1);
-                        {setDialog(false)}
+                        openDialogXMLFields(1);
+                        {
+                            setDialog(false)
+                        }
                     } else {
-                        {setDialog(true)}
-                        handleOpenDialogXMLFields(null);
+                        openDialogXMLFields(null);
+                        {
+                            setDialog(true)
+                        }
                     }
-                    handleOpenDialog(1);
+                    openDialog(1);//se tiver diferente de null é para dar indicação que leu todos os dados e é para mostrar a info
+
                 }).catch(error => {
                     console.error("XML inválido");
                 });
 
             };
+
             reader.readAsDataURL(fileList[index]);
         }
-
     };
 
-    const displayCompetition = () => {
-        if (openDialogIndex !== null && openInvalidXMLFields===null) {
+    const getCompetition = () => {
+        if (popUpInfo !== null && openInvalidXMLFields === null) {
             return (
                 <div className="competition-container">
                     <h6>Competition name: <span className="value">{competitionList[0].name}</span></h6>
@@ -455,8 +466,8 @@ const DropFileInput = (props) => {
         return null;
     }
 
-    const displayJuri = () => {
-        if (openDialogIndex !== null && openInvalidXMLFields===null) {
+    const getJuri = () => {
+        if (popUpInfo !== null && openInvalidXMLFields === null) {
             return (
                 <div className="juri-container">
                     <h5>Juri painel</h5>
@@ -493,11 +504,11 @@ const DropFileInput = (props) => {
             );
         }
 
-        return null; // Retorna null se openDialogIndex for null
+        return null; // Retorna null se popUpInfo for null
     };
 
-    const displayAthletes = () => {
-        if (openDialogIndex !== null && openInvalidXMLFields===null) {
+    const getAthletes = () => {
+        if (popUpInfo !== null && openInvalidXMLFields === null) {
             return (
                 <div>
                     <h5>Athletes painel</h5>
@@ -539,9 +550,9 @@ const DropFileInput = (props) => {
         return null;
     }
 
-    const displayEvent = () => {
+    const getEvent = () => {
 
-        if (openDialogIndex !== null && openInvalidXMLFields===null) {
+        if (popUpInfo !== null && openInvalidXMLFields === null) {
             return (
                 <>
 
@@ -582,21 +593,24 @@ const DropFileInput = (props) => {
         return null;
     }
 
-    const renderDialog = () => {
-        if (openDialogIndex !== null && openInvalidXMLFields===null && showDialog === true  ) {
+    const show_XMl_info = () => {
+
+        if (popUpInfo !== null && openInvalidXMLFields === null && showDialog === true) {
+
+            competitionList[0].availableToSubmit=true;
 
             return (
-                <Dialog open={true} onClose={handleCloseDialog} maxWidth="lg">
+                <Dialog open={true} onClose={closeDialog} maxWidth="lg">
                     {/*maxWidth="md" fullWidth = "800"*/}
                     {/*sx={{width: '100%', maxWidth: '100%'}}*/}
 
                     <DialogTitle>XML Preview</DialogTitle>
                     <DialogContent>
 
-                        {displayCompetition()}
-                        {displayEvent()}
-                        {displayJuri()}
-                        {displayAthletes()}
+                        {getCompetition()}
+                        {getEvent()}
+                        {getJuri()}
+                        {getAthletes()}
 
                         <DialogContentText>
                         </DialogContentText>
@@ -607,10 +621,10 @@ const DropFileInput = (props) => {
                         <DialogActions>
                             <Button onClick={() => {
                                 fileRemove(null, index);
-                                handleCloseDialog()
+                                closeDialog()
                             }}>Submit</Button>
                         </DialogActions>
-                        <Button onClick={handleCloseDialog}>Close</Button>
+                        <Button onClick={closeDialog}>Close</Button>
                     </DialogActions>
 
                 </Dialog>
@@ -619,10 +633,11 @@ const DropFileInput = (props) => {
         return null;
     };
 
-    const showInvalidDialogXMLInput = () => {
+    const verifyFileInput = () => {
+
         if (openInvalidXMLInput !== null) {
             return (
-                <Dialog open={true} onClose={handleCloseDialogXMLInput} className="error-dialog">
+                <Dialog open={true} onClose={closeDialogXMLInput} className="error-dialog">
                     <DialogTitle className="error-dialog-title">
                         <ErrorIcon className="error-dialog-icon"/>
                         Error
@@ -630,7 +645,7 @@ const DropFileInput = (props) => {
                     <DialogContent className="error-dialog-content">The selected file is invalid. Please choose a valid
                         XML file.</DialogContent>
                     <DialogActions className="error-dialog-actions">
-                        <Button onClick={handleCloseDialogXMLInput} color="primary" className="error-dialog-button">
+                        <Button onClick={closeDialogXMLInput} color="primary" className="error-dialog-button">
                             Close
                         </Button>
                     </DialogActions>
@@ -641,10 +656,11 @@ const DropFileInput = (props) => {
         return null;
     };
 
-    const showInvalidDialogXMLFields = () => {
+
+    const verifyFileFields = () => {
         if (openInvalidXMLFields !== null) {
             return (
-                <Dialog open={true} onClose={handleCloseDialogXMLFields} className="error-dialog">
+                <Dialog open={true} onClose={closeDialogXMLFields} className="error-dialog">
                     <DialogTitle className="error-dialog-title">
                         <ErrorIcon className="error-dialog-icon"/>
                         Error
@@ -652,7 +668,7 @@ const DropFileInput = (props) => {
                     <DialogContent className="error-dialog-content">Wrong structure or the competition is not
                         wakeboarding.</DialogContent>
                     <DialogActions className="error-dialog-actions">
-                        <Button onClick={handleCloseDialogXMLFields} color="primary" className="error-dialog-button">
+                        <Button onClick={closeDialogXMLFields} color="primary" className="error-dialog-button">
                             Close
                         </Button>
                     </DialogActions>
@@ -677,34 +693,36 @@ const DropFileInput = (props) => {
                     <img src={uploadImg} alt=""/>
                     <p>Drag & Drop your files here!</p>
                 </div>
+
                 <input type="file" value="" accept=".xml" onChange={onFileDrop}/>
+
             </div>
+
+
             {fileList.length > 0 ? (
                 <div className="drop-file-preview">
+
                     <p className="drop-file-preview_title">Ready to upload</p>
                     {fileList.map((item, index) => (
 
                         <div key={index} className="drop-file-preview_item">
-
                             <img src={ImageConfig[item.type.split('/')[1] || ImageConfig['default']]} alt=""/>
                             <div className="drop-file-preview_item_info">
                                 <p>{item.name}</p>
                             </div>
-                            {openInvalidXMLFields===null &&(
-                                <Tooltip title="Submit" className="tooltip-gender">
-                                    <IconButton
-                                        id="drop-file-item_submit"
-                                        onClick={() => {
-                                            submitXML();
-                                            fileRemove(null, index);
-                                        }}
-                                    >
-                                        <PublishIcon style={{color: 'forestgreen', cursor: 'pointer'}}/>
-                                    </IconButton>
-                                </Tooltip>
 
-                            )}
-
+                            <Tooltip title="Submit" className="tooltip-gender">
+                                <IconButton
+                                    id="drop-file-item_submit"
+                                    onClick={() => {
+                                        submitXML();
+                                        //fileRemove(null, index);
+                                    }}
+                                    //style={{ display: 'none' }}
+                                >
+                                    <PublishIcon style={{color: 'forestgreen', cursor: 'pointer'}}/>
+                                </IconButton>
+                            </Tooltip>
 
                             <Tooltip title="Preview" className="tooltip-gender">
                                 <IconButton id="drop-file-item_preview" onClick={() => handleFileSubmit(item)}>
@@ -719,15 +737,14 @@ const DropFileInput = (props) => {
                                                 style={{cursor: 'pointer'}}/>
                                 </IconButton>
                             </Tooltip>
-
                         </div>
+
                     ))}
                 </div>
             ) : null}
-
-            {showInvalidDialogXMLInput()}
-            {showInvalidDialogXMLFields()}
-            {renderDialog()}
+            {verifyFileInput()}
+            {verifyFileFields()}
+            {show_XMl_info()}
         </>
     );
 };
