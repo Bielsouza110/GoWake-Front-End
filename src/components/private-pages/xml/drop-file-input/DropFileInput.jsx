@@ -109,61 +109,17 @@ const DropFileInput = (props) => {
     const submitXML = async () => {
 
 
-        const data1 = {
-            code: competitionList[0].code,
-            discipline: competitionList[0].discipline,
-            name: competitionList[0].name,
-            organizing_country: competitionList[0].orgCountry,
-            tournament_type: competitionList[0].tournament_type,
-            venue: competitionList[0].venue,
-            site_code: competitionList[0].site_code,
-            age_groups: competitionList[0].age_groups,
-            beginning_date: competitionList[0].startDate,
-            end_date: competitionList[0].endDate,
-            athletes: athletesList.map((athlete) => ({
-                events: [],
-                fed_id: athlete.fed_id,
-                first_name: athlete.firstName,
-                last_name: athlete.lastName,
-                country: athlete.country,
-                gender: athlete.gender,
-                year_of_birth: athlete.year,
-            })),
-            events: eventList.map((event) => ({
-                rounds: event.rounds,
-                event_class: event.event_class,
-                name: event.name,
-                code: event.code,
-            })),
-            athlete_events: athletesList.map((athlete) => ({
-                division: athlete.division,
-                entry_type: athlete.entry_type,
-                participation: athlete.participation,
-                real_category: athlete.real_category,
-                category_in_competition: athlete.category_in_competition,
-                code: athlete.code,
-            })),
-            officials: juriList.map((juri) => ({
-                iwwfid: juri.iwwfid,
-                position: juri.position,
-                first_name: juri.firstName,
-                last_name: juri.lastName,
-                qualification: juri.qualification,
-                country: juri.country,
-                region: juri.region,
-            })),
-        };
-        console.log(data1)
+
 
         //const athlete_eventsJson = JSON.stringify(athlete_events);
         //const a = JSON.stringify(athletesList);
         //console.log(a);
 
-        const oi = 2;
+        //const oi = 2;
         //console.log(competitionList[0].code)
         //console.log(competitionList[0].code.toString())
 
-        if (oi === 5) {
+        //if (oi === 5) {
         const data = {
             code: competitionList[0].code,
             discipline: competitionList[0].discipline,
@@ -177,7 +133,7 @@ const DropFileInput = (props) => {
             end_date: competitionList[0].endDate,
             athletes: athletesList.map((athlete) => ({
                 events: [],
-                fed_id: athlete.fed_id,
+                fed_id: athlete.id,
                 first_name: athlete.firstName,
                 last_name: athlete.lastName,
                 country: athlete.country,
@@ -186,7 +142,7 @@ const DropFileInput = (props) => {
             })),
             events: eventList.map((event) => ({
                 rounds: event.rounds,
-                event_class: event.event_class,
+                event_class: event.classEvent,
                 name: event.name,
                 code: event.code,
             })),
@@ -194,13 +150,13 @@ const DropFileInput = (props) => {
                 division: athlete.division,
                 entry_type: athlete.entry_type,
                 participation: athlete.participation,
-                real_category: athlete.real_category,
-                category_in_competition: athlete.category_in_competition,
+                real_category: athlete.category,
+                category_in_competition: athlete.competitionCategory,
                 code: athlete.code,
             })),
             officials: juriList.map((juri) => ({
-                iwwfid: juri.iwwfid,
-                position: juri.position,
+                iwwfid: juri.id,
+                position: juri.category,
                 first_name: juri.firstName,
                 last_name: juri.lastName,
                 qualification: juri.qualification,
@@ -222,7 +178,7 @@ const DropFileInput = (props) => {
             console.log("deu erro");
             console.error(error.request.response);
         }
-        }
+        //}
     };
 
 
