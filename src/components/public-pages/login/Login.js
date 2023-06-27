@@ -13,22 +13,24 @@ import axios from 'axios';
 import {endpoints} from "../../../api/Urls";
 import DrawerHeader from "../../../navs/DrawerHeader";
 import React, { useRef } from 'react';
-import {Grid, TextField} from "@mui/material";
-
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import DoneIcon from '@mui/icons-material/Done';
+import { Grid, TextField, InputAdornment, IconButton } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 function Login() {
 
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
     const inputRef = useRef(null);
     const [showError, setShowError] = useState(false);
     const [showRecoverPassword, setRecoverPassword] = useState(false);
     const [user, setUser] = useState({ username: '', password: '' , email: ''});
+    const [open, setOpen] = useState(false);
 
     function handleChangeUsername(event) {
         setUser({ ...user, username: event.target.value });
@@ -94,7 +96,9 @@ function Login() {
         }
     };
 
-    const [open, setOpen] = useState(false);
+    const handleTogglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     return (
         <div className="sdd">
@@ -137,11 +141,18 @@ function Login() {
                                         label="Password"
                                         value={user.password}
                                         onChange={handleChangePassword}
-                                        ref={inputRef}
-                                        onKeyDown={handleKeyDown}
-                                        type='password'
+                                        type={showPassword ? 'text' : 'password'}
                                         size="md"
                                         fullWidth
+                                        InputProps={{
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton onClick={handleTogglePasswordVisibility}>
+                                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                        }}
                                     />
                                 </Grid>
 

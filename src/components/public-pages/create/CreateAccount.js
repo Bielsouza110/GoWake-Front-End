@@ -5,7 +5,6 @@ import {
     MDBInput,
 } from 'mdb-react-ui-kit';
 
-import {Grid, TextField} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AppBar from "../../../navs/AppBar";
 import Box from "@mui/material/Box";
@@ -18,9 +17,11 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import DoneIcon from "@mui/icons-material/Done";
+import { Grid, TextField, InputAdornment, IconButton } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 function CreateAccount() {
 
@@ -34,6 +35,7 @@ function CreateAccount() {
     const [showErrorPassword2, setShowErrorPassword2] = useState('');
     const [showSucessMessage, setShowSucessMessage] = useState('');
     const [user, setUser] = useState({ username: '', email: '', password: '', password2: '' });
+    const [showPassword, setShowPassword] = useState(false);
 
     function handleChangeUsername(event) {
         setUser({ ...user, username: event.target.value });
@@ -126,6 +128,10 @@ function CreateAccount() {
         }
     };
 
+    const handleTogglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
     return (
         <div className="sdd">
             <Box sx ={{display:"flex"}}>
@@ -181,11 +187,18 @@ function CreateAccount() {
                                         label="Password"
                                         value={user.password}
                                         onChange={handleChangePassword}
-                                        ref={inputRef}
-                                        onKeyDown={handleKeyDown}
-                                        type='password'
+                                        type={showPassword ? 'text' : 'password'}
                                         size="md"
                                         fullWidth
+                                        InputProps={{
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton onClick={handleTogglePasswordVisibility}>
+                                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                        }}
                                     />
                                     {showError && showErrorPassword !== '' && <p id="error">{showErrorPassword}</p>}
                                 </Grid>
@@ -197,7 +210,7 @@ function CreateAccount() {
                                         onChange={handleChangePassword2}
                                         ref={inputRef}
                                         onKeyDown={handleKeyDown}
-                                        type='password'
+                                        type={showPassword ? 'text' : 'password'}
                                         size="md"
                                         fullWidth
                                     />
