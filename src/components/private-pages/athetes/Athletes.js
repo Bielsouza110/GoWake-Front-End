@@ -10,8 +10,8 @@ import axios from "axios";
 import {
     endpoints,
     getEndpointAthleteById,
-    getEndpointCompetitionById,
-    getEndpointDeleteAthleteById
+    getEndpointCompetitionById, getEndpointCreateAthlete,
+    getEndpointDeleteAthleteById, postEndpointGenerateHeats
 } from "../../../api/Urls";
 import {Edit as EditIcon, Delete as DeleteIcon} from '@mui/icons-material';
 import {IconButton} from '@mui/material';
@@ -129,8 +129,39 @@ const Athletes = ({idComp}) => {
 
     const isMobile = useMediaQuery('(max-width: 600px)');
 
-    const generateHeat = () => {
-        console.log("função generate chamada!");
+    const generateHeat = async () => {
+
+        const dataApi = {
+            competition_id: idComp,
+        };
+
+        try {
+            const response = await axios.post(postEndpointGenerateHeats("heatSystem"), dataApi, {
+                headers: {
+                    Authorization: `Token ${usuarioSalvo.token}`,
+                },
+            });
+
+
+            console.log("função generate sucess");
+
+            /*setSuccessDialogOpen(true);
+            setTimeout(() => {
+                cleanFieldsAndClose();
+                cleanFields();
+                onClose();
+            }, 3000);*/
+        } catch (error) {
+            console.error(error.request.response);
+           /* setErrorDialogOpen(true);
+            setTimeout(() => {
+                setErrorDialogOpen(false);
+            }, 3000);*/
+
+            console.log("função generate error");
+        }
+
+
     };
 
     return (
@@ -188,33 +219,67 @@ const Athletes = ({idComp}) => {
                     Athletes
                 </Typography>
 
-                <div>
-                    <Button
-                        variant="contained"
-                        startIcon={<CachedIcon/>}
-                        onClick={generateHeat}
-                        style={{
-                            textTransform: 'none',
-                            backgroundColor: 'green',
-                            marginBottom: '1vh',
-                        }}
-                    >
-                        <span style={{color: 'inherit'}}>Generate heat</span>
-                    </Button>
-                    <Button
-                        variant="contained"
-                        startIcon={<AddIcon/>}
-                        onClick={handleOpenDialog}
-                        style={{
-                            textTransform: 'none',
-                            color: 'success',
-                            marginBottom: '1vh',
-                            marginLeft: '2vh',
-                        }}
-                    >
-                        Create athlete
-                    </Button>
-                </div>
+                {isMobile ? (
+                    <div>
+                        <Grid item xs={12} sm={12}>
+                            <Button
+                                variant="contained"
+                                startIcon={<CachedIcon/>}
+                                onClick={generateHeat}
+                                style={{
+                                    textTransform: 'none',
+                                    backgroundColor: 'green',
+                                    marginBottom: '1.5vh',
+                                }}
+                                sx={{width: '100%', maxWidth: '100%'}}
+                            >
+                                <span style={{ color: 'inherit' }}>Generate heat</span>
+                            </Button>
+                            <Button
+                                variant="contained"
+                                startIcon={<AddIcon/>}
+                                onClick={handleOpenDialog}
+                                style={{
+                                    textTransform: 'none',
+                                    color: 'success',
+                                    marginBottom: '2vh',
+                                }}
+                                sx={{width: '100%', maxWidth: '100%'}}
+                            >
+                                <span style={{ color: 'inherit' }}>Create athlete</span>
+                            </Button>
+                        </Grid>
+                    </div>
+                ) : (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+
+                        <Button
+                            variant="contained"
+                            startIcon={<CachedIcon />}
+                            onClick={generateHeat}
+                            style={{
+                                textTransform: 'none',
+                                backgroundColor: 'green',
+                                marginBottom: '1vh',
+                            }}
+                        >
+                            <span style={{ color: 'inherit' }}>Generate heat</span>
+                        </Button>
+                        <Button
+                            variant="contained"
+                            startIcon={<AddIcon/>}
+                            onClick={handleOpenDialog}
+                            style={{
+                                textTransform: 'none',
+                                color: 'success',
+                                marginBottom: '1vh',
+                                marginLeft: '2vh',
+                            }}
+                        >
+                            <span style={{ color: 'inherit' }}>Create athlete</span>
+                        </Button>
+                    </div>
+                )}
             </Grid>
 
             <div id="esconde"><Divider style={{backgroundColor: 'black', marginBottom: '5vh', marginTop: '1.3vh'}}/>

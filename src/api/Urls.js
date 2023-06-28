@@ -10,6 +10,7 @@ export const endpoints = {
     officialBy: `${API_ROOT}/api/competition`,
     eventBy: `${API_ROOT}/api/competition`,
     submitXML:`${API_ROOT}/api/create-all/`,
+    heatSystem:`${API_ROOT}/api/generate-heatsystem/`,
 };
 
 export const getEndpointCompetitionById = (endpoint, id) => {
@@ -77,4 +78,8 @@ export const getEndpointDeleteCompetition = (endpoint, idCompetition) => {
 
 export const putEndpointCompetitionById = (endpoint, idCompetition) => {
     return `${endpoints[endpoint]}/${idCompetition}/`;
+};
+
+export const postEndpointGenerateHeats = (endpoint) => {
+    return `${endpoints[endpoint]}`;
 };
