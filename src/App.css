@@ -298,3 +298,9 @@
 #marginGlobal {
     margin-top: 5vh;
 }
+
+@media (max-width: 600px) {
+    .top-margin {
+        margin-top: 48px;
+    }
+}

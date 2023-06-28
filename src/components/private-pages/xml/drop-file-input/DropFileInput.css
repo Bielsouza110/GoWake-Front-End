@@ -1,8 +1,7 @@
 .drop-file-input {
-    /*margin-left: 800px;*/
-    /*padding-left: 800px ;*/
-    /*display: flex;*/
-
+    /* margin-left: 800px; */
+    /* padding-left: 800px; */
+    /* display: flex; */
     width: 100%;
     height: 200px;
     display: flex;
@@ -12,7 +11,6 @@
     border-radius: 20px;
     align-items: center;
     background-color: var(--input-bg);
-
 }
 
 .drop-file-input_label {
@@ -26,7 +24,6 @@
     width: 100px;
 }
 
-
 .drop-file-input input {
     opacity: 0;
     position: absolute;
@@ -35,12 +32,11 @@
     width: 100%;
     height: 100%;
     cursor: pointer;
-
 }
 
-.drop-file-input:hover, .drop-file-input.dragover {
+.drop-file-input:hover,
+.drop-file-input.dragover {
     opacity: 0.6;
-
 }
 
 .drop-file-preview {
@@ -78,51 +74,43 @@
     justify-content: space-between;
 }
 
-
-.drop-file-preview_item  #drop-file-item_del{
-
+.drop-file-preview_item #drop-file-item_del {
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
     right: 15px;
     margin-top: 5px;
-
 }
 
-.drop-file-preview_item  #drop-file-item_preview{
-
+.drop-file-preview_item #drop-file-item_preview {
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
     right: 60px;
     margin-top: 5px;
-
 }
 
-.drop-file-preview_item  #drop-file-item_submit{
-
+.drop-file-preview_item #drop-file-item_submit {
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
     right: 105px;
     margin-top: 5px;
-
 }
 
 .competition-preview {
-    /*display: inline-block;*/
+    /* display: inline-block; */
     border-radius: 3%;
     color: red;
-    /*border: 1px solid black;*/
+    /* border: 1px solid black; */
     border: 1px dashed var(--border-color);
     background-color: var(--box-bg);
     justify-content: center;
     width: fit-content;
     margin-top: -20px;
-
 }
 
 .juri-container {
@@ -131,11 +119,11 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 50px;
-    /*border: 1px solid black;*/
+    /* border: 1px solid black; */
 }
 
 .juri-item {
-    /*padding-bottom: 20px;*/
+    /* padding-bottom: 20px; */
     display: inline-grid;
     border-radius: 5%;
     color: black;
@@ -144,12 +132,10 @@
     height: 220px;
     padding-top: -10px;
     margin: 10px;
-
 }
 
 .juri-blank-container {
     padding-left: 22px;
-
 }
 
 .event-container {
@@ -174,11 +160,11 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 50px;
-    /*border: 1px solid black;*/
+    /* border: 1px solid black; */
 }
 
 .athletes-item {
-    /*padding-bottom: 20px;*/
+    /* padding-bottom: 20px; */
     display: inline-grid;
     border-radius: 5%;
     color: black;
@@ -187,18 +173,18 @@
     height: 220px;
     padding-top: -10px;
     margin: 10px;
-    /*margin: 5px;*/
-    /*max-width: 400px;*/
-    /*background-color: var(--input-bg);*/
-    /*background-color: red;*/
+    /* margin: 5px; */
+    /* max-width: 400px; */
+    /* background-color: var(--input-bg); */
+    /* background-color: red; */
 }
 
 .athletes-blank-container {
     padding-left: 22px;
-    /*border: 1px dashed black;*/
-    /*background-color: #f2f2f2;*/
-
+    /* border: 1px dashed black; */
+    /* background-color: #f2f2f2; */
 }
+
 .error-dialog {
     max-width: 400px;
     margin: 0 auto;
@@ -230,6 +216,21 @@
     font-weight: bold;
 }
 
+/* Responsivo para dispositivos móveis */
+@media (max-width: 600px) {
+    .drop-file-input {
+        flex-direction: column;
+        height: auto;
+    }
 
+    .drop-file-preview_item {
+        height: auto;
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
-
+    .drop-file-preview_item img {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
