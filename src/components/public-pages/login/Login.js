@@ -28,6 +28,10 @@ function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const inputRef = useRef(null);
     const [showError, setShowError] = useState(false);
+
+    const [showErrorRecover, setErrorRecover] = useState(false);
+    const [showSuccessRecover, setSuccessRecover] = useState(false);
+
     const [showRecoverPassword, setRecoverPassword] = useState(false);
     const [user, setUser] = useState({ username: '', password: '' , email: ''});
     const [open, setOpen] = useState(false);
@@ -61,7 +65,6 @@ function Login() {
                 }, 2000);
 
             } else {
-                // lidar com outros erros
                 console.log(error);
             }
         }
@@ -72,6 +75,28 @@ function Login() {
     }
     function handleSubmitRecoverPassword(event){
         event.preventDefault();
+
+        if (user.email === '') {
+            // Show error message when the email input is empty
+            setErrorRecover(true);
+            setTimeout(() => {
+                setErrorRecover(false);
+            }, 2000);
+        } else if (!user.email.includes('@')) {
+            // Show error message when the email input does not contain '@'
+            setErrorRecover(true);
+            setTimeout(() => {
+                setErrorRecover(false);
+            }, 2000);
+        } else {
+            // Show success message when the input is valid
+
+            setSuccessRecover(true);
+            setTimeout(() => {
+                setSuccessRecover(false);
+                setUser({ ...user, email: '' });
+            }, 3000);
+        }
     }
     function recoverPassword(event) {
         event.preventDefault();
@@ -106,7 +131,7 @@ function Login() {
                 <AppBar/>
                 <Container id="marginDrawerHeader">
                     <DrawerHeader/>
-                    <MDBContainer className="p-3 my-4">
+                    <MDBContainer id = "marginGlobal">
                         <MDBRow>
                             <MDBCol id="esconde" col='10' md='6'>
                                 <img src="/images/wake.png" alt="Image login" />
@@ -180,8 +205,14 @@ function Login() {
                                     </Grid>
                                 }
 
+                                {showErrorRecover ? (
+                                    <p id="error">Invalid email format</p>
+                                ) : (
+                                    showSuccessRecover && <p id="success">Email sent</p>
+                                )}
+
                                 {showRecoverPassword &&
-                                    <Button variant="contained" type="submit" onClick={handleSubmit} className="mb-3 w-100" size="md" style={{ textTransform: 'none', backgroundColor: 'gray' }}>
+                                    <Button variant="contained" type="submit" onClick={handleSubmitRecoverPassword} className="mb-3 w-100" size="md" style={{ textTransform: 'none', backgroundColor: 'gray' }}>
                                         Recover password
                                     </Button>
                                 }

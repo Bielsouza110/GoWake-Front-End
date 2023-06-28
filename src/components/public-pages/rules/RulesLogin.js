@@ -38,7 +38,7 @@ const RulesLogin = () => {
                 <AppBar/>
                 <Container id="marginDrawerHeader">
                     <DrawerHeader/>
-                    <MDBContainer className="p-1 my-2">
+                    <MDBContainer id = "marginGlobal">
 
                         <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{
                             fontSize: '20px'

@@ -132,7 +132,7 @@ const Athletes = ({idComp}) => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Delete</Button>
+                    <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={() => handleDelete(idComp, idAthlete)} color="error">
                         Delete
                     </Button>

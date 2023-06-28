@@ -37,11 +37,11 @@ function ResponsiveAppBar() {
         setAnchorElNav(null);
     };
 
-/*    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };*/
+    /*    const handleCloseUserMenu = () => {
+            setAnchorElUser(null);
+        };*/
 
- /*   const navigate = useNavigate();*/
+    /*   const navigate = useNavigate();*/
 
     return (
         <AppBar position="fixed" color="inherit">
@@ -49,7 +49,6 @@ function ResponsiveAppBar() {
                 <Toolbar disableGutters>
 
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Link to="/">
                                 <img src="/images/iwwf.png" alt="Logo" style={{ height: '6.3vh' }} />
@@ -75,11 +74,6 @@ function ResponsiveAppBar() {
                         >
                             <MenuIcon/>
                         </IconButton>
-                        <a className="navbar-brand" href="/">
-                            <img sx={{display: {xs: 'flex', md: 'flex'}, mr: 0}}
-                                 src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/International_Waterski_%26_Wakeboard_Federation_logo.svg/1200px-International_Waterski_%26_Wakeboard_Federation_logo.svg.png"
-                                 width="100%" height="50" alt=""/>
-                        </a>
                         <Menu
                             id="menu-appbar"
                             anchorEl={anchorElNav}
@@ -111,6 +105,11 @@ function ResponsiveAppBar() {
                                 );
                             })}
                         </Menu>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Link to="/">
+                                <img src="/images/iwwf.png" alt="Logo" style={{ height: '6.3vh' }} />
+                            </Link>
+                        </Box>
                     </Box>
 
                     <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>

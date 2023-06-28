@@ -147,7 +147,7 @@ const Officials = ({idComp}) => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Delete</Button>
+                    <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={() => handleDelete(idOfficial)} color="error">
                         Delete
                     </Button>

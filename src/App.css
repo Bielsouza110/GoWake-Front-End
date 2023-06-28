@@ -219,7 +219,7 @@
      font-size: 14px;
  }
 
-#sucess {
+#success {
     color: green;
     font-size: 12px;
 }
@@ -293,4 +293,8 @@
 #margin10 {
     margin-top: 2.5%;
     margin-bottom: 4%;
+}
+
+#marginGlobal {
+    margin-top: 5vh;
 }

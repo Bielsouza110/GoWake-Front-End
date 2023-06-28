@@ -138,7 +138,7 @@ function CreateAccount() {
                 <AppBar/>
                 <Container id="marginDrawerHeader">
                     <DrawerHeader/>
-                    <MDBContainer className="p-3 my-4 mg">
+                    <MDBContainer id = "marginGlobal">
                         <MDBRow>
                             <MDBCol id="esconde" col='10' md='6'>
                                 <img src="/images/wake.png" alt="Image login"/>
