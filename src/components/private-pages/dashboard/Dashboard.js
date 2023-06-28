@@ -5,7 +5,19 @@ import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Grid, Button, IconButton} from '@mui/material';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    TextField,
+    Grid,
+    Button,
+    IconButton
+} from '@mui/material';
 import {Spinner} from "react-bootstrap";
 import Typography from '@mui/material/Typography';
 import DrawerHeader from "../../../navs/DrawerHeader";
@@ -53,7 +65,9 @@ const Dashboard = () => {
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
     const fetchCompetition = async () => {
 
-        const timer = setTimeout(() => {setShowSpinner(false);}, 3000); // Tempo limite de 3 segundos
+        const timer = setTimeout(() => {
+            setShowSpinner(false);
+        }, 3000); // Tempo limite de 3 segundos
 
         await axios.get(endpoints.competitions, {
             headers: {
@@ -73,7 +87,9 @@ const Dashboard = () => {
     const reload = () => {
         fetchCompetition();
 
-        const timer = setTimeout(() => {setShowSpinner(false);}, 3000);
+        const timer = setTimeout(() => {
+            setShowSpinner(false);
+        }, 3000);
         return () => clearTimeout(timer);
     }
 
@@ -139,9 +155,10 @@ const Dashboard = () => {
     const handleDetalhesClick = (id) => {
         navigate(`/login/dashboard/${id}`);
     };
+
     function downloadXML(content, fileName) {
         const element = document.createElement('a');
-        const file = new Blob([content], { type: 'text/xml' });
+        const file = new Blob([content], {type: 'text/xml'});
         element.href = URL.createObjectURL(file);
         element.download = fileName;
         document.body.appendChild(element);
@@ -203,7 +220,7 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="sdd" style={{ marginTop: isMobile ? "-3vh" : "-0.5vh" }}>
+        <div className="sdd" style={{marginTop: isMobile ? "-3vh" : "-0.5vh"}}>
             <Box sx={{display: "flex"}}>
                 <Drawer/>
                 <Container id="marginDrawerHeader">
@@ -261,14 +278,15 @@ const Dashboard = () => {
                         </Typography>
 
                         <Typography id="margin2">
-                            Here you can see all the competitions that are currently available. Click on the competition to see more details.
+                            Here you can see all the competitions that are currently available. Click on the competition
+                            to see more details.
                         </Typography>
 
                         {data.length === 0 && showSpinner && (
-                                <div align="center">
-                                    <Spinner id="load" animation="border" variant="secondary" size="3rem"/>
-                                    <p id="load2">Loading...</p>
-                                </div>
+                            <div align="center">
+                                <Spinner id="load" animation="border" variant="secondary" size="3rem"/>
+                                <p id="load2">Loading...</p>
+                            </div>
                         )}
 
                         {data.length === 0 && !showSpinner && (
@@ -291,42 +309,33 @@ const Dashboard = () => {
                                     />
 
                                     {isMobile ? (
-                                        <Grid item xs={12} sm={12}>
-                                            <Button
-                                                variant="contained"
-                                                startIcon={<FileDownloadOutlinedIcon/>}
-                                                onClick={exportXML}
-                                                style={{textTransform: 'none', backgroundColor: 'green', marginBottom: '3vh'}}
-                                                sx={{width: '100%', maxWidth: '100%'}}
-                                            >
-                                                <span style={{ color: 'inherit' }}>Export XML</span>
-                                            </Button>
+                                        <div>
+                                            <Grid item xs={12} sm={12}>
+                                                <Button
+                                                    variant="contained"
+                                                    startIcon={<AddIcon/>}
+                                                    onClick={handleOpenDialog}
+                                                    style={{textTransform: 'none', color: 'success', marginBottom: '3vh'}}
+                                                    sx={{width: '100%', maxWidth: '100%'}}
+                                                >
+                                                    <span style={{ color: 'inherit' }}>Create competition</span>
+                                                </Button>
+                                            </Grid>
+                                        </div>
+                                    ) : (
+                                        <div style={{ display: 'flex', alignItems: 'center' }}>
 
                                             <Button
                                                 variant="contained"
-                                                startIcon={<AddIcon/>}
+                                                startIcon={<AddIcon />}
                                                 onClick={handleOpenDialog}
-                                                style={{textTransform: 'none', color: 'success', marginBottom: '3vh'}}
-                                                sx={{width: '100%', maxWidth: '100%'}}
+                                                style={{ textTransform: 'none', color: 'success', marginLeft: 'auto', marginBottom: '2vh'}}
                                             >
-                                                Create competition
+                                                <span style={{ color: 'inherit' }}>Create competition</span>
                                             </Button>
-                                        </Grid>
-                                    ) : (
-                                        <Grid item xs={12} sm={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                            <Button
-                                                variant="contained"
-                                                startIcon={<FileDownloadOutlinedIcon />}
-                                                onClick={exportXML}
-                                                style={{textTransform: 'none', backgroundColor: 'green', marginBottom: '1vh',}}
-                                            >
-                                                <span style={{ color: 'inherit' }}>Export XML</span>
-                                            </Button>
-                                            <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenDialog} style={{ textTransform: 'none', color: 'success', marginBottom: '1vh', marginLeft: '2vh' }}>
-                                                Create competition
-                                            </Button>
-                                        </Grid>
+                                        </div>
                                     )}
+
 
                                     <TableContainer component={Paper}>
                                         <Table>
@@ -359,13 +368,20 @@ const Dashboard = () => {
                                                         </TableCell>
                                                         <TableCell style={{padding: -30}}>
                                                             <Tooltip title="Edit" className="tooltip-gender">
-                                                                <IconButton onClick={(event) => {event.stopPropagation(); handleOpenEditDialog(item.id);}}>
+                                                                <IconButton onClick={(event) => {
+                                                                    event.stopPropagation();
+                                                                    handleOpenEditDialog(item.id);
+                                                                }}>
                                                                     <EditIcon color="gray" style={{cursor: 'pointer'}}/>
                                                                 </IconButton>
                                                             </Tooltip>
                                                             <Tooltip title="Remove" className="tooltip-gender">
-                                                                <IconButton onClick={(event) => {event.stopPropagation(); handleClickOpenDelete(item.id);}}>
-                                                                    <DeleteIcon color="error" style={{cursor: 'pointer'}}/>
+                                                                <IconButton onClick={(event) => {
+                                                                    event.stopPropagation();
+                                                                    handleClickOpenDelete(item.id);
+                                                                }}>
+                                                                    <DeleteIcon color="error"
+                                                                                style={{cursor: 'pointer'}}/>
                                                                 </IconButton>
                                                             </Tooltip>
                                                         </TableCell>

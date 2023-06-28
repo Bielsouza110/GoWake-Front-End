@@ -5,12 +5,15 @@ import Drawer from "../../../navs/Drawer";
 import DrawerHeader from "../../../navs/DrawerHeader";
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Competitons = () => {
 
+    const isMobile = useMediaQuery('(max-width: 600px)');
+
     return (
         <div className="sdd">
-            <Box sx={{display: "flex"}}>
+            <Box sx={{display: "flex"}} style={{marginTop: isMobile ? "-3vh" : "-0.5vh"}}>
                 <Drawer/>
                 <Container id="marginDrawerHeader">
                     <DrawerHeader/>

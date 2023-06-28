@@ -29,8 +29,9 @@ import CreateAthlete from "./create/CreateAthlete";
 import DoneIcon from "@mui/icons-material/Done";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import Typography from "@mui/material/Typography";
-import { Divider } from '@mui/material';
+import {Divider} from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
+import CachedIcon from '@mui/icons-material/Cached';
 
 const Athletes = ({idComp}) => {
 
@@ -47,7 +48,9 @@ const Athletes = ({idComp}) => {
     const [data, setData] = useState(null)
 
     const fetchAtletes = async () => {
-        const timer = setTimeout(() => {setShowSpinner(false);}, 3000); // Tempo limite de 3 segundos
+        const timer = setTimeout(() => {
+            setShowSpinner(false);
+        }, 3000); // Tempo limite de 3 segundos
 
         axios.get(getEndpointCompetitionById("competitionsBy", idComp), {
             headers: {'Authorization': `Token ${usuarioSalvo.token}`}
@@ -62,7 +65,9 @@ const Athletes = ({idComp}) => {
     const reload = () => {
         fetchAtletes();
 
-        const timer = setTimeout(() => {setShowSpinner(false);}, 3000); // Tempo limite de 3 segundos
+        const timer = setTimeout(() => {
+            setShowSpinner(false);
+        }, 3000); // Tempo limite de 3 segundos
         return () => clearTimeout(timer);
     }
 
@@ -83,7 +88,9 @@ const Athletes = ({idComp}) => {
 
             reload();
             setSuccessDialogOpenDeleteDelete(true);
-            setTimeout(() => {setSuccessDialogOpenDeleteDelete(false);}, 3000);
+            setTimeout(() => {
+                setSuccessDialogOpenDeleteDelete(false);
+            }, 3000);
 
         } catch (error) {
             console.error('An error occurred while fetching the athlete.');
@@ -121,6 +128,10 @@ const Athletes = ({idComp}) => {
     };
 
     const isMobile = useMediaQuery('(max-width: 600px)');
+
+    const generateHeat = () => {
+        console.log("função generate chamada!");
+    };
 
     return (
         <MDBContainer className="p-1 my-2">
@@ -172,42 +183,42 @@ const Athletes = ({idComp}) => {
                 idComp={idComp}
             />
 
-            {isMobile ? (
+            <Grid item xs={12} sm={12} container alignItems="center" justifyContent="space-between">
+                <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{fontSize: '18px'}}>
+                    Athletes
+                </Typography>
+
                 <div>
-                    <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{fontSize: '18px'}}>
-                        Athletes
-                    </Typography>
-
-                    <Grid item xs={12} sm={12}>
-                        <Button
-                            variant="contained"
-                            startIcon={<AddIcon/>}
-                            onClick={handleOpenDialog}
-                            style={{textTransform: 'none', color: 'success', marginBottom: '3vh'}}
-                            sx={{width: '100%', maxWidth: '100%'}}
-                        >
-                            <span style={{ color: 'inherit' }}>Create athlete</span>
-                        </Button>
-                    </Grid>
-                </div>
-            ) : (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{fontSize: '18px'}}>
-                        Athletes
-                    </Typography>
-
                     <Button
                         variant="contained"
-                        startIcon={<AddIcon />}
-                        onClick={handleOpenDialog}
-                        style={{ textTransform: 'none', color: 'success', marginLeft: 'auto' }}
+                        startIcon={<CachedIcon/>}
+                        onClick={generateHeat}
+                        style={{
+                            textTransform: 'none',
+                            backgroundColor: 'green',
+                            marginBottom: '1vh',
+                        }}
                     >
-                        <span style={{ color: 'inherit' }}>Create athlete</span>
+                        <span style={{color: 'inherit'}}>Generate heat</span>
+                    </Button>
+                    <Button
+                        variant="contained"
+                        startIcon={<AddIcon/>}
+                        onClick={handleOpenDialog}
+                        style={{
+                            textTransform: 'none',
+                            color: 'success',
+                            marginBottom: '1vh',
+                            marginLeft: '2vh',
+                        }}
+                    >
+                        Create athlete
                     </Button>
                 </div>
-            )}
+            </Grid>
 
-            <div id="esconde"><Divider style={{ backgroundColor: 'black', marginBottom: '5vh', marginTop: '1.3vh' }} /></div>
+            <div id="esconde"><Divider style={{backgroundColor: 'black', marginBottom: '5vh', marginTop: '1.3vh'}}/>
+            </div>
 
             {data && (
                 <Grid container spacing={4}>
@@ -222,8 +233,8 @@ const Athletes = ({idComp}) => {
 
                         {data.athletes.length === 0 && !showSpinner && (
                             <div align="center">
-                                <WarningIcon style={{ color: 'red' , marginTop: '3vh'  }} />
-                                <p id="error2">  There are no athletes at the moment!</p>
+                                <WarningIcon style={{color: 'red', marginTop: '3vh'}}/>
+                                <p id="error2"> There are no athletes at the moment!</p>
                             </div>
                         )}
 

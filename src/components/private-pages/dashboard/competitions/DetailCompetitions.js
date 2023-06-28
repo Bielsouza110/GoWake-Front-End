@@ -89,58 +89,22 @@ function DetailCompetitions() {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    const generateHeat = () => {
-        console.log("Generate heat")
-    }
 
     return (
-        <div className="sdd">
+        <div className="sdd" style={{marginTop: isMobile ? "-3vh" : "-0.5vh"}}>
             <Box sx={{display: "flex"}}>
                 <Drawer/>
                 <Container id="marginDrawerHeader">
                     <DrawerHeader/>
                     <MDBContainer className="p-1 my-2">
 
-                        {isMobile ? (
-                            <div>
-                                <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{ fontSize: '20px' }}>
-                                    <IconButton color="inherit" aria-label="open drawer" onClick={handleClick} edge="start" sx={{ marginRight: 0.5 }}>
-                                        <Tooltip title="Menu"><MenuIcon /></Tooltip>
-                                    </IconButton>
-                                    Competition details
-                                </Typography>
-
-                                <Grid item xs={12} sm={12}>
-                                    <Button
-                                        variant="contained"
-                                        startIcon={<PublishedWithChangesIcon/>}
-                                        onClick={generateHeat}
-                                        style={{textTransform: 'none', backgroundColor: 'green', marginBottom: '6vh'}}
-                                        sx={{width: '100%', maxWidth: '100%'}}
-                                    >
-                                        <span style={{ color: 'inherit' }}>Generate heat</span>
-                                    </Button>
-                                </Grid>
-                            </div>
-                        ) : (
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{ fontSize: '20px' }}>
-                                    <IconButton color="inherit" aria-label="open drawer" onClick={handleClick} edge="start" sx={{ marginRight: 0.5 }}>
-                                        <Tooltip title="Menu"><MenuIcon /></Tooltip>
-                                    </IconButton>
-                                    Competition details
-                                </Typography>
-
-                                <Button
-                                    variant="contained"
-                                    startIcon={<PublishedWithChangesIcon />}
-                                    onClick={generateHeat}
-                                    style={{ textTransform: 'none', backgroundColor: 'green', marginLeft: 'auto' }}
-                                >
-                                    <span style={{ color: 'inherit' }}>Generate heat</span>
-                                </Button>
-                            </div>
-                        )}
+                        <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{fontSize: '20px'}}>
+                            <IconButton color="inherit" aria-label="open drawer" onClick={handleClick} edge="start"
+                                        sx={{marginRight: 0.5}}>
+                                <Tooltip title="Menu"><MenuIcon/></Tooltip>
+                            </IconButton>
+                            Competition details
+                        </Typography>
 
                         <div>
                             <Menu

@@ -12,6 +12,7 @@ import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 import DrawerHeader from "../../../navs/DrawerHeader";
 import './Rules.css';
+import useMediaQuery from "@mui/material/useMediaQuery";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const Rules = () => {
@@ -32,8 +33,10 @@ const Rules = () => {
         zIndex: 100,
     };
 
+    const isMobile = useMediaQuery('(max-width: 600px)');
+
     return (
-        <div className="sdd">
+        <div className="sdd" style={{marginTop: isMobile ? "-3vh" : "-0.5vh"}}>
             <Box sx={{display: "flex"}}>
                 <Drawer/>
                 <Container id="marginDrawerHeader" >
