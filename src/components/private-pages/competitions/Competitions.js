@@ -13,7 +13,7 @@ const Competitons = () => {
 
     return (
         <div className="sdd">
-            <Box sx={{display: "flex"}} style={{marginTop: isMobile ? "-3vh" : "-0.5vh"}}>
+            <Box sx={{display: "flex"}} style={{marginTop: isMobile ? "1%" : "1.2%"}}>
                 <Drawer/>
                 <Container id="marginDrawerHeader">
                     <DrawerHeader/>

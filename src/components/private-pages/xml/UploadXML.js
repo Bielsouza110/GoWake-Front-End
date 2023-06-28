@@ -13,7 +13,7 @@ const UploadXML = () => {
 
     const handleResize = () => {
         const isMobile = window.matchMedia('(max-width: 600px)').matches;
-        const newMarginTop = isMobile ? '-3vh' : '-0.5vh';
+        const newMarginTop = isMobile ? "1%" : "1.2%";
         setMarginTop(newMarginTop)
     };
 

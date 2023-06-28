@@ -36,7 +36,7 @@ const Rules = () => {
     const isMobile = useMediaQuery('(max-width: 600px)');
 
     return (
-        <div className="sdd" style={{marginTop: isMobile ? "-3vh" : "-0.5vh"}}>
+        <div className="sdd" style={{marginTop: isMobile ? "1%" : "1.2%"}}>
             <Box sx={{display: "flex"}}>
                 <Drawer/>
                 <Container id="marginDrawerHeader" >
