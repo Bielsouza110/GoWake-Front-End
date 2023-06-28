@@ -43,9 +43,12 @@ const Athletes = ({idComp}) => {
     const [showSpinner, setShowSpinner] = useState(true);
     const [openDialog, setOpenDialog] = useState(false);
     const [openEditDialog, setOpenEditDialog] = useState(false);
-    const [successDialogOpenDelete, setSuccessDialogOpenDeleteDelete] = useState(false);
+    const [successDialogOpenDelete, setSuccessDialogOpenDelete] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
     const [data, setData] = useState(null)
+
+    const [errorHeatDialogOpen, setErrorHeatDialogOpen] = useState(false);
+    const [successHeatDialogOpen, setSuccessHeatDialogOpen] = useState(false);
 
     const fetchAtletes = async () => {
         const timer = setTimeout(() => {
@@ -75,7 +78,7 @@ const Athletes = ({idComp}) => {
         reload();
     }, []);
     const handleCloseSuccessDialogDelete = () => {
-        setSuccessDialogOpenDeleteDelete(false);
+        setSuccessDialogOpenDelete(false);
     };
     const handleAthleteDelete = async (idComp, idAthl) => {
 
@@ -87,9 +90,9 @@ const Athletes = ({idComp}) => {
             });
 
             reload();
-            setSuccessDialogOpenDeleteDelete(true);
+            setSuccessDialogOpenDelete(true);
             setTimeout(() => {
-                setSuccessDialogOpenDeleteDelete(false);
+                setSuccessDialogOpenDelete(false);
             }, 3000);
 
         } catch (error) {
@@ -141,27 +144,21 @@ const Athletes = ({idComp}) => {
                     Authorization: `Token ${usuarioSalvo.token}`,
                 },
             });
-
-
             console.log("função generate sucess");
 
-            /*setSuccessDialogOpen(true);
+            setSuccessHeatDialogOpen(true);
             setTimeout(() => {
-                cleanFieldsAndClose();
-                cleanFields();
-                onClose();
-            }, 3000);*/
+                setSuccessHeatDialogOpen(false);
+            }, 3000);
+
         } catch (error) {
             console.error(error.request.response);
-           /* setErrorDialogOpen(true);
+
+            setErrorHeatDialogOpen(true);
             setTimeout(() => {
-                setErrorDialogOpen(false);
-            }, 3000);*/
-
-            console.log("função generate error");
+                setErrorHeatDialogOpen(false);
+            }, 3000);
         }
-
-
     };
 
     return (
@@ -197,6 +194,26 @@ const Athletes = ({idComp}) => {
                         sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                         <ReportProblemIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
                         Please contact the administrator. You do not have permission.
+                    </DialogContentText>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={successHeatDialogOpen} onClose={() => setSuccessHeatDialogOpen(false)}>
+                <DialogContent>
+                    <DialogContentText
+                        sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                        <DoneIcon sx={{color: 'green', fontSize: 48, marginBottom: '1%'}}/>
+                        Heat created successfully!
+                    </DialogContentText>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={errorHeatDialogOpen} onClose={() => setErrorHeatDialogOpen(false)}>
+                <DialogContent>
+                    <DialogContentText
+                        sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                        <ReportProblemIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
+                        Error. Please contact the administrator.
                     </DialogContentText>
                 </DialogContent>
             </Dialog>
