@@ -202,9 +202,8 @@ const Dashboard = () => {
         downloadXML(exportedXML, 'competitions.xml');
     };
 
-
     return (
-        <div className="sdd">
+        <div className="sdd" style={{ marginTop: isMobile ? "-3vh" : "-0.5vh" }}>
             <Box sx={{display: "flex"}}>
                 <Drawer/>
                 <Container id="marginDrawerHeader">

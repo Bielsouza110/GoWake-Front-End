@@ -50,7 +50,6 @@ function DetailCompetitions() {
     const isMobile = useMediaQuery('(max-width: 600px)');
 
     useEffect(() => {
-
         axios.get(getEndpointCompetitionById("competitionsBy", id), {
             headers: {
                 'Authorization': `Token ${usuarioSalvo.token}`
