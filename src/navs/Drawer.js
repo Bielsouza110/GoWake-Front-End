@@ -105,7 +105,7 @@ function MiniDrawer (){
     const [anchorElProfile, setAnchorElProfile] = React.useState(null);
     const [userDetails, setUserDetails] = React.useState({
         name: usuarioSalvo.username.charAt(0).toUpperCase() + usuarioSalvo.username.slice(1).toLowerCase().trim(),
-        role: usuarioSalvo.role === "none" ? "guest" : usuarioSalvo.role.charAt(0).toUpperCase() + usuarioSalvo.role.slice(1).toLowerCase().trim()
+        role: usuarioSalvo.role === "None" ? "Guest" : usuarioSalvo.role.charAt(0).toUpperCase() + usuarioSalvo.role.slice(1).toLowerCase().trim()
     });
 
     const itemsList = [

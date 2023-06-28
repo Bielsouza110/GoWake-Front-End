@@ -156,69 +156,6 @@ const Dashboard = () => {
         navigate(`/login/dashboard/${id}`);
     };
 
-    function downloadXML(content, fileName) {
-        const element = document.createElement('a');
-        const file = new Blob([content], {type: 'text/xml'});
-        element.href = URL.createObjectURL(file);
-        element.download = fileName;
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
-    }
-
-    const exportXML = () => {
-        const xmlData = '<?xml version="1.0" encoding="UTF-8"?><root></root>'; // Initial XML data
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xmlData, 'text/xml');
-
-        // Add competitions to XML
-        data.forEach((competition) => {
-            const competitionNode = xmlDoc.createElement('competition');
-            competitionNode.setAttribute('id', competition.id);
-
-            // Add events to competition
-            competition.events.forEach((event) => {
-                const eventNode = xmlDoc.createElement('event');
-                eventNode.setAttribute('id', event.id);
-                eventNode.setAttribute('name', event.name);
-                eventNode.setAttribute('rounds', event.rounds);
-                eventNode.setAttribute('event_class', event.event_class);
-                eventNode.setAttribute('code', event.code);
-                competitionNode.appendChild(eventNode);
-            });
-
-            // Add officials to competition
-            competition.officials.forEach((official) => {
-                const officialNode = xmlDoc.createElement('official');
-                officialNode.setAttribute('id', official.id);
-                officialNode.setAttribute('first_name', official.first_name);
-                officialNode.setAttribute('last_name', official.last_name);
-                officialNode.setAttribute('position', official.position);
-                officialNode.setAttribute('qualification', official.qualification);
-                competitionNode.appendChild(officialNode);
-            });
-
-            // Add athletes to competition
-            competition.athletes.forEach((athlete) => {
-                const athleteNode = xmlDoc.createElement('athlete');
-                athleteNode.setAttribute('id', athlete.id);
-                athleteNode.setAttribute('first_name', athlete.first_name);
-                athleteNode.setAttribute('last_name', athlete.last_name);
-                athleteNode.setAttribute('country', athlete.country);
-                athleteNode.setAttribute('gender', athlete.gender);
-                competitionNode.appendChild(athleteNode);
-            });
-
-            xmlDoc.getElementsByTagName('root')[0].appendChild(competitionNode);
-        });
-
-        const serializer = new XMLSerializer();
-        const exportedXML = serializer.serializeToString(xmlDoc);
-
-        // Download the XML file
-        downloadXML(exportedXML, 'competitions.xml');
-    };
-
     return (
         <div className="sdd" style={{marginTop: isMobile ? "1%" : "1.2%"}}>
             <Box sx={{display: "flex"}}>
@@ -257,7 +194,7 @@ const Dashboard = () => {
                                 <DialogContentText
                                     sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                     <ReportProblemIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
-                                    Error: Failed to delete the competition. Please try again.
+                                    Please contact the administrator. You do not have permission.
                                 </DialogContentText>
                             </DialogContent>
                         </Dialog>

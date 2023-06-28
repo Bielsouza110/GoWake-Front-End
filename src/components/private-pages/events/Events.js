@@ -164,7 +164,7 @@ const Events = ({idComp}) => {
                     <DialogContentText
                         sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                         <ReportProblemIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
-                        Error: Failed to delete the event. Please try again.
+                        Please contact the administrator. You do not have permission.
                     </DialogContentText>
                 </DialogContent>
             </Dialog>
