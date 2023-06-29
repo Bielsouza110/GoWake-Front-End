@@ -218,9 +218,9 @@ const DropFileInput = (props) => {
                     <DialogContent>
                         <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                             <ErrorOutlineIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
-                            <p>Submission failed!</p>
-                            {errorFileSubmit}
                         </DialogContentText>
+                        <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>Submission failed!</DialogContentText>
+                        <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>{errorFileSubmit}</DialogContentText>
                     </DialogContent>
                 </Dialog>
             </div>
@@ -470,7 +470,6 @@ const DropFileInput = (props) => {
 
     const getCompetition = () => {
         if (popUpInfo !== null && openInvalidXMLFields === null) {
-            //console.log("Aqui --> " + competitionList.length);
             return (
                 <div className="competition-container">
                     <h6>Competition name: <span className="value">{competitionList[0].name}</span></h6>
