@@ -57,7 +57,7 @@ const Officials = ({idComp}) => {
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [successDialogOpenDelete, setSuccessDialogOpenDeleteDelete] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
-    const [data, setData] = useState(null)
+    const [data, setData] = useState(null);
 
     const fetchOfficials = async () => {
         const timer = setTimeout(() => {setShowSpinner(false);}, 3000); // Tempo limite de 3 segundos
@@ -186,7 +186,6 @@ const Officials = ({idComp}) => {
                 idOffic={idOfficial}
                 idComp={idComp}
             />
-
 
             {isMobile ? (
                 <div>

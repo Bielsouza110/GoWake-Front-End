@@ -43,7 +43,7 @@ const EditOfficial = ({open, onClose, idOffic, idComp}) => {
         'Calculator',
         'Chief judge',
         'Judge',
-        'Boat Driver'
+        'Boat driver'
     ]
     countryCodeMatrix.sort();
 

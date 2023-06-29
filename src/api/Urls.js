@@ -11,6 +11,7 @@ export const endpoints = {
     eventBy: `${API_ROOT}/api/competition`,
     submitXML:`${API_ROOT}/api/create-all/`,
     heatSystem:`${API_ROOT}/api/generate-heatsystem/`,
+    leaderboard:`${API_ROOT}/api/competition`,
 };
 
 export const getEndpointCompetitionById = (endpoint, id) => {
@@ -82,4 +83,8 @@ export const putEndpointCompetitionById = (endpoint, idCompetition) => {
 
 export const postEndpointGenerateHeats = (endpoint) => {
     return `${endpoints[endpoint]}`;
+};
+
+export const getEndpointLeaderboard = (endpoint, idCompetition) => {
+    return `${endpoints[endpoint]}/${idCompetition}/leaderboards`;
 };
