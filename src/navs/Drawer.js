@@ -19,19 +19,12 @@ import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import StreamIcon from '@mui/icons-material/Stream';
-import KitesurfingIcon from '@mui/icons-material/Kitesurfing';
-import PublishIcon from '@mui/icons-material/Publish';
-import AddIcon from '@mui/icons-material/Add';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import {Link, useNavigate} from 'react-router-dom';
-import FitbitIcon from '@mui/icons-material/Fitbit';
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
-import PeopleIcon from '@mui/icons-material/People';
-import FestivalIcon from '@mui/icons-material/Festival';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 const drawerWidth = 240;
@@ -115,11 +108,6 @@ function MiniDrawer (){
             link: "/login/dashboard"
         },
         {
-            text: 'Competitions',
-            icon: <FestivalIcon/>,
-            link: "/login/competitions"
-        },
-        {
             text: 'Upload XML',
             icon: <UploadFileIcon/>,
             link: "/login/uploadxml"
@@ -129,11 +117,11 @@ function MiniDrawer (){
             icon: <PictureAsPdfIcon/>,
             link: "/login/rules"
         },
-        {
+        /*{
             text: 'Live Results',
             icon: <StreamIcon/>,
             link: "/login/liveresults"
-        },
+        },*/
     ]
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -268,7 +256,7 @@ function MiniDrawer (){
                             </Tooltip>
                             <ListItemText primary={item.text} />
                         </ListItem>
-                            {index === 2 && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>}
+                            {index === 1 && <div className="divider d-flex align-items-center" style={{ marginBottom: '2%' }}/>}
                         </div>
                     ))}
                 </List>

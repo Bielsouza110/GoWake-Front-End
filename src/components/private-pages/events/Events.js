@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Drawer from "../../../navs/Drawer";
 import DrawerHeader from "../../../navs/DrawerHeader";
 import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
@@ -44,7 +42,6 @@ const Events = ({idComp}) => {
 
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
-    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [idEvent, setIdEvent] = useState('');
     const [showSpinner, setShowSpinner] = useState(true);

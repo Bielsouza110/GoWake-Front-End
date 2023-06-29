@@ -1,16 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import DrawerHeader from "../../../navs/DrawerHeader";
-import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 import {Spinner} from "react-bootstrap";
-import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField} from "@mui/material";
+import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../dashboard/utils/Utils";
-import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {
-    endpoints,
-    getEndpointAthleteById,
-    getEndpointCompetitionById, getEndpointCreateAthlete,
+    getEndpointCompetitionById,
     getEndpointDeleteAthleteById, postEndpointGenerateHeats
 } from "../../../api/Urls";
 import {Edit as EditIcon, Delete as DeleteIcon} from '@mui/icons-material';
@@ -37,7 +32,6 @@ const Athletes = ({idComp}) => {
 
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
-    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [idAthlete, setIdAthlete] = useState('');
     const [showSpinner, setShowSpinner] = useState(true);

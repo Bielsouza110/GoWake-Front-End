@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, MenuItem, Grid, DialogContentText} from '@mui/material';
 import axios from "axios";
-import { endpoints, getEndpointCompetitionById, getEndpointCreateAthlete } from "../../../../api/Urls";
+import { getEndpointCreateAthlete } from "../../../../api/Urls";
 import {getAllGenderFlags} from "../../dashboard/utils/Utils";
 import DoneIcon from '@mui/icons-material/Done';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
@@ -131,7 +131,7 @@ const CreateAthlete = ({ open, onClose, idComp}) => {
             yearOfBirth.trim() === '' ||
             country.trim() === '' ||
             realCategory.trim() === '' ||
-            categoryInCompetition.trim() == ''
+            categoryInCompetition.trim() === ''
         ) {
             return true; // Form is empty
         }

@@ -2,7 +2,6 @@ import {
     MDBContainer,
     MDBCol,
     MDBRow,
-    MDBInput,
 } from 'mdb-react-ui-kit';
 import {useNavigate} from 'react-router-dom';
 import AppBar from "../../../navs/AppBar";

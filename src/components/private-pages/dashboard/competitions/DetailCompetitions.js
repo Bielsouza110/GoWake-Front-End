@@ -10,16 +10,7 @@ import Typography from "@mui/material/Typography";
 import {getEndpointCompetitionById} from "../../../../api/Urls";
 import {
     Divider,
-    Grid,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
 } from "@mui/material";
-import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../utils/Utils";
 import ShareLocationOutlinedIcon from '@mui/icons-material/ShareLocationOutlined';
 import AutoAwesomeMotionOutlinedIcon from '@mui/icons-material/AutoAwesomeMotionOutlined';
 import moment from 'moment';

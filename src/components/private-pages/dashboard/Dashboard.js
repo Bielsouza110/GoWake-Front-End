@@ -23,9 +23,7 @@ import Typography from '@mui/material/Typography';
 import DrawerHeader from "../../../navs/DrawerHeader";
 import {
     endpoints,
-    getEndpointCompetitionById,
     getEndpointDeleteCompetition,
-    getEndpointDeleteEventById
 } from "../../../api/Urls";
 import {getCountryFlag, handleMouseEnter, handleMouseLeave} from "./utils/Utils";
 import Tooltip from "@mui/material/Tooltip";
@@ -33,8 +31,6 @@ import WarningIcon from "@mui/icons-material/Warning";
 import AddIcon from "@mui/icons-material/Add";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import {Delete as DeleteIcon, Edit as EditIcon} from "@mui/icons-material";
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import CreateEvent from "../events/create/CreateEvent";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -44,6 +40,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import CreateCompetition from "./create/CreateCompetition";
 import EditCompetition from "./edit/EditCompetition";
+import Painel from "./painel/Painel";
 
 const Dashboard = () => {
 
@@ -63,6 +60,12 @@ const Dashboard = () => {
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [successDialogOpenDelete, setSuccessDialogOpenDeleteDelete] = useState(false);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+
+    const [totalCompetitions, setTotalCompetitions] = useState(0);
+    const [totalEvents, setTotalEvents] = useState(0);
+    const [totalAthletes, setTotalAthletes] = useState(0);
+    const [totalOfficials, setTotalOfficials] = useState(0);
+
     const fetchCompetition = async () => {
 
         const timer = setTimeout(() => {
@@ -78,6 +81,23 @@ const Dashboard = () => {
                 a.organizing_country.localeCompare(b.organizing_country)
             );
             setData(sortedData);
+
+            let totalCompetitionss = response.data.count;
+            let totalEventss = 0;
+            let totalAthletess = 0;
+            let totalOfficialss = 0;
+
+            response.data.results.forEach((result) => {
+                totalEventss += result.events.length;
+                totalAthletess += result.athletes.length;
+                totalOfficialss += result.officials.length;
+            });
+
+            setTotalCompetitions(totalCompetitionss);
+            setTotalEvents(totalEventss);
+            setTotalAthletes(totalAthletess);
+            setTotalOfficials(totalOfficialss);
+
         }).catch(error => {
             console.error(error);
         });
@@ -214,10 +234,55 @@ const Dashboard = () => {
                             Welcome, <span id="nameUser">{usuarioSalvo.username}!</span>
                         </Typography>
 
+                        {isMobile ? null : (
+                            <Painel
+                                nComp={totalCompetitions}
+                                nEvents={totalEvents}
+                                nAthletes={totalAthletes}
+                                nOfficials={totalOfficials}
+                            />
+                        )}
+
                         <Typography id="margin2">
                             Here you can see all the competitions that are currently available. Click on the competition
                             to see more details.
                         </Typography>
+
+                        <TextField
+                            label="Search by venue"
+                            variant="outlined"
+                            value={searchTerm}
+                            onChange={handleSearchTermChange}
+                            size="large"
+                            sx={{width: '100%', margin: '0 0 1rem'}}
+                        />
+
+                        {isMobile ? (
+                            <div>
+                                <Grid item xs={12} sm={12}>
+                                    <Button
+                                        variant="contained"
+                                        startIcon={<AddIcon/>}
+                                        onClick={handleOpenDialog}
+                                        style={{textTransform: 'none', color: 'success', marginBottom: '3vh'}}
+                                        sx={{width: '100%', maxWidth: '100%'}}
+                                    >
+                                        <span style={{ color: 'inherit' }}>Create competition</span>
+                                    </Button>
+                                </Grid>
+                            </div>
+                        ) : (
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Button
+                                    variant="contained"
+                                    startIcon={<AddIcon />}
+                                    onClick={handleOpenDialog}
+                                    style={{ textTransform: 'none', color: 'success', marginLeft: 'auto', marginBottom: '2vh'}}
+                                >
+                                    <span style={{ color: 'inherit' }}>Create competition</span>
+                                </Button>
+                            </div>
+                        )}
 
                         {data.length === 0 && showSpinner && (
                             <div align="center">
@@ -236,44 +301,6 @@ const Dashboard = () => {
                         {data.length !== 0 && (
                             <div>
                                 <div>
-                                    <TextField
-                                        label="Search by venue"
-                                        variant="outlined"
-                                        value={searchTerm}
-                                        onChange={handleSearchTermChange}
-                                        size="large"
-                                        sx={{width: '100%', margin: '0 0 1rem'}}
-                                    />
-
-                                    {isMobile ? (
-                                        <div>
-                                            <Grid item xs={12} sm={12}>
-                                                <Button
-                                                    variant="contained"
-                                                    startIcon={<AddIcon/>}
-                                                    onClick={handleOpenDialog}
-                                                    style={{textTransform: 'none', color: 'success', marginBottom: '3vh'}}
-                                                    sx={{width: '100%', maxWidth: '100%'}}
-                                                >
-                                                    <span style={{ color: 'inherit' }}>Create competition</span>
-                                                </Button>
-                                            </Grid>
-                                        </div>
-                                    ) : (
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-
-                                            <Button
-                                                variant="contained"
-                                                startIcon={<AddIcon />}
-                                                onClick={handleOpenDialog}
-                                                style={{ textTransform: 'none', color: 'success', marginLeft: 'auto', marginBottom: '2vh'}}
-                                            >
-                                                <span style={{ color: 'inherit' }}>Create competition</span>
-                                            </Button>
-                                        </div>
-                                    )}
-
-
                                     <TableContainer component={Paper}>
                                         <Table>
                                             <TableHead>

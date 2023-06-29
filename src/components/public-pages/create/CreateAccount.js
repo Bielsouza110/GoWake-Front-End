@@ -2,7 +2,6 @@ import {
     MDBContainer,
     MDBCol,
     MDBRow,
-    MDBInput,
 } from 'mdb-react-ui-kit';
 
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +17,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
-import DoneIcon from "@mui/icons-material/Done";
 import { Grid, TextField, InputAdornment, IconButton } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -33,7 +31,6 @@ function CreateAccount() {
     const [showErrorEmail, setShowErrorEmail] = useState('');
     const [showErrorPassword, setShowErrorPassword] = useState('');
     const [showErrorPassword2, setShowErrorPassword2] = useState('');
-    const [showSucessMessage, setShowSucessMessage] = useState('');
     const [user, setUser] = useState({ username: '', email: '', password: '', password2: '' });
     const [showPassword, setShowPassword] = useState(false);
 

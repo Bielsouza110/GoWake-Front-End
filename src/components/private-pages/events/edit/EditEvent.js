@@ -7,10 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {Button, Grid, MenuItem, TextField} from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
-import {
-    endpoints,
-    putEndpointEventById, getEndpointEventById
-} from "../../../../api/Urls";
+import {putEndpointEventById, getEndpointEventById} from "../../../../api/Urls";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
 const EditEvent = ({open, onClose, idEvent, idComp}) => {

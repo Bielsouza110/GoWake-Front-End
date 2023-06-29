@@ -6,8 +6,6 @@ import CreateAccount from "./components/public-pages/create/CreateAccount";
 import Dashboard from "./components/private-pages/dashboard/Dashboard";
 import Athletes from "./components/private-pages/athetes/Athletes";
 import Events from "./components/private-pages/events/Events";
-import LiveResults from "./components/private-pages/results/LiveResults";
-import Competitons from "./components/private-pages/competitions/Competitions";
 import UploadXML from "./components/private-pages/xml/UploadXML";
 import Rules from "./components/private-pages/rules/Rules";
 import RulesLogin from "./components/public-pages/rules/RulesLogin";
@@ -27,12 +25,10 @@ import Officials from "./components/private-pages/officers/Officials";
                 <Route path="/createlogin" element={<CreateAccount/>}/>
                 <Route path="/login/dashboard" element={<PrivateRoute><Dashboard/></PrivateRoute>}/>
                 <Route path="/login/rules" element={<PrivateRoute><Rules/></PrivateRoute>}/>
-                <Route path="/login/liveresults" element={<PrivateRoute><LiveResults/></PrivateRoute>}/>
                 <Route path="/login/athletes" element={<PrivateRoute><Athletes/></PrivateRoute>}/>
                 <Route path="/login/officers" element={<PrivateRoute><Officials/></PrivateRoute>}/>
                 <Route path="/login/uploadxml" element={<PrivateRoute><UploadXML/></PrivateRoute>}/>
                 <Route path="/login/events" element={<PrivateRoute><Events/></PrivateRoute>}/>
-                <Route path="/login/competitions" element={<PrivateRoute><Competitons/></PrivateRoute>}/>
 
                 <Route path="/login/dashboard/:id" element={<DetailCompetitions/>} />
             </Routes>

@@ -4,14 +4,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import {countryCodeMatrix, getYearOptions} from "../../athetes/ultils/Utils";
+import {countryCodeMatrix} from "../../athetes/ultils/Utils";
 import {Button, Grid, MenuItem, TextField} from "@mui/material";
-import {getAllGenderFlags} from "../../dashboard/utils/Utils";
 import DoneIcon from "@mui/icons-material/Done";
 import axios from "axios";
 import {
-    endpoints, getEndpointAthleteById,
-    getEndpointOfficialById, putEndpointAthleteById, putEndpointOfficialById
+    getEndpointOfficialById, putEndpointOfficialById
 } from "../../../../api/Urls";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 

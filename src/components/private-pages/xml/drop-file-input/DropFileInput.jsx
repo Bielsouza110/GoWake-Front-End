@@ -11,13 +11,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import {IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
-import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../../dashboard/utils/Utils";
 import Tooltip from "@mui/material/Tooltip";
-import {Delete as DeleteIcon, Edit as EditIcon} from "@mui/icons-material";
+import {Delete as DeleteIcon} from "@mui/icons-material";
 import {Visibility} from "@material-ui/icons";
 import PublishIcon from '@mui/icons-material/Publish';
 import axios from "axios";
-import {getEndpointCreateAthlete, postXML} from "../../../../api/Urls";
+import { postXML} from "../../../../api/Urls";
 import {Error as ErrorIcon} from '@material-ui/icons';
 import DoneIcon from "@mui/icons-material/Done";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -164,16 +163,25 @@ const DropFileInput = (props) => {
         };
 
         try {
-            const response = await axios.post(postXML("submitXML"), data, {
-                headers: {
-                    Authorization: `Token ${usuarioSalvo.token}`,
-                },
-            });
-            setOpen(true);
-            setTimeout(() => {
-                setOpen(false);
-            }, 2000);
+            console.error(usuarioSalvo.role);
 
+            if(usuarioSalvo.role !== "Guest" && usuarioSalvo.role !== "None"){
+                const response = await axios.post(postXML("submitXML"), data, {
+                    headers: {
+                        Authorization: `Token ${usuarioSalvo.token}`,
+                    },
+                });
+                setOpen(true);
+                setTimeout(() => {
+                    setOpen(false);
+                }, 2000);
+            }else{
+                setShowError(true);
+                setTimeout(() => {
+                    setShowError(false);
+                }, 5000);
+                setErrorFileSubmit("Please contact the administrator. You do not have permission.");
+            }
         } catch (error) {
             const jsonString = error.request.response;
             const startIndex = jsonString.indexOf('[');
@@ -432,14 +440,10 @@ const DropFileInput = (props) => {
                         }
                         if (eventList2.length === 0 || athletesList2.length === 0 || juriList2.length === 0 || competitionList2.length === 0) {
                             openDialogXMLFields(1);
-                            {
                                 setDialog(false)
-                            }
                         } else {
                             openDialogXMLFields(null);
-                            {
                                 setDialog(true)
-                            }
                         }
 
                         if (lockPopUp === false) {

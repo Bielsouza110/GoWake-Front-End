@@ -11,12 +11,11 @@ import {
     DialogContentText
 } from '@mui/material';
 import axios from "axios";
-import {endpoints, getEndpointCreateCompetition} from "../../../../api/Urls";
+import {getEndpointCreateCompetition} from "../../../../api/Urls";
 import DoneIcon from '@mui/icons-material/Done';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import {countryCodeMatrix} from "../../athetes/ultils/Utils";
 import Typography from "@mui/material/Typography";
-import { format } from 'date-fns';
 
 const CreateCompetition = ({open, onClose}) => {
 

@@ -42,8 +42,6 @@ const Leaderboard = ({idComp}) => {
         reload();
     }, []);
 
-    const isMobile = useMediaQuery('(max-width: 600px)');
-
     return (
         <MDBContainer className="p-1 my-2">
             <Typography variant="h6" fontWeight="bold" className="my-3 pb-0" style={{fontSize: '18px'}}>

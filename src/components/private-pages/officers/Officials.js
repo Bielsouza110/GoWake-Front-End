@@ -1,9 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Drawer from "../../../navs/Drawer";
-import DrawerHeader from "../../../navs/DrawerHeader";
-import {Container} from "@material-ui/core";
 import {MDBContainer} from "mdb-react-ui-kit";
 import {Spinner} from "react-bootstrap";
 import {
@@ -16,15 +12,12 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    TextField
 } from "@mui/material";
-import {getCountryFlag, GetGenderFlags, handleMouseEnter, handleMouseLeave} from "../dashboard/utils/Utils";
-import {useNavigate} from "react-router-dom";
+import {getCountryFlag, handleMouseEnter, handleMouseLeave} from "../dashboard/utils/Utils";
 import axios from "axios";
 import {
     endpoints,
     getEndpointCompetitionById,
-    getEndpointDeleteAthleteById,
     getEndpointDeleteOfficialById
 } from "../../../api/Urls";
 import {Edit as EditIcon, Delete as DeleteIcon} from '@mui/icons-material';
@@ -48,11 +41,9 @@ const Officials = ({idComp}) => {
 
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
-    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [idOfficial, setIdOfficial] = useState('');
     const [showSpinner, setShowSpinner] = useState(true);
-    const [searchTerm, setSearchTerm] = useState('');
     const [openDialog, setOpenDialog] = useState(false);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [successDialogOpenDelete, setSuccessDialogOpenDeleteDelete] = useState(false);

@@ -7,23 +7,15 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import LoginIcon from '@mui/icons-material/Login';
-import {Link, useNavigate} from "react-router-dom";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import LogoutIcon from "@mui/icons-material/Logout";
-import Typography from "@mui/material/Typography";
-import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
+import {Link} from "react-router-dom";
+
 
 const menuItems = [
-    { label: 'Live Results', path: "/"},
+    /*{ label: 'Live Results', path: "/"},*/
     { label: 'IWWF Wakeboard Rules', path: "/rules" },
 ];
-/*const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];*/
 
 function ResponsiveAppBar() {
-    const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -36,12 +28,6 @@ function ResponsiveAppBar() {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-
-    /*    const handleCloseUserMenu = () => {
-            setAnchorElUser(null);
-        };*/
-
-    /*   const navigate = useNavigate();*/
 
     return (
         <AppBar position="fixed" color="inherit">
