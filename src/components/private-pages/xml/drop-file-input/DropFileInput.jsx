@@ -28,6 +28,7 @@ let athletesList2 = []; //Lista global dos atletas
 let competitionList2 = [];
 let index = 0;
 let countSubmit = 0;
+//let errorFileSubmit="";
 const DropFileInput = (props) => {
     const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
 
@@ -55,6 +56,7 @@ const DropFileInput = (props) => {
     const [juriList, setJuriList] = useState([]);
     const [open, setOpen] = useState(false);
     const [showError, setShowError] = useState(false);
+    const [errorFileSubmit, setErrorFileSubmit] = useState("");
     const onFileDrop = (e) => {
         const newFile = e.target.files[0];
         if (newFile) {
@@ -173,14 +175,18 @@ const DropFileInput = (props) => {
             }, 2000);
 
         } catch (error) {
+            const jsonString = error.request.response;
+            const startIndex = jsonString.indexOf('[');
+            const endIndex = jsonString.lastIndexOf(']');
+            const jsonContent = jsonString.substring(startIndex, endIndex + 1);
+            const parsedContent = JSON.parse(jsonContent);
             setShowError(true);
             setTimeout(() => {
                 setShowError(false);
-            }, 2000);
-            console.error(error.request.response);
-
+            }, 5000);
+            setErrorFileSubmit(parsedContent);
+            console.error(parsedContent);
         }
-
     };
 
     const submitedSucessfully = () => {
@@ -205,7 +211,8 @@ const DropFileInput = (props) => {
                     <DialogContent>
                         <DialogContentText sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                             <ErrorOutlineIcon sx={{color: 'red', fontSize: 48, marginBottom: '1%'}}/>
-                            Submission failed!
+                            <p>Submission failed!</p>
+                            {errorFileSubmit}
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>
@@ -642,12 +649,9 @@ const DropFileInput = (props) => {
         }
 
         if (popUpInfo === 1 && openInvalidXMLFields === null && showDialog === true) {
-            //competitionList[0].availableToSubmit=true;
 
             return (
                 <Dialog open={true} onClose={closeDialog} maxWidth="lg">
-                    {/*maxWidth="md" fullWidth = "800"*/}
-                    {/*sx={{width: '100%', maxWidth: '100%'}}*/}
 
                     <DialogTitle>XML Preview</DialogTitle>
                     <DialogContent>
@@ -667,7 +671,6 @@ const DropFileInput = (props) => {
                             <Button onClick={() => {
                                 submitXML(competitionList, eventList, athletesList, juriList).then(closeDialog);
                                 fileRemove(null, index);
-                                //closeDialog()
                             }}>Submit</Button>
                         </DialogActions>
                         <Button onClick={closeDialog}>Close</Button>
@@ -716,7 +719,6 @@ const DropFileInput = (props) => {
                         </Button>
                     </DialogActions>
                 </Dialog>
-
             );
         }
         return null;
@@ -752,13 +754,11 @@ const DropFileInput = (props) => {
                                 <p>{item.name}</p>
                             </div>
 
-
                             <Tooltip title="Submit" className="tooltip-gender">
                                 <IconButton
                                     id="drop-file-item_submit"
                                     onClick={async () => {
                                         await handleFileSubmit(item, true);
-                                        //fileRemove(null,index);
                                     }}
                                 >
                                     <PublishIcon style={{color: 'forestgreen', cursor: 'pointer'}}/>
