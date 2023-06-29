@@ -12,8 +12,8 @@ const Competitons = () => {
     const isMobile = useMediaQuery('(max-width: 600px)');
 
     return (
-        <div className="sdd">
-            <Box sx={{display: "flex"}} style={{marginTop: isMobile ? "1%" : "1.2%"}}>
+        <div className="sdd" style={{marginTop: isMobile ? "-2vh" : "0.5vh"}}>
+            <Box sx={{display: "flex"}}>
                 <Drawer/>
                 <Container id="marginDrawerHeader">
                     <DrawerHeader/>
