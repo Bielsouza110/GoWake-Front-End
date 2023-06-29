@@ -188,7 +188,6 @@ const DropFileInput = (props) => {
             console.error(parsedContent);
         }
     };
-
     const submitedSucessfully = () => {
         return (
             <div>
