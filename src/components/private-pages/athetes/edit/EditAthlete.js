@@ -35,6 +35,15 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
 
     countryCodeMatrix.sort();
 
+    const categories = [
+        'U14',
+        'U18',
+        'O30',
+        'O40',
+        'O50',
+        'Open'
+    ]
+
     const handleRealCategory = (event) => {
         setRealCategory(event.target.value);
     };
@@ -245,19 +254,33 @@ const EditAthlete = ({open, onClose, idAth, idComp}) => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
+                            select
                             label="Real category"
                             value={realCategory}
                             onChange={handleRealCategory}
                             fullWidth
-                        />
+                        >
+                            {categories.map((p) => (
+                                <MenuItem key={p} value={p}>
+                                    {p}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
+                            select
                             label="Category in competition"
                             value={categoryInCompetition}
                             onChange={handleCategoryInCompetition}
                             fullWidth
-                        />
+                        >
+                            {categories.map((p) => (
+                                <MenuItem key={p} value={p}>
+                                    {p}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </Grid>
                 </Grid>
                 <Dialog open={successDialogOpen} onClose={() => setSuccessDialogOpen(false)}>
