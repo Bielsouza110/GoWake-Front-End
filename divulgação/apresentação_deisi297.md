@@ -1,13 +1,13 @@
 ![iwwf](iwwf.png)
-# DEISI297
+# DEISI297 - International Waterski & Wakeboard Federation
 
 Este trabalho tem como objetivo desenvolver uma aplicação sofisticada e adequada para auxiliar as competições de Wakeboard, proporcionando uma atualização em tempo real das pontuações dos atletas por meio de baterias (heats). O propósito final é disponibilizar esse sistema para uso futuro pela Federação Internacional de Esqui Aquático e Wakeboard (IWWF).
 
 Nas competições de Wakeboard, os atletas são distribuídos em categorias de acordo com suas idades, e são organizados em baterias (grupos de atletas) e rodadas. Os atletas com as maiores pontuações em cada bateria avançam para a próxima rodada, até chegar à final.
 
-1. A aplicação web desenvolvida tem como função gerenciar todas as competições da modalidade Wakeboard. Suas principais funcionalidades incluem:
+A aplicação web desenvolvida tem como função gerenciar todas as competições da modalidade Wakeboard. Suas principais funcionalidades incluem:
 
-Criação de eventos: possibilita a criação de novos eventos de competição.
+1. Criação de eventos: possibilita a criação de novos eventos de competição.
 
 2. Associação de atletas e oficiais (júri) ao evento: permite associar os atletas participantes e os oficiais responsáveis pelo julgamento ao evento em questão.
 
