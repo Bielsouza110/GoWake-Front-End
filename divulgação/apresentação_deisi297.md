@@ -1,4 +1,4 @@
-![Screenshot](./screenshots/chorme.png)
+![Screenshot](chorme.png)
 # DEISI297
 
 Este trabalho propõe o desenvolvimento de uma aplicação sofisticada para
