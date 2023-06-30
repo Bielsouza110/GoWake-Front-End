@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+  <discipline>Wakeboard Boat</discipline>
+  <code>23COL006</code>
+  <name>I Parada Circuito Colombiano de Wakeboard - Pro</name>
+  <organizing_country>CO</organizing_country>
+  <tournament_type>NatCH</tournament_type>
+  <venue>Club Los Lagartos</venue>
+  <site_code>COL001</site_code>
+  <beginning_date>2023-03-25</beginning_date>
+  <end_date>2023-03-26</end_date>
+  <age_groups>IWWF</age_groups>
+  <events>
+    <code>E893</code>
+    <rounds>0</rounds>
+    <event_class>2 STAR</event_class>
+    <name>wakeboard</name>
+  </events>
+  <officials>
+    <iwwfid>1999</iwwfid>
+    <position>Boat Driver</position>
+    <last_name>Burbano M.</last_name>
+    <first_name>Fredy</first_name>
+    <qualification>WBD3</qualification>
+    <country>CO</country>
+    <region>Panam</region>
+  </officials>
+  <officials>
+    <iwwfid>1900</iwwfid>
+    <position>Boat Driver</position>
+    <last_name>Quintana Boada</last_name>
+    <first_name>Jose Alfonso</first_name>
+    <qualification>WBD3</qualification>
+    <country>CO</country>
+    <region>Panam</region>
+  </officials>
+  <officials>
+    <iwwfid>9118</iwwfid>
+    <position>Chief Judge</position>
+    <last_name>Diaz Dominguez</last_name>
+    <first_name>Cristian</first_name>
+    <qualification>WBJ2</qualification>
+    <country>CO</country>
+    <region>Panam</region>
+  </officials>
+  <officials>
+    <iwwfid>9999</iwwfid>
+    <position>Judge</position>
+    <last_name>Pena Ruiz</last_name>
+    <first_name>Judy</first_name>
+    <country>CO</country>
+    <region>Panam</region>
+  </officials>
+  <officials>
+    <iwwfid>1118</iwwfid>
+    <position>Judge</position>
+    <last_name>Cifuentes Rodriguez</last_name>
+    <first_name>Angelica</first_name>
+    <qualification>WBJN</qualification>
+    <country>CO</country>
+    <region>Panam</region>
+  </officials>
+  <officials>
+    <iwwfid>111121</iwwfid>
+    <position>Judge</position>
+    <last_name>Cifuentes Rodriguez</last_name>
+    <first_name>Carolina</first_name>
+    <country>CO</country>
+    <region>Panam</region>
+  </officials>
+  <officials>
+    <iwwfid>9118</iwwfid>
+    <position>Chief Judge</position>
+    <last_name>Diaz Dominguez</last_name>
+    <first_name>Cristian</first_name>
+    <qualification>WBJ2</qualification>
+    <country>CO</country>
+    <region>Panam</region>
+  </officials>
+  <officials>
+    <iwwfid>2298</iwwfid>
+    <position>Judge</position>
+    <last_name>Gutierrez T.</last_name>
+    <first_name>Natalia Del P.</first_name>
+    <qualification>WBJA</qualification>
+    <country>CO</country>
+    <region>Panam</region>
+  </officials>
+  <officials>
+    <iwwfid>1111</iwwfid>
+    <position>Judge</position>
+    <last_name>Pena Ruiz</last_name>
+    <first_name>Judy</first_name>
+    <country>CO</country>
+    <region>Panam</region>
+  </officials>
+  <officials>
+    <iwwfid>5555</iwwfid>
+    <position>Judge</position>
+    <last_name>Perez Bernal</last_name>
+    <first_name>Nathalie</first_name>
+    <qualification>WBJ2</qualification>
+    <country>CO</country>
+    <region>Panam</region>
+  </officials>
+  <officials>
+    <iwwfid>7798</iwwfid>
+    <position>Safety Director</position>
+    <last_name>Mancheno Traverso</last_name>
+    <first_name>Maria</first_name>
+    <country>CO</country>
+    <region>Panam</region>
+  </officials>
+  <officials>
+    <iwwfid>9998</iwwfid>
+    <position>Chief Calculator</position>
+    <last_name>Delgado Acosta</last_name>
+    <first_name>Jersson</first_name>
+    <country>CO</country>
+    <region>Panam</region>
+  </officials>
+  <officials>
+    <iwwfid>9998</iwwfid>
+    <position>Judge</position>
+    <last_name>Perez Bernal</last_name>
+    <first_name>Nathalie</first_name>
+    <qualification>WBJ2</qualification>
+    <country>CO</country>
+    <region>Panam</region>
+  </officials>
+  <athletes>
+    <fed_id>503433</fed_id>
+    <last_name>Ruiz M.</last_name>
+    <first_name>Carlos Andres</first_name>
+    <country>CO</country>
+    <gender>M</gender>
+    <year_of_birth>2000</year_of_birth>
+    <events>
+      <code>E893</code>
+      <division></division>
+      <entry_type>IP</entry_type>
+      <participation>true</participation>
+      <real_category>Open</real_category>
+      <category_in_competition>Open</category_in_competition>
+    </events>
+  </athletes>
+  <athletes>
+    <fed_id>61024515</fed_id>
+    <last_name>Ramirez C.</last_name>
+    <first_name>Camila</first_name>
+    <country>CO</country>
+    <gender>F</gender>
+    <year_of_birth>2006</year_of_birth>
+    <events>
+      <code>E893</code>
+      <division></division>
+      <EntryType>IP</EntryType>
+      <participation>true</participation>
+      <real_category>U18</real_category>
+      <category_in_competition>Open</category_in_competition>
+    </events>
+  </athletes>
+  <athletes>
+    <fed_id>990918385</fed_id>
+    <last_name>Cardenas E.</last_name>
+    <first_name>Martin</first_name>
+    <country>CO</country>
+    <gender>M</gender>
+    <year_of_birth>1999</year_of_birth>
+    <events>
+      <code>E893</code>
+      <division></division>
+      <EntryType>IP</EntryType>
+      <participation>true</participation>
+      <real_category>Open</real_category>
+      <category_in_competition>Open</category_in_competition>
+    </events>
+  </athletes>
+  <athletes>
+    <fed_id>70407576</fed_id>
+    <last_name>Duran M.</last_name>
+    <first_name>Manuela</first_name>
+    <country>CO</country>
+    <gender>F</gender>
+    <year_of_birth>2007</year_of_birth>
+    <events>
+      <code>E893</code>
+      <division></division>
+      <entry_type>IP</entry_type>
+      <participation>true</participation>
+      <real_category>U18</real_category>
+      <category_in_competition>Open</category_in_competition>
+    </events>
+  </athletes>
+  <athletes>
+    <fed_id>30921451</fed_id>
+    <last_name>Palau L.</last_name>
+    <first_name>Sofia</first_name>
+    <country>CO</country>
+    <gender>F</gender>
+    <year_of_birth>2003</year_of_birth>
+    <events>
+      <code>E893</code>
+      <division></division>
+      <entry_type>IP</entry_type>
+      <participation>true</participation>
+      <real_category>Open</real_category>
+      <category_in_competition>Open</category_in_competition>
+    </events>
+  </athletes>
+  <athletes>
+    <fed_id>80820755</fed_id>
+    <last_name>Cuervo L.</last_name>
+    <first_name>Luciana</first_name>
+    <country>CO</country>
+    <gender>F</gender>
+    <year_of_birth>2008</year_of_birth>
+    <events>
+      <code>E893</code>
+      <division></division>
+      <entry_type>IP</entry_type>
+      <participation>true</participation>
+      <real_category>U18</real_category>
+      <category_in_competition>Open</category_in_competition>
+    </events>
+  </athletes>
+  <athletes>
+    <fed_id>100914752</fed_id>
+    <last_name>Lochbuhler B.</last_name>
+    <first_name>Ivanka</first_name>
+    <country>CO</country>
+    <gender>F</gender>
+    <year_of_birth>2010</year_of_birth>
+    <events>
+      <code>E893</code>
+      <division></division>
+      <entry_type>IP</entry_type>
+      <participation>true</participation>
+      <real_category>U14</real_category>
+      <category_in_competition>Open</category_in_competition>
+    </events>
+  </athletes>
+  <athletes>
+    <fed_id>100913546</fed_id>
+    <last_name>Zea S.</last_name>
+    <first_name>Ignacio</first_name>
+    <country>CO</country>
+    <gender>M</gender>
+    <year_of_birth>2010</year_of_birth>
+    <events>
+      <code>E893</code>
+      <division></division>
+      <entry_type>IP</entry_type>
+      <participation>true</participation>
+      <real_category>U14</real_category>
+      <category_in_competition>Open</category_in_competition>
+    </events>
+  </athletes>
+  <athletes>
+    <fed_id>80302602</fed_id>
+    <last_name>Castro Ch.</last_name>
+    <first_name>Vicente</first_name>
+    <country>CO</country>
+    <gender>M</gender>
+    <year_of_birth>2008</year_of_birth>
+    <events>
+      <code>E893</code>
+      <division></division>
+      <entry_type>IP</entry_type>
+      <participation>true</participation>
+      <real_category>U18</real_category>
+      <category_in_competition>Open</category_in_competition>
+    </events>
+  </athletes>
+  <athletes>
+    <fed_id>60202549</fed_id>
+    <last_name>Mejia Q.</last_name>
+    <first_name>Felipe</first_name>
+    <country>CO</country>
+    <gender>M</gender>
+    <year_of_birth>2006</year_of_birth>
+    <events>
+      <code>E893</code>
+      <division></division>
+      <entry_type>IP</entry_type>
+      <participation>true</participation>
+      <real_category>U18</real_category>
+      <category_in_competition>Open</category_in_competition>
+    </events>
+  </athletes>
+  <athletes>
+    <fed_id>60810631</fed_id>
+    <last_name>Pelaez C.</last_name>
+    <first_name>Lucas</first_name>
+    <country>CO</country>
+    <gender>M</gender>
+    <year_of_birth>2006</year_of_birth>
+    <events>
+      <code>E893</code>
+      <division></division>
+      <entry_type>IP</entry_type>
+      <participation>true</participation>
+      <real_category>U18</real_category>
+      <category_in_competition>Open</category_in_competition>
+    </events>
+  </athletes>
+  <athletes>
+    <fed_id>71229661</fed_id>
+    <last_name>Charria R.</last_name>
+    <first_name>Maria</first_name>
+    <country>CO</country>
+    <gender>F</gender>
+    <year_of_birth>2007</year_of_birth>
+    <events>
+      <code>E893</code>
+      <division></division>
+      <entry_type>IP</entry_type>
+      <participation>true</participation>
+      <real_category>U18</real_category>
+      <category_in_competition>Open</category_in_competition>
+    </events>
+  </athletes>
+</root>
