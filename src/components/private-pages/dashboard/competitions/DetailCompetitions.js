@@ -118,10 +118,10 @@ function DetailCompetitions() {
                                     handleButtonHover(3); // Ativar o Item 3
                                     handleClose();
                                 }}>Officials</MenuItem>
-                                {/*<MenuItem onClick={() => {
+                                <MenuItem onClick={() => {
                                     handleButtonHover(4); // Ativar o Item 3
                                     handleClose();
-                                }}>Leaderboard</MenuItem>*/}
+                                }}>Leaderboard</MenuItem>
                             </Menu>
                         </div>
 

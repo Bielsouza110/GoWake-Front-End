@@ -86,5 +86,5 @@ export const postEndpointGenerateHeats = (endpoint) => {
 };
 
 export const getEndpointLeaderboard = (endpoint, idCompetition) => {
-    return `${endpoints[endpoint]}/${idCompetition}/leaderboards`;
+    return `${endpoints[endpoint]}/${idCompetition}/leaderboards/`;
 };
