@@ -242,7 +242,7 @@ const Events = ({idComp}) => {
                                             <TableCell id="esconde">Code</TableCell>
                                             <TableCell>Name</TableCell>
                                             <TableCell id="esconde">Event class</TableCell>
-                                            <TableCell id="esconde">Rounds</TableCell>
+                                            <TableCell >Rounds</TableCell>
                                             <TableCell>Actions</TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -258,7 +258,7 @@ const Events = ({idComp}) => {
                                                 <TableCell id="esconde">
                                                     {event.event_class.toLowerCase()}
                                                 </TableCell>
-                                                <TableCell id="esconde">
+                                                <TableCell>
                                                     {event.rounds}
                                                 </TableCell>
                                                 <TableCell>
