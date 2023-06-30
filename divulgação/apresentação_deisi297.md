@@ -1,4 +1,5 @@
 ![iwwf](iwwf.png)
+ <img src=".iwwf.png" alt="iwwf" style="max-width: 50px; max-height: 50px;">
 # DEISI297
 
 Este trabalho propõe o desenvolvimento de uma aplicação sofisticada para
