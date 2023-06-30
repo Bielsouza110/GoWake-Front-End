@@ -1,0 +1,21 @@
+This project aims to architect a more sophisticated and suitable system, an application, designed to assist Wakeboard competitions by differentiating athletes through heats. Its main objective is to provide real-time updates of the respective athletes' scores, with the intention of being used in the future by the International Waterski & Wakeboard Federation (IWWF).
+
+Athletes participating in a competition are distributed across categories (age groups), organized into heats (groups of athletes) and rounds. The highest-scoring athletes from each heat advance to the next round until reaching the final.
+
+This web application manages all Wakeboard competitions and includes the following features:
+
+1. Event creation: Allows the creation of new competition events.
+
+2. Association of athletes and officials (judges) to the event: Enables the association of participating athletes and officials responsible for judging with the specific event.
+
+3. Distribution of athletes by categories: Facilitates organizing athletes into their respective age categories.
+
+4. Creation of rounds and distribution of athletes into heats: Allows the creation of competition rounds and the distribution of athletes into different heats.
+
+5. Association of officials to heats: Enables the assignment of officials responsible for each competition heat.
+
+6. Recording scores assigned by judges to each athlete in each heat: Enables the registration of scores given by judges to each athlete during the competition heats.
+
+7. Management of advancement to the next rounds: Assists in managing the process of classifying athletes for the subsequent rounds based on their scores.
+
+The ultimate goal of this project is to deploy the application and make it available for use by the International Waterski & Wakeboard Federation. Due to the complexity and importance of the work, it has been divided into two main components: backend and frontend. This particular work focuses primarily on the frontend, while the backend has been developed within the scope of the DEISI 314 project.
