@@ -45,8 +45,6 @@ Este projeto é um aplicativo web desenvolvido em React. Para instalá-lo, siga 
 
 # Imagens dos browsers
 
-### Aqui estão algumas capturas de diferentes browsers (navegadores):
-
 Chrome
 ![Screenshot](screenshots/chorme.png)
 
