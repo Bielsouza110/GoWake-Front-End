@@ -241,7 +241,7 @@ const Officials = ({idComp}) => {
                                         <TableRow>
                                             <TableCell id="esconde">Iwwf id</TableCell>
                                             <TableCell>Name</TableCell>
-                                            <TableCell >Country</TableCell>
+                                            <TableCell id="esconde">Country</TableCell>
                                             <TableCell id="esconde">Position</TableCell>
                                             <TableCell>Actions</TableCell>
                                         </TableRow>
@@ -257,11 +257,12 @@ const Officials = ({idComp}) => {
                                                         official.first_name.charAt(0).toUpperCase() + official.first_name.slice(1).toLowerCase() :
                                                         `${official.first_name.charAt(0).toUpperCase() + official.first_name.slice(1).toLowerCase()} ${official.last_name.charAt(0).toUpperCase() + official.last_name.slice(1).toLowerCase()}`}
                                                 </TableCell>
-                                                <TableCell >
+                                                <TableCell id="esconde">
                                                     <Tooltip title={official.country.toUpperCase()}>
                                                         {getCountryFlag(official.country)}
                                                     </Tooltip>
                                                 </TableCell>
+
                                                 <TableCell
                                                     id="esconde">{official.position.charAt(0).toUpperCase() + official.position.slice(1).toLowerCase()}</TableCell>
                                                 <TableCell>

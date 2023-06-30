@@ -230,8 +230,40 @@ const Athletes = ({idComp}) => {
                     Athletes
                 </Typography>
 
-                {isMobile ? null : (
+                {isMobile ? (
+                    <div>
+                        <Grid item xs={12} sm={12}>
+                            <Button
+                                variant="contained"
+                                startIcon={<CachedIcon/>}
+                                onClick={generateHeat}
+                                style={{
+                                    textTransform: 'none',
+                                    backgroundColor: 'green',
+                                    marginBottom: '1.5vh',
+                                }}
+                                sx={{width: '100%', maxWidth: '100%'}}
+                            >
+                                <span style={{ color: 'inherit' }}>Generate heat</span>
+                            </Button>
+                            <Button
+                                variant="contained"
+                                startIcon={<AddIcon/>}
+                                onClick={handleOpenDialog}
+                                style={{
+                                    textTransform: 'none',
+                                    color: 'success',
+                                    marginBottom: '2vh',
+                                }}
+                                sx={{width: '100%', maxWidth: '100%'}}
+                            >
+                                <span style={{ color: 'inherit' }}>Create athlete</span>
+                            </Button>
+                        </Grid>
+                    </div>
+                ) : (
                     <div style={{ display: 'flex', alignItems: 'center' }}>
+
                         <Button
                             variant="contained"
                             startIcon={<CachedIcon />}
@@ -260,39 +292,6 @@ const Athletes = ({idComp}) => {
                     </div>
                 )}
             </Grid>
-
-            {isMobile ? (
-                <div>
-                    <Grid item xs={12} sm={12}>
-                        <Button
-                            variant="contained"
-                            startIcon={<CachedIcon/>}
-                            onClick={generateHeat}
-                            style={{
-                                textTransform: 'none',
-                                backgroundColor: 'green',
-                                marginBottom: '1.5vh',
-                            }}
-                            sx={{width: '100%'}}
-                        >
-                            <span style={{ color: 'inherit' }}>Generate heat</span>
-                        </Button>
-                        <Button
-                            variant="contained"
-                            startIcon={<AddIcon/>}
-                            onClick={handleOpenDialog}
-                            style={{
-                                textTransform: 'none',
-                                color: 'success',
-                                marginBottom: '2vh',
-                            }}
-                            sx={{width: '100%', maxWidth: '100%'}}
-                        >
-                            <span style={{ color: 'inherit' }}>Create athlete</span>
-                        </Button>
-                    </Grid>
-                </div>
-            ) : null}
 
             <div id="esconde"><Divider style={{backgroundColor: 'black', marginBottom: '5vh', marginTop: '1.3vh'}}/>
             </div>
@@ -324,7 +323,7 @@ const Athletes = ({idComp}) => {
                                             <TableCell>Name</TableCell>
                                             <TableCell id="esconde">Country</TableCell>
                                             <TableCell id="esconde">Gender</TableCell>
-                                            <TableCell >Category</TableCell>
+                                            <TableCell id="esconde">Category in competition</TableCell>
                                             <TableCell>Actions</TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -358,7 +357,7 @@ const Athletes = ({idComp}) => {
                                                         </Tooltip>
                                                     )}
                                                 </TableCell>
-                                                <TableCell >
+                                                <TableCell id="esconde">
                                                     {athlete.category_in_competition ? athlete.category_in_competition.charAt(0).toUpperCase() + athlete.category_in_competition.slice(1).toLowerCase().trim() : 'Undefined'}
                                                 </TableCell>
                                                 <TableCell>

@@ -171,7 +171,7 @@ const Leaderboard = ({ idComp }) => {
                                             <TableCell id="esconde">Fed id</TableCell>
                                             <TableCell>Name</TableCell>
                                             <TableCell id="esconde">Gender</TableCell>
-                                            <TableCell >Category</TableCell>
+                                            <TableCell id="esconde">Category in competition</TableCell>
                                             <TableCell>Pontuation</TableCell>
                                             <TableCell>Action</TableCell>
                                         </TableRow>
@@ -202,7 +202,7 @@ const Leaderboard = ({ idComp }) => {
                                                         </Tooltip>
                                                     )}
                                                 </TableCell>
-                                                <TableCell >
+                                                <TableCell id="esconde">
                                                     {heat.athlete.category_in_competition
                                                         ? heat.athlete.category_in_competition.charAt(0).toUpperCase() +
                                                         heat.athlete.category_in_competition.slice(1).toLowerCase().trim()

@@ -305,7 +305,7 @@ const Dashboard = () => {
                                         <Table>
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell >Country</TableCell>
+                                                    <TableCell id="esconde">Country</TableCell>
                                                     <TableCell>Venue</TableCell>
                                                     <TableCell id="esconde">Name</TableCell>
                                                     <TableCell id="esconde">Discipline</TableCell>
@@ -318,7 +318,7 @@ const Dashboard = () => {
                                                               onClick={() => handleDetalhesClick(item.id)}
                                                               onMouseEnter={handleMouseEnter}
                                                               onMouseLeave={handleMouseLeave}>
-                                                        <TableCell >
+                                                        <TableCell id="esconde">
                                                             <Tooltip title={item.organizing_country.toUpperCase()}>
                                                                 {getCountryFlag(item.organizing_country)}
                                                             </Tooltip>
