@@ -1,4 +1,4 @@
-![Screenshot](public/images/iwwf.png)
+![Screenshot](screenshots/img.png)
 # DEISI297
 
 Este trabalho propõe o desenvolvimento de uma aplicação sofisticada para
