@@ -43,7 +43,7 @@ Este projeto é um aplicativo web desenvolvido em React. Para instalá-lo, siga 
 | LeaderBoard     |             | X    |
 
 
-# Imagens dos browser
+# Imagens dos browsers
 
 Chrome
 ![Screenshot](screenshots/chorme.png)
