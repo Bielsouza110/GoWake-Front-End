@@ -56,6 +56,7 @@ const Leaderboard = ({idComp}) => {
 
     const isMobile = useMediaQuery('(max-width: 600px)');
 
+/*
     const handleOpenEditDialog = () => {
         setOpenEditDialog(true);
     };
@@ -63,6 +64,7 @@ const Leaderboard = ({idComp}) => {
         reload();
         setOpenEditDialog(false);
     };
+*/
 
     return (
         <MDBContainer className="p-1 my-2">
@@ -101,7 +103,7 @@ const Leaderboard = ({idComp}) => {
                                             <TableCell>Name</TableCell>
                                             <TableCell id="esconde">Gender</TableCell>
                                             <TableCell id="esconde">Category in competition</TableCell>
-                                            <TableCell id="esconde">Global pontuation</TableCell>
+                                            <TableCell >Pontuation</TableCell>
                                             <TableCell>Action</TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -114,10 +116,29 @@ const Leaderboard = ({idComp}) => {
                                                 onMouseLeave={handleMouseLeave}
                                             >
                                                 <TableCell id="esconde">{heat.athlete.fed_id}</TableCell>
-                                                <TableCell id="esconde">{heat.athlete.gender}</TableCell>
-                                                <TableCell id="esconde">{heat.athlete.first_name}</TableCell>
-                                                <TableCell id="esconde">{heat.athlete.last_name}</TableCell>
-                                                <TableCell id="esconde">{heat.global_pontuation}</TableCell>
+                                                <TableCell >
+                                                    {window.innerWidth <= 768 ?
+                                                        heat.athlete.first_name.charAt(0).toUpperCase() + heat.athlete.first_name.slice(1).toLowerCase() :
+                                                        `${heat.athlete.first_name.charAt(0).toUpperCase() + heat.athlete.first_name.slice(1).toLowerCase()} ${heat.athlete.last_name.charAt(0).toUpperCase() + heat.athlete.last_name.slice(1).toLowerCase()}`}
+                                                </TableCell>
+                                                <TableCell id="esconde">
+                                                    {heat.athlete.gender === "F" && (
+                                                        <Tooltip title="Feminine"
+                                                                 className="tooltip-gender">
+                                                            {GetGenderFlags(heat.athlete.gender)}
+                                                        </Tooltip>
+                                                    )}
+                                                    {heat.athlete.gender === "M" && (
+                                                        <Tooltip title="Masculine"
+                                                                 className="tooltip-gender">
+                                                            {GetGenderFlags(heat.athlete.gender)}
+                                                        </Tooltip>
+                                                    )}
+                                                </TableCell>
+                                                <TableCell id="esconde">
+                                                    {heat.athlete.category_in_competition ? heat.athlete.category_in_competition.charAt(0).toUpperCase() + heat.athlete.category_in_competition.slice(1).toLowerCase().trim() : 'Undefined'}
+                                                </TableCell>
+                                                <TableCell>{heat.global_pontuation}</TableCell>
 
                                                 <TableCell>
                                                     <Tooltip title="Edit" className="tooltip-gender">
